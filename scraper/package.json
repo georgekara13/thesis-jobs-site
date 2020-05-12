@@ -1,0 +1,21 @@
+{
+  "name": "js_scraper",
+  "version": "1.0.0",
+  "description": "js scraper tests with firefox(GUI & headless)",
+  "main": "scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Georgekara",
+  "license": "ISC",
+  "dependencies": {
+    "chromedriver": "^2.38.3",
+    "geckodriver": "^1.19.1",
+    "got": "^8.3.1",
+    "jsonlint": "^1.6.3",
+    "moment": "^2.24.0",
+    "salted-md5": "^2.2.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
+  }
+}

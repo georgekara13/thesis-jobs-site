@@ -1,0 +1,14 @@
+{
+  "__comment":"This one could be used as a configuration file for the js scraper.",
+  "browser":
+  {
+      "name":"chrome",
+      "mode":"gui"
+  },
+  "scraper_conf":
+  {
+    "use_module": "./functions/SkyWalker.js",
+    "site_url":["https://www.skywalker.gr/elGR/anazitisi/aggelies-ergasias?categories[Id]=5A055CBE-577C-971A-D8D3-99BA78DB92D4&categories[Title]=%CE%A0%CE%BB%CE%B7%CF%81%CE%BF%CF%86%CE%BF%CF%81%CE%B9%CE%BA%CE%AE&categories[Parent]=null&categories[Type]=Category&states[Id]=CD34EC1B-4011-46D3-A995-CDF9CFA86AF3&states[Title]=%CE%9D%CE%BF%CE%BC%CF%8C%CF%82%20%CE%91%CF%84%CF%84%CE%B9%CE%BA%CE%AE%CF%82&states[Parent]=197DC3F7-4487-474A-A0FD-7F9A0E6079CC&states[Type]=Statesky&perPage=20&page=1&sortBy=relative","https://www.skywalker.gr/elGR/anazitisi/aggelies-ergasias?categories[Id]=968A71D3-B4BD-D3A5-8E5F-513EE00D920A&categories[Title]=%CE%A0%CF%89%CE%BB%CE%AE%CF%83%CE%B5%CE%B9%CF%82&categories[Parent]=null&categories[Type]=Category&perPage=20&page=1&sortBy=relative"],
+    "total_ads":3
+  }
+}

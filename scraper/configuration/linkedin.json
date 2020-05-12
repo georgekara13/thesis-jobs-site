@@ -1,0 +1,15 @@
+{
+  "__comment":"Possible values for filter: type: text(DONE)/regex field: any of the ad fields(DONE) logic: not(DONE)/or/and or empty value: The value in text or regex(DONE) i_modifier: yes/no case sensitivity(WIP)",
+  "browser":
+  {
+      "name":"firefox",
+      "mode":"headless"
+  },
+  "scraper_conf":
+  {
+    "use_module": "./functions/LinkedIn.js",
+    "site_url":["https://uk.linkedin.com/jobs/search?location=United%20Kingdom&locationId=gb%3A0&pageNum=4&position=8&sortBy=DD&redirect=false&currentJobId=1445171546"],
+    "total_ads": 25,
+    "filter": {"type":"text","field":"easyapply","logic":"not","value":"Easy Apply", "i_modifier":"no"}
+  }
+}

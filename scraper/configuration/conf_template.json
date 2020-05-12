@@ -1,0 +1,14 @@
+{
+  "__comment":"This one could be used as a configuration file for the js scraper.",
+  "browser":
+  {
+      "name":"allowed values: firefox or chrome",
+      "mode":"allowed values: headless or gui"
+  },
+  "scraper_conf":
+  {
+    "use_module": "./functions/ModuleName.js",
+    "site_url":["site_url_1","site_url_2"],
+    "total_ads":10
+  }
+}
