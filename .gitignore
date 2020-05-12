@@ -109,9 +109,8 @@ tmp/
 temp/
 
 # app specific folders
-#scraper/exports/
-#!scraper/exports/exports.txt
-scraper/auth/linkedin.json
+scraper/exports/
+scraper/auth/
 
 # app specific files
 .DS_Store
