@@ -16,5 +16,5 @@ app.use(cookieParser())
 
 
 app.listen(port, () => {
-  logger.info(`API is up in port ${port}, running in ${dbconf.MODE} mode`)
+  console.log(`API is up in port ${port}, running in ${dbconf.MODE} mode`)
 })
