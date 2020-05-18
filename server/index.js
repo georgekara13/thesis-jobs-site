@@ -5,6 +5,11 @@ const bodyParser   = require('body-parser')
 const cookieParser = require('cookie-parser')
 const {logger}     = require('./configuration/logger')
 
+//models
+const { User }   = require('./model/user')
+const { Job }    = require('./model/job')
+const { Source } = require('./model/source')
+
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true })
 
