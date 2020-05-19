@@ -18,14 +18,20 @@ const jobSchema = mongoose.Schema({
     type: String,
     default: '-'
   },
-  salary: {
+  salaryMin: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 100000
+  },
+  salaryMax: {
     type: Number,
     default: 0,
     min: 0,
     max: 100000
   },
   jobTag: {
-    type: String,
+    type: [String],
     enum: [
             "marketing",
             "economics",
@@ -39,7 +45,7 @@ const jobSchema = mongoose.Schema({
             "customer-service",
             "unknown"
     ],
-    required: true
+    default: "unknown"
   },
   location: {
     type: String,
