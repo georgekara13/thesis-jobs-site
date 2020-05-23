@@ -10,6 +10,9 @@ const { User }   = require('./model/user')
 const { Job }    = require('./model/job')
 const { Source } = require('./model/source')
 
+//middleware
+const { jobQuery } = require('./middleware/constructquery')
+
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -30,34 +33,9 @@ app.get('/api/getjobbyid', (req, res) => {
   })
 })
 
-//FIXME empty response
-app.get('/api/getjobs', (req, res) => {
-  //TODO add pagination param - important
-  let {
-        title,
-        company,
-        salary,
-        jobTag,
-        location,
-        contactPhone,
-        contactEmail,
-        createdAt,
-        modifiedAt
-      } = req.query
-
-  Job.find({
-    title,
-    company,
-    salary,
-    jobTag,
-    location,
-    contactPhone,
-    contactEmail,
-    createdAt,
-    modifiedAt
-  }).exec((err, doc) => {
-    if (err) return res.status(400).send(err)
-    res.send(doc)
+app.get('/api/getjobs', jobQuery, (req, res) => {
+  res.json({
+    jobs: req.jobs
   })
 })
 
