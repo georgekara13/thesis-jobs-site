@@ -11,7 +11,7 @@ const { Job }    = require('./model/job')
 const { Source } = require('./model/source')
 
 //middleware
-const { jobQuery } = require('./middleware/constructquery')
+const { jobQuery, sourceQuery } = require('./middleware/constructquery')
 
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -35,6 +35,7 @@ app.get('/api/getjobbyid', (req, res) => {
 
 app.get('/api/getjobs', jobQuery, (req, res) => {
   res.json({
+    results: req.jobs.length,
     jobs: req.jobs
   })
 })
@@ -48,33 +49,10 @@ app.get('/api/getsourcebyid', (req, res) => {
   })
 })
 
-app.get('/api/getsources', (req, res) => {
-  //TODO add pagination param
-  let {
-        name,
-        browserName,
-        browserMode,
-        confModule,
-        confUrl,
-        confTotalAds,
-        confscrapeFrequency
-      } = req.query
-
-  Source.find({
-    name,
-    browser:{
-      name: browserName,
-      mode: browserMode
-    },
-    conf: {
-      module: confModule,
-      url: confUrl,
-      totalAds: confTotalAds,
-      scrapeFrequency: confscrapeFrequency
-    }
-  }).exec((err, doc) => {
-    if (err) return res.status(400).send(err)
-    res.send(doc)
+app.get('/api/getsources', sourceQuery, (req, res) => {
+  res.json({
+    results: req.sources.length,
+    sources: req.sources
   })
 })
 
@@ -121,7 +99,7 @@ app.post('/api/addsource', (req,res) => {
 app.post('/api/addsources', (req,res) => {
   const sources = req.body
 
-  sources.foreach( source => {
+  sources.forEach( source => {
     const newSource = new Source(source)
     newSource.save((err, doc) => {
       if(err) return res.status(400).send(err)
