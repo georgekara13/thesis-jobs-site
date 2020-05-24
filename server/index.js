@@ -34,7 +34,7 @@ app.get('/api/getjobbyid', (req, res) => {
 })
 
 app.get('/api/getjobs', jobQuery, (req, res) => {
-  res.json({
+  res.status(200).json({
     results: req.jobs.length,
     jobs: req.jobs
   })
@@ -50,7 +50,7 @@ app.get('/api/getsourcebyid', (req, res) => {
 })
 
 app.get('/api/getsources', sourceQuery, (req, res) => {
-  res.json({
+  res.status(200).json({
     results: req.sources.length,
     sources: req.sources
   })
