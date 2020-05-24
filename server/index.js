@@ -14,7 +14,7 @@ const { Source } = require('./model/source')
 const { jobQuery, sourceQuery } = require('./middleware/constructquery')
 
 mongoose.Promise = global.Promise
-mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 
 const port = process.env.PORT || 3001
 const app  = express()
@@ -110,8 +110,44 @@ app.post('/api/addsources', (req,res) => {
 })
 
 //DELETE routes
+app.delete('/api/deletejob', (req, res) => {
+  let id = req.query.id
+
+  Job.findByIdAndRemove(id, (err, doc) => {
+    if(err) return res.status(400).send(err)
+    res.json(true)
+  })
+})
+
+app.delete('/api/deletesource', (req, res) => {
+  let id = req.query.id
+
+  Source.findByIdAndRemove(id, (err, doc) => {
+    if(err) return res.status(400).send(err)
+    res.json(true)
+  })
+})
 
 //UPDATE routes
+app.post('/api/updatejob', (req, res) => {
+  Job.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, doc) => {
+    if(err) return res.status(400).send(err)
+    res.json({
+      success: true,
+      doc
+    })
+  })
+})
+
+app.post('/api/updatesource', (req, res) => {
+  Source.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, doc) => {
+    if(err) return res.status(400).send(err)
+    res.json({
+      success: true,
+      doc
+    })
+  })
+})
 
 app.listen(port, () => {
   console.log(`API is up in port ${port}, running in ${dbconf.MODE} mode`)
