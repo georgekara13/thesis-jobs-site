@@ -29,31 +29,19 @@ let jobQuery = (req, res, next) => {
 
 //middleware for constructing source queries
 let sourceQuery = (req, res, next) => {
-  let query        = req.query
-  let queryObj     = {}
-
-  //add keys for the nested params if defined
-  if (query.browserName || query.browserMode) queryObj.browser = {}
-  if (query.confModule || query.confUrl || query.confTotalAds || query.confScrapeFrequency) queryObj.conf = {}
+  let query    = req.query
+  let queryObj = {}
 
   /*fetch query params, append to json unless not defined
   note: ids are unique, no need to use here. Use getsourcebbyid route*/
-  if (query.name)                queryObj.name                 = query.name
-  if (query.browserName)         queryObj.browser.name         = query.browserName
-  if (query.browserMode)         queryObj.browser.mode         = query.browserMode
-  if (query.confModule)          queryObj.conf.module          = query.confModule
-  if (query.confUrl)             queryObj.conf.url             = query.confUrl
-  if (query.confTotalAds)        queryObj.conf.totalAds        = query.confTotalAds
-  if (query.confScrapeFrequency) queryObj.conf.scrapeFrequency = query.confScrapeFrequency
+  if (query.name)            queryObj.name            = query.name
+  if (query.browser)         queryObj.browser         = query.browser
+  if (query.mode)            queryObj.mode            = query.mode
+  if (query.module)          queryObj.module          = query.module
+  if (query.url)             queryObj.url             = query.url
+  if (query.totalAds)        queryObj.totalAds        = query.totalAds
+  if (query.scrapeFrequency) queryObj.scrapeFrequency = query.scrapeFrequency
 
-  /*FIXME if one of the query params for the nested keys is missing, we get no results
-  Mongoose is using exact match atm.
-  This http://localhost:3001/api/getsources?browserName=firefox&browserMode=headless
-  returns results,
-  while this http://localhost:3001/api/getsources?browserName=firefox
-  returns an error no sources found response
-  we need the $or operator for the nested fields - see https://docs.mongodb.com/manual/reference/operator/query/
-  */
   Source.find(queryObj).exec((err, doc) => {
     if (err) throw err
     if(!doc.length) return res.json({error:"No sources found"})
