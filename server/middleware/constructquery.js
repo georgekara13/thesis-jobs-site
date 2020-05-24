@@ -1,5 +1,6 @@
 const { Job }    = require('../model/job')
 const { Source } = require('../model/source')
+const { logger } = require('../configuration/logger')
 
 //middleware for constructing job queries
 let jobQuery = (req, res, next) => {
@@ -19,7 +20,10 @@ let jobQuery = (req, res, next) => {
   if (query.company)      queryObj.company      = query.company
 
   Job.find(queryObj).exec((err, doc) => {
-    if (err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     if(!doc.length) return res.json({error:"No jobs found"})
 
     req.jobs = doc
@@ -43,7 +47,10 @@ let sourceQuery = (req, res, next) => {
   if (query.scrapeFrequency) queryObj.scrapeFrequency = query.scrapeFrequency
 
   Source.find(queryObj).exec((err, doc) => {
-    if (err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     if(!doc.length) return res.json({error:"No sources found"})
 
     req.sources = doc

@@ -28,7 +28,10 @@ app.get('/api/getjobbyid', (req, res) => {
   let id = req.query.id
 
   Job.findById(id, (err, doc) => {
-    if (err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     res.send(doc)
   })
 })
@@ -44,7 +47,10 @@ app.get('/api/getsourcebyid', (req, res) => {
   let id = req.query.id
 
   Source.findById(id, (err, doc) => {
-    if (err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     res.send(doc)
   })
 })
@@ -63,7 +69,10 @@ app.post('/api/addjob', (req,res) => {
   const job = new Job(req.body)
 
   job.save((err, doc) => {
-    if(err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     res.status(200).json({
       post: true,
       jobId: doc._id
@@ -77,7 +86,10 @@ app.post('/api/addjobs', (req,res) => {
   jobs.forEach( job => {
     const newJob = new Job(job)
     newJob.save((err, doc) => {
-      if(err) return res.status(400).send(err)
+      if (err){
+        logger.warn(err)
+        return res.status(400).send(err)
+      }
     })
   })
 
@@ -88,7 +100,10 @@ app.post('/api/addsource', (req,res) => {
   const source = new Source(req.body)
 
   source.save((err, doc) => {
-    if(err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     res.status(200).json({
       post: true,
       sourceId: doc._id
@@ -102,7 +117,10 @@ app.post('/api/addsources', (req,res) => {
   sources.forEach( source => {
     const newSource = new Source(source)
     newSource.save((err, doc) => {
-      if(err) return res.status(400).send(err)
+      if (err){
+        logger.warn(err)
+        return res.status(400).send(err)
+      }
     })
   })
 
@@ -123,7 +141,10 @@ app.delete('/api/deletesource', (req, res) => {
   let id = req.query.id
 
   Source.findByIdAndRemove(id, (err, doc) => {
-    if(err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     res.json(true)
   })
 })
@@ -131,7 +152,10 @@ app.delete('/api/deletesource', (req, res) => {
 //UPDATE routes
 app.post('/api/updatejob', (req, res) => {
   Job.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, doc) => {
-    if(err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     res.json({
       success: true,
       doc
@@ -141,7 +165,10 @@ app.post('/api/updatejob', (req, res) => {
 
 app.post('/api/updatesource', (req, res) => {
   Source.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, doc) => {
-    if(err) return res.status(400).send(err)
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
     res.json({
       success: true,
       doc

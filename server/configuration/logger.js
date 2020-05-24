@@ -5,6 +5,9 @@ const logformat = printf(({ level, message, label, timestamp }) => {
   return `${timestamp} [${label}] ${level}: ${message}`
 })
 
+/*keep ALL errors in the debug.log(non fatal + fatal) file
+fatal errors in the error.log file, for easier inspection & debug
+*/
 const logger = winston.createLogger({
   level: 'info',
   format: combine(
