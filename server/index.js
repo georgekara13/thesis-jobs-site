@@ -178,4 +178,5 @@ app.post('/api/updatesource', (req, res) => {
 
 app.listen(port, () => {
   console.log(`API is up in port ${port}, running in ${dbconf.MODE} mode`)
+  logger.info(`API is up in port ${port}, running in ${dbconf.MODE} mode`)
 })
