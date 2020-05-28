@@ -3,6 +3,7 @@ const mongoose     = require('mongoose')
 const dbconf       = require('./configuration/dbconf').dbconf()
 const bodyParser   = require('body-parser')
 const cookieParser = require('cookie-parser')
+var ldapClient     = require('promised-ldap')
 const {logger}     = require('./configuration/logger')
 
 //models
@@ -18,6 +19,7 @@ mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: t
 
 const port = process.env.PORT || 3001
 const app  = express()
+const ldap = new ldapClient({url: dbconf.LDAP})
 
 app.use(bodyParser.json())
 app.use(cookieParser())
@@ -174,6 +176,17 @@ app.post('/api/updatesource', (req, res) => {
       doc
     })
   })
+})
+
+app.post('/api/login', (req, res) => {
+  const {email, password} = req.body
+
+  ldap.authenticate(`MAIL=${email}`, 'cn', password).then((result) => {
+    res.json({
+      result
+    })
+  })
+  .catch((err) => res.status(401).json({error: err}))
 })
 
 app.listen(port, () => {
