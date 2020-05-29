@@ -67,6 +67,17 @@ app.get('/api/getsources', sourceQuery, (req, res) => {
 //TODO Add here user GET routers - isauth route, logout route
 
 //POST routes
+app.post('/api/login', (req, res) => {
+  const {email, password} = req.body
+
+  ldap.authenticate(`mail=${email}`, 'dummy', password).then((result) => {
+    res.json({
+      result
+    })
+  })
+  .catch((err) => res.status(401).json({error: err}))
+})
+
 app.post('/api/addjob', (req,res) => {
   const job = new Job(req.body)
 
@@ -176,17 +187,6 @@ app.post('/api/updatesource', (req, res) => {
       doc
     })
   })
-})
-
-app.post('/api/login', (req, res) => {
-  const {email, password} = req.body
-
-  ldap.authenticate(`MAIL=${email}`, 'cn', password).then((result) => {
-    res.json({
-      result
-    })
-  })
-  .catch((err) => res.status(401).json({error: err}))
 })
 
 app.listen(port, () => {
