@@ -26,6 +26,12 @@ app.use(cookieParser())
 
 
 //GET routes
+/*TODO:
+- userisauth route, with auth middleware. Will be required for restricted routes in client
+- logout route, with auth middleware
+- auth middleware. Will be used to find user by token, in User collection
+*/
+
 app.get('/api/getjobbyid', (req, res) => {
   let id = req.query.id
 
@@ -72,9 +78,13 @@ app.post('/api/login', (req, res) => {
   const options = {filter: `(&(mail=${email})(userPassword=${password}))`}
 
   //search for entry in ldap - if it exists, proceed with auth
-  ldap.search('dc=test', options).then(function (result) {
+  ldap.search('dc=test', options).then((result) => {
     if (result.entries[0]) {
-      res.json({result})
+      /*TODO:
+      1) Check if user exists in User collection. If not, add him/her
+      2) generate session token for user
+      3) send user data as a response cookie
+      */
     }
     else {
       res.status(401).json({error: 'User auth error'})
