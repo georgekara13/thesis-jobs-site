@@ -1,6 +1,0 @@
-dn: cn=ldapjs, ou=users, o=myhost
-objectClass: unixUser
-cn: ldapjs
-mail: dummyuser@uop.gr
-shell: /bin/bash
-description: Created via ldapadd
