@@ -2,5 +2,5 @@
   "port": 3002,
   "userLoginAttribute": "mail",
   "searchBase": "dc=test",
-  "searchFilter": "(&(mail={{useremail}}))"
+  "searchFilter": "(&(mail={{useremail}})&(userPassword={{pass}}))"
 }

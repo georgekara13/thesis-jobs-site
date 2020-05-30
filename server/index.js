@@ -69,15 +69,18 @@ app.get('/api/getsources', sourceQuery, (req, res) => {
 //POST routes
 app.post('/api/login', (req, res) => {
   const {email, password} = req.body
-  const options = {filter: `(&(mail=${email}))`}
+  const options = {filter: `(&(mail=${email})(userPassword=${password}))`}
 
   //search for entry in ldap - if it exists, proceed with auth
   ldap.search('dc=test', options).then(function (result) {
-    res.json({
-        result
-      })
-    })
-    .catch((err) => res.status(200).json({error: err}))
+    if (result.entries[0]) {
+      res.json({result})
+    }
+    else {
+      res.status(401).json({error: 'User auth error'})
+    }
+  })
+  .catch((err) => res.status(200).json({error: err}))
 })
 
 app.post('/api/addjob', (req,res) => {
