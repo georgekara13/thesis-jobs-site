@@ -13,9 +13,10 @@ const { Source } = require('./model/source')
 
 //middleware
 const { jobQuery, sourceQuery } = require('./middleware/constructquery')
+const { auth }                  = require('./middleware/auth')
 
 mongoose.Promise = global.Promise
-mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
 const port = process.env.PORT || 3001
 const app  = express()
@@ -26,11 +27,20 @@ app.use(cookieParser())
 
 
 //GET routes
-/*TODO:
-- userisauth route, with auth middleware. Will be required for restricted routes in client
-- logout route, with auth middleware
-- auth middleware. Will be used to find user by token, in User collection
-*/
+app.get('/api/userisauth', auth, (req, res) => {
+  res.json({
+    isAuth: true,
+    id: req.user._id,
+    email: req.user.email
+  })
+})
+
+app.get('/api/logout', auth, (req, res) => {
+  req.user.deleteToken(req.token, (err, user) => {
+    if(err) return res.status(400).send(err)
+    res.sendStatus(200)
+  })
+})
 
 app.get('/api/getjobbyid', (req, res) => {
   let id = req.query.id
@@ -70,8 +80,6 @@ app.get('/api/getsources', sourceQuery, (req, res) => {
   })
 })
 
-//TODO Add here user GET routers - isauth route, logout route
-
 //POST routes
 app.post('/api/login', (req, res) => {
   const {email, password} = req.body
@@ -79,12 +87,36 @@ app.post('/api/login', (req, res) => {
 
   //search for entry in ldap - if it exists, proceed with auth
   ldap.search('dc=test', options).then((result) => {
+    //ldap confirms user email & password
     if (result.entries[0]) {
-      /*TODO:
-      1) Check if user exists in User collection. If not, add him/her
-      2) generate session token for user
-      3) send user data as a response cookie
-      */
+      //check if user email exists in User collection
+      User.findOne({email}, (err, user) => {
+        //if not, add them
+        if(!user){
+          let user = new User({email})
+          user.generateToken((err, user) => {
+            if(err) return res.status(400).send(err)
+            //send user data as a response cookie
+            res.cookie('auth', user.token).json({
+              isAuth: true,
+              id: user._id,
+              email: user.email
+            })
+          })
+        }
+        else {
+          //generate token for user
+          user.generateToken((err, user) => {
+            if(err) return res.status(400).send(err)
+            //send user data as a response cookie
+            res.cookie('auth', user.token).json({
+              isAuth: true,
+              id: user._id,
+              email: user.email
+            })
+          })
+        }
+      })
     }
     else {
       res.status(401).json({error: 'User auth error'})
