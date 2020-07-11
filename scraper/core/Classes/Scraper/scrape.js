@@ -81,7 +81,8 @@ class Scrape {
     redirect_module     = redirect_module.replace(/^\.\//, '../../../')
     const opt_module    = require(redirect_module)
 
-    let {url, filter, totalAds} = this.getConf().getContent()
+    let url      = this.getConf().getUrl()
+    let totalAds = this.getConf().getTotalAds()
 
     const driver    = this.getDriver()
     let ad_urls     = this.getAdUrls()
@@ -135,17 +136,14 @@ class Scrape {
 
             //fetch filter values
             console.log(`\n=========================\nAd ${i + 1} \n\nFetching ad fields:`)
-            let ad_fields_mut = await opt_module.ad_page(driver, ad_urls[i], adfields, filter)
+            let ad_fields_mut = await opt_module.ad_page(driver, ad_urls[i], adfields)
 
             if (ad_fields_mut !== null)
             {
                 export_json.push(ad_fields_mut)
                 console.log(ad_fields_mut)
             }
-            else
-            {
-                console.log(`\nAd Got filtered for value "${filter.value}" in ad field "${filter.field}"\n`)
-            }
+
             console.log("\n=========================\n")
         }
 
@@ -154,10 +152,8 @@ class Scrape {
     }
 
     //export data to json file
-    let conf_path = this.getConf().getConfPath()
-    const dateNow = new Date('YYYYMMDDHHSS')
-    conf_path     = conf_path.replace(".json", `-${dateNow.getDateTimeNow()}.json`)
-    exportJSON(`./exports${conf_path.match(/\/.*?\.json/)}`, export_json)
+    const dateNow = new Date('YYYYMMDDHHSS').getDateTimeNow()
+    exportJSON(`./exports/${this.getConf().getName()}-${dateNow}.json`, export_json)
 
     //index ads to mongodb job collection
     this.indexAd(export_json)

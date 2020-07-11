@@ -1,4 +1,5 @@
 const readline = require('readline')
+const axios    = require('axios')
 
 const readStdin = () => {
   try
@@ -11,12 +12,14 @@ const readStdin = () => {
       console.log(err.message)
   }
 
-  let conf_path = ''
+  let conf_path      = ''
+  let source_content = {}
 
   for ( let i = 0; i < process.argv.length; i++ )
   {
       //Set opts here
-      process.argv[i].match(/-conf/)      ?  conf_path = _validateConfPath(process.argv[i+1]) :
+      process.argv[i].match(/-conf/)      ?  conf_path      = _validateConfPath(process.argv[i+1]) :
+      process.argv[i].match(/-source/)    ?  source_content = _fetchSource(process.argv[i+1]) :
       process.argv[i].match(/-noexport/)  ?  console.log('Not supported yet') : {}
 
       //Help dialog
@@ -31,7 +34,7 @@ const readStdin = () => {
       }
   }
 
-  return {conf_path}
+  return {conf_path, source_content}
 }
 
 const _validateConfPath = (path) => {
@@ -42,6 +45,12 @@ const _validateConfPath = (path) => {
     }
 
     return path
+}
+
+//FIXME
+const _fetchSource = (id) => {
+    return axios.get(`http://localhost:3001/api/getsourcebyid?id=${id}`)
+                .then((response) => {return response.data})
 }
 
 //process read key combinations
@@ -61,7 +70,7 @@ process.stdin.on('keypress', (str, key) =>
 
 process.on('exit', function(code)
 {
-      return console.log(`\nExited with code ${code}`)
+    return console.log(`\nExited with code ${code}`)
 })
 
 module.exports = {readStdin}

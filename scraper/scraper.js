@@ -4,6 +4,7 @@ const { promisify } = require('util')
 const {driverBuilder}   = require('./core/Builder/driverbuilder')
 const {scrapeBuilder}   = require('./core/Builder/scrapebuilder')
 const {readStdin}       = require('./core/Parser/readstdin')
+const {readJSON}        = require('./core/Parser/readjson')
 const {showMenu}        = require('./core/Stdout/showmenu')
 const {Conf}            = require('./core/Classes/conf')
 
@@ -13,14 +14,17 @@ webdriver.USE_PROMISE_MANAGER = false;
 console.log("\n--Running js scraper module--\n");
 
 //readstdin
-const {conf_path} = readStdin()
+const {conf_path, source_content} = readStdin()
+
+let content = conf_path ? readJSON(conf_path)
+                        : source_content
 
 //instantiate conf object
-const confFile = new Conf(conf_path)
+const confFile = new Conf(content)
 
-const {browser, mode} = confFile.getContent()
+const {browser, mode} = content
 
-console.log (`Using conf: '${conf_path}'`)
+console.log (`Using conf: '${confFile.getName()}'`)
 
 //Instantiate Browser object & build driver
 const browserDriver = driverBuilder(browser, mode)

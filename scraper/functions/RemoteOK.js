@@ -15,7 +15,7 @@ module.exports =
     }
   },
 
-  ad_page: async function(driver,ad_url,ad_fields,conf_filter)
+  ad_page: async function(driver,ad_url,ad_fields)
   {
     ad_fields.location = "Remote"
     ad_fields.jobTag   = ["it"]
