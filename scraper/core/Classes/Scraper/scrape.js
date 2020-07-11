@@ -77,27 +77,27 @@ class Scrape {
     /*use module functions defined in json
     fix path and require it
     */
-    let redirect_module = this.getConf().getScraperModule()
+    let redirect_module = this.getConf().getModule()
     redirect_module     = redirect_module.replace(/^\.\//, '../../../')
     const opt_module    = require(redirect_module)
 
-    let {site_url, filter, total_ads} = this.getConf().getScraperConf()
+    let {url, filter, totalAds} = this.getConf().getContent()
 
     const driver    = this.getDriver()
     let ad_urls     = this.getAdUrls()
     let export_json = []
 
-    if ( !site_url[0] )
+    if ( !url[0] )
     {
         console.log("No URL parameter found");
         process.exit()
     }
-    for (let x = 0; x < site_url.length; x++)
+    for (let x = 0; x < url.length; x++)
     {
-        console.log("\nVisiting URL " + site_url[x])
+        console.log("\nVisiting URL " + url[x])
         try
         {
-            await driver.get(site_url[x])
+            await driver.get(url[x])
             await opt_module.results_page(ad_urls,driver)
         }
         catch(err)
@@ -114,18 +114,18 @@ class Scrape {
           s++
         })
 
-        if (total_ads && typeof total_ads !== 'number' )
+        if (totalAds && typeof totalAds !== 'number' )
         {
-            console.log('\nError - total_ads is not a number')
+            console.log('\nError - totalAds is not a number')
             await driver.quit()
             process.exit()
         }
         else
         {
-            if ( total_ads > ad_urls.length ) total_ads = ad_urls.length
+            if ( totalAds > ad_urls.length ) totalAds = ad_urls.length
         }
 
-        for (let i = 0; i < total_ads; i++)
+        for (let i = 0; i < totalAds; i++)
         {
             console.log(`\nvisiting url: ${ad_urls[i]}`)
             await driver.get(ad_urls[i])
@@ -149,7 +149,7 @@ class Scrape {
             console.log("\n=========================\n")
         }
 
-        //we empty the ad_urls array to refill it with the ads of the next site_url
+        //we empty the ad_urls array to refill it with the ads of the next url
         ad_urls = []
     }
 

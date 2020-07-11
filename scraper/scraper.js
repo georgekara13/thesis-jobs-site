@@ -3,7 +3,6 @@ const { promisify } = require('util')
 
 const {driverBuilder}   = require('./core/Builder/driverbuilder')
 const {scrapeBuilder}   = require('./core/Builder/scrapebuilder')
-const {readJSON}        = require('./core/Parser/readjson')
 const {readStdin}       = require('./core/Parser/readstdin')
 const {showMenu}        = require('./core/Stdout/showmenu')
 const {Conf}            = require('./core/Classes/conf')
@@ -19,13 +18,12 @@ const {conf_path} = readStdin()
 //instantiate conf object
 const confFile = new Conf(conf_path)
 
-const conf_content           = confFile.getContent()
-const {site_url, use_module} = conf_content.scraper_conf
+const {browser, mode} = confFile.getContent()
 
 console.log (`Using conf: '${conf_path}'`)
 
 //Instantiate Browser object & build driver
-const browserDriver = driverBuilder(conf_content.browser)
+const browserDriver = driverBuilder(browser, mode)
 const driver        = browserDriver.getDriver()
 
 console.log(`Browser: ${browserDriver.getName()} \nMode: ${browserDriver.getMode()}`)
