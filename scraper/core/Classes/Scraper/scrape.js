@@ -1,5 +1,6 @@
 const {exportJSON} = require('../../Parser/readjson')
 const {Date}       = require('../date')
+const axios        = require('axios')
 
 class Scrape {
   constructor(Conf, Driver){
@@ -13,12 +14,13 @@ class Scrape {
       title:"",
       description:"",
       location:"",
-      salary:"",
-      date:"",
+      salaryMin:"",
+      salaryMax:"",
       id:"",
       company:"",
-      category:"",
-      type:"",
+      jobTag:[],
+      contactPhone:"",
+      contactEmail:"",
       url:""
     }
   }
@@ -61,6 +63,15 @@ class Scrape {
 
   getAdFields(){
     return this._adfields
+  }
+
+  getAdFields(){
+    return this._adfields
+  }
+
+  indexAd(ads){
+    axios.post('http://localhost:3001/api/addjobs', ads)
+         .then(response => {console.log(response.data)})
   }
 
   //scraper methods
@@ -123,13 +134,16 @@ class Scrape {
             console.log(`\nvisiting url: ${ad_urls[i]}`)
             await driver.get(ad_urls[i])
 
+            //deep clone ad fields
+            let adfields = {...this.getAdFields()}
+
             //fetch filter values
             console.log(`\n=========================\nAd ${i + 1} \n\nFetching ad fields:`)
-            let ad_fields_mut = await opt_module.ad_page(driver,ad_urls[i],this.getAdFields(),filter)
+            let ad_fields_mut = await opt_module.ad_page(driver, ad_urls[i], adfields, filter)
 
             if (ad_fields_mut !== null)
             {
-                export_json.push({"result_page": site_url[x], "ad_fields": ad_fields_mut})
+                export_json.push(ad_fields_mut)
                 console.log(ad_fields_mut)
             }
             else
@@ -148,6 +162,9 @@ class Scrape {
     const dateNow = new Date('YYYYMMDDHHSS')
     conf_path     = conf_path.replace(".json", `-${dateNow.getDateTimeNow()}.json`)
     exportJSON(`./exports${conf_path.match(/\/.*?\.json/)}`, export_json)
+
+    //index ads to mongodb job collection
+    this.indexAd(export_json)
 
     await driver.quit()
     process.exit()
