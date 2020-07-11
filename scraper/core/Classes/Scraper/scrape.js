@@ -65,10 +65,6 @@ class Scrape {
     return this._adfields
   }
 
-  getAdFields(){
-    return this._adfields
-  }
-
   indexAd(ads){
     axios.post('http://localhost:3001/api/addjobs', ads)
          .then(response => {console.log(response.data)})

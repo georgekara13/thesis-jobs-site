@@ -13,11 +13,6 @@ const userSchema = mongoose.Schema({
   token: {
     type: String
   }
-  /*password: {
-    type: String,
-    required: true,
-    minlength: 8 //to be confirmed
-  }*/
 })
 
 userSchema.methods.generateToken = function(cb){
