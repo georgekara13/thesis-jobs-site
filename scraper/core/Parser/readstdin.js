@@ -1,7 +1,8 @@
-const readline   = require('readline')
-const axios      = require('axios')
-const getopts    = require('getopts')
-const {readJSON} = require('./readjson')
+const readline      = require('readline')
+const axios         = require('axios')
+const getopts       = require('getopts')
+const {readJSON}    = require('./readjson')
+const scraperConf   = require('../../configuration/environment/scraperconf').scraperConf()
 
 async function readStdin() {
     let content = {}
@@ -61,7 +62,7 @@ const _validateConfPath = (path) => {
 }
 
 const _fetchSource = (id) => {
-    const content = axios.get(`http://localhost:3001/api/getsourcebyid?id=${id}`)
+    const content = axios.get(`${scraperConf.HOST}/api/getsourcebyid?id=${id}`)
                          .then(response => response.data)
     return content
 }

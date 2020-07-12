@@ -1,6 +1,7 @@
 const {exportJSON} = require('../../Parser/readjson')
 const {Date}       = require('../date')
 const axios        = require('axios')
+const scraperConf  = require('../../../configuration/environment/scraperconf').scraperConf()
 
 class Scrape {
   constructor(Conf, Driver){
@@ -66,7 +67,7 @@ class Scrape {
   }
 
   indexAd(ads){
-    axios.post('http://localhost:3001/api/addjobs', ads)
+    axios.post(`${scraperConf.HOST}/api/addjobs`, ads)
          .then(response => {console.log(response.data)})
   }
 
