@@ -58,16 +58,17 @@ module.exports =
        )
     })
 
-    try
-    {
-      await driver.findElement(webdriver.By.css("#jobsboard td.position h2")).getText().then((title) => {ad_fields.title = title})
-      await driver.findElement(webdriver.By.css(".insert .bsa .default-description, #jobsboard td.company h3")).getText().then((company) => {ad_fields.company = company})
-      await driver.findElement(webdriver.By.className("description")).getText().then((description) => {ad_fields.description = description})
-    }
-    catch(err)
-    {
-      console.log(err.message)
-    }
+    await driver.findElement(webdriver.By.css("#jobsboard td.position h2")).getText()
+                .then((title) => {ad_fields.title = title})
+                .catch(err => {console.log(err.message)})
+
+    await driver.findElement(webdriver.By.css(".insert .bsa .default-description, #jobsboard td.company h3")).getText()
+                .then((company) => {ad_fields.company = company})
+                .catch(err => {console.log(err.message)})
+
+    await driver.findElement(webdriver.By.className("description")).getText()
+                .then((description) => {ad_fields.description = description})
+                .catch(err => {console.log(err.message)})
 
     return ad_fields
   }

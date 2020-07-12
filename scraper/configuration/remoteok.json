@@ -1,7 +1,7 @@
 {
   "name":"remoteOK",
   "browser":"firefox",
-  "mode":"headless",
+  "mode":"gui",
   "module": "./functions/RemoteOK.js",
   "url":["https://remoteok.io/remote-junior-jobs"],
   "totalAds":30,
