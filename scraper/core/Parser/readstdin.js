@@ -1,45 +1,58 @@
-const readline = require('readline')
-const axios    = require('axios')
+const readline   = require('readline')
+const axios      = require('axios')
+const getopts    = require('getopts')
+const {readJSON} = require('./readjson')
 
-const readStdin = () => {
-  try
-  {
-      readline.emitKeypressEvents(process.stdin)
-      process.stdin.setRawMode(true)
-  }
-  catch (err)
-  {
-      console.log(err.message)
-  }
+async function readStdin() {
+    let content = {}
 
-  let conf_path      = ''
-  let source_content = {}
+    try {
+        readline.emitKeypressEvents(process.stdin)
+        process.stdin.setRawMode(true)
+    }
+    catch (err) {
+        console.log(err.message)
+    }
 
-  for ( let i = 0; i < process.argv.length; i++ )
-  {
-      //Set opts here
-      process.argv[i].match(/-conf/)      ?  conf_path      = _validateConfPath(process.argv[i+1]) :
-      process.argv[i].match(/-source/)    ?  source_content = _fetchSource(process.argv[i+1]) :
-      process.argv[i].match(/-noexport/)  ?  console.log('Not supported yet') : {}
+    //getopt
+    const options = getopts(process.argv.slice(2), {
+        alias: {
+          help: "h",
+          conf: "c",
+          source: "s",
+          noexport: "ne"
+        }
+    })
 
-      //Help dialog
-      if (process.argv[i].match(/-help/))
-      {
-          console.log('\n\nUsage: $node scraper.js -conf configuration/conf.json\n\n' +
-                      'Arguments:\n' +
-                      '-conf: the json conf file containing the scraper configuration - Mandatory\n' +
-                      '-noexport: Do not export json file with scraped data - Optional\n'
-                     )
-          return process.exit()
-      }
-  }
+    if (options.conf) {
+        content = _validateConfPath(options.conf)
+        //consume json conf contents
+        content = readJSON(content)
+    }
+    else if (options.source) {
+        //fetch source from source collection
+        content = _fetchSource(options.source)
+    }
+    else if (options.help) {
+        console.log('\n\nUsage: $node scraper.js --conf=configuration/conf.json\n\n' +
+                    'Either use it with --conf OR --source\n' +
+                    'Arguments:\n' +
+                    '-conf: the json conf file containing the scraper configuration \n' +
+                    '-source: The source id from the source collection\n' +
+                    '--help: Show help dialog')
 
-  return {conf_path, source_content}
+        process.exit()
+    }
+    else {
+        console.log('No valid option found in the command line arguments.\nEither use it with --conf=<conf> OR --source=<id>')
+        process.exit()
+    }
+
+    return content
 }
 
 const _validateConfPath = (path) => {
-    if (!path || (path && !path.match(/configuration\/.*?\.json/)))
-    {
+    if (!path || (path && !path.match(/configuration\/.*?\.json/))) {
         console.log("No json conf file found in the arguments\n")
         process.exit()
     }
@@ -47,15 +60,14 @@ const _validateConfPath = (path) => {
     return path
 }
 
-//FIXME
 const _fetchSource = (id) => {
-    return axios.get(`http://localhost:3001/api/getsourcebyid?id=${id}`)
-                .then((response) => {return response.data})
+    const content = axios.get(`http://localhost:3001/api/getsourcebyid?id=${id}`)
+                         .then(response => response.data)
+    return content
 }
 
 //process read key combinations
-process.stdin.on('keypress', (str, key) =>
-{
+process.stdin.on('keypress', (str, key) => {
     if (key.ctrl && key.name === 'c')
     {
         console.log('Exit')
@@ -68,8 +80,7 @@ process.stdin.on('keypress', (str, key) =>
 })
 
 
-process.on('exit', function(code)
-{
+process.on('exit', function(code) {
     return console.log(`\nExited with code ${code}`)
 })
 
