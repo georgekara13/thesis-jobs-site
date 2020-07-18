@@ -10,8 +10,10 @@
   "author": "Georgekara",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "chromedriver": "^2.38.3",
     "geckodriver": "^1.19.1",
+    "getopts": "^2.2.5",
     "got": "^8.3.1",
     "jsonlint": "^1.6.3",
     "moment": "^2.24.0",

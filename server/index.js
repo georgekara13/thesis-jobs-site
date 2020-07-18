@@ -54,10 +54,19 @@ app.get('/api/getjobbyid', (req, res) => {
   })
 })
 
-app.get('/api/getjobs', jobQuery, (req, res) => {
+app.get('/api/getjobs', jobQuery, async (req, res) => {
+
+  const count = await Job.countDocuments()
+  let {limit = 10} = req.query
+
+  if (limit > 100) limit = 100
+
   res.status(200).json({
     results: req.jobs.length,
-    jobs: req.jobs
+    jobs: req.jobs,
+    totalPages: req.totalPages,
+    currentPage: req.currentPage,
+    totalPages: Math.ceil(count/limit)
   })
 })
 

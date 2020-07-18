@@ -1,14 +1,10 @@
 {
-  "__comment":"This one could be used as a configuration file for the js scraper.",
-  "browser":
-  {
-      "name":"chrome",
-      "mode":"gui"
-  },
-  "scraper_conf":
-  {
-    "use_module": "./functions/RemoteOK.js",
-    "site_url":["https://remoteok.io/remote-junior-jobs"],
-    "total_ads":10
-  }
+  "name":"remoteOK",
+  "browser":"firefox",
+  "mode":"gui",
+  "module": "./functions/RemoteOK.js",
+  "url":["https://remoteok.io/remote-junior-jobs"],
+  "totalAds":30,
+  "scrapeFrequency":720,
+  "scrapeType":"jobs"
 }

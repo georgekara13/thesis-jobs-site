@@ -19,6 +19,10 @@ const sourceSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  scrapeType: {
+    type: String,
+    default: "jobs"
+  },
   url: {
     type: [String],
     required: true

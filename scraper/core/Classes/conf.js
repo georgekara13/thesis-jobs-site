@@ -1,21 +1,15 @@
-const {readJSON}        = require('../Parser/readjson')
 const {moduleValidator} = require('../Validate/modulevalidator')
 
 class Conf {
-  constructor(path){
-    this._confPath      = path
-    this._content       = readJSON(path)
-    this._browser       = this.getContent().browser
-    this._scraperConf   = this.getContent().scraper_conf
-    this._scraperModule = moduleValidator(this.getContent().scraper_conf.use_module)
-    this._scrapeType    = this.getContent().scrape_type
-  }
-
-  getContent(){
-    return this._content
-  }
-  setContent(content){
-    this._content = content
+  constructor({name, browser, mode, module, url, totalAds, scrapeFrequency, scrapeType}){
+    this._browser         = browser
+    this._mode            = mode
+    this._name            = name
+    this._module          = moduleValidator(module)
+    this._totalAds        = totalAds
+    this._scrapeFrequency = scrapeFrequency
+    this._url             = url
+    this._scrapeType      = scrapeType
   }
 
   getBrowser(){
@@ -25,23 +19,32 @@ class Conf {
     this._browser = browser
   }
 
-  getScraperConf(){
-    return this._scraperConf
-  }
-  setScraperConf(scraperconf){
-    this._scraperConf = scraperconf
+  getMode(){
+    return this._mode
   }
 
-  getConfPath(){
-    return this._confPath
+  getName(){
+    return this._name
+  }
+
+  getModule(){
+    return this._module
+  }
+
+  getUrl(){
+    return this._url
+  }
+
+  getScrapeFrequency(){
+    return this._scrapeFrequency
+  }
+
+  getTotalAds(){
+    return this._totalAds
   }
 
   getScrapeType(){
     return this._scrapeType
-  }
-
-  getScraperModule(){
-    return this._scraperModule
   }
 }
 

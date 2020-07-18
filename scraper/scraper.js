@@ -1,38 +1,39 @@
-const webdriver     = require('selenium-webdriver')  //By,Builder,Key,promise,until
-const { promisify } = require('util')
+const webdriver       = require('selenium-webdriver')  //By,Builder,Key,promise,until
+const { promisify }   = require('util')
+const {driverBuilder} = require('./core/Builder/driverbuilder')
+const {scrapeBuilder} = require('./core/Builder/scrapebuilder')
+const {readStdin}     = require('./core/Parser/readstdin')
+const {showMenu}      = require('./core/Stdout/showmenu')
+const {Conf}          = require('./core/Classes/conf')
 
-const {driverBuilder}   = require('./core/Builder/driverbuilder')
-const {scrapeBuilder}   = require('./core/Builder/scrapebuilder')
-const {readJSON}        = require('./core/Parser/readjson')
-const {readStdin}       = require('./core/Parser/readstdin')
-const {showMenu}        = require('./core/Stdout/showmenu')
-const {Conf}            = require('./core/Classes/conf')
+async function run()
+{
+    //Disable promise manager use Node's native async/await
+    webdriver.USE_PROMISE_MANAGER = false
 
-//Disable promise manager use Node's native async/await
-webdriver.USE_PROMISE_MANAGER = false;
+    console.log("\n--Running js scraper module--\n")
 
-console.log("\n--Running js scraper module--\n");
+    //readstdin
+    const content = await readStdin()
 
-//readstdin
-const {conf_path} = readStdin()
+    const confFile = new Conf(content)
 
-//instantiate conf object
-const confFile = new Conf(conf_path)
+    const {browser, mode} = content
 
-const conf_content           = confFile.getContent()
-const {site_url, use_module} = conf_content.scraper_conf
+    console.log (`Using conf: '${confFile.getName()}'`)
 
-console.log (`Using conf: '${conf_path}'`)
+    //Instantiate Browser object & build driver
+    const browserDriver = driverBuilder(browser, mode)
+    const driver        = browserDriver.getDriver()
 
-//Instantiate Browser object & build driver
-const browserDriver = driverBuilder(conf_content.browser)
-const driver        = browserDriver.getDriver()
+    console.log(`Browser: ${browserDriver.getName()} \nMode: ${browserDriver.getMode()}`)
 
-console.log(`Browser: ${browserDriver.getName()} \nMode: ${browserDriver.getMode()}`)
+    showMenu()
 
-showMenu()
+    //instantiate scrape object
+    const scrape = scrapeBuilder(confFile, driver)
 
-//instantiate scrape object
-const scrape = scrapeBuilder(confFile, driver)
+    scrape.start()
+}
 
-scrape.start()
+run()

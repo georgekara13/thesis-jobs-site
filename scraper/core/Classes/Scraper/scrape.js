@@ -1,5 +1,7 @@
 const {exportJSON} = require('../../Parser/readjson')
 const {Date}       = require('../date')
+const axios        = require('axios')
+const scraperConf  = require('../../../configuration/environment/scraperconf').scraperConf()
 
 class Scrape {
   constructor(Conf, Driver){
@@ -13,12 +15,13 @@ class Scrape {
       title:"",
       description:"",
       location:"",
-      salary:"",
-      date:"",
+      salaryMin:"",
+      salaryMax:"",
       id:"",
       company:"",
-      category:"",
-      type:"",
+      jobTag:[],
+      contactPhone:"",
+      contactEmail:"",
       url:""
     }
   }
@@ -63,6 +66,11 @@ class Scrape {
     return this._adfields
   }
 
+  indexAd(ads){
+    axios.post(`${scraperConf.HOST}/api/addjobs`, ads)
+         .then(response => {console.log(response.data)})
+  }
+
   //scraper methods
   //TODO refactor to es6
   async start(){
@@ -70,27 +78,28 @@ class Scrape {
     /*use module functions defined in json
     fix path and require it
     */
-    let redirect_module = this.getConf().getScraperModule()
+    let redirect_module = this.getConf().getModule()
     redirect_module     = redirect_module.replace(/^\.\//, '../../../')
     const opt_module    = require(redirect_module)
 
-    let {site_url, filter, total_ads} = this.getConf().getScraperConf()
+    let url      = this.getConf().getUrl()
+    let totalAds = this.getConf().getTotalAds()
 
     const driver    = this.getDriver()
     let ad_urls     = this.getAdUrls()
     let export_json = []
 
-    if ( !site_url[0] )
+    if ( !url[0] )
     {
         console.log("No URL parameter found");
         process.exit()
     }
-    for (let x = 0; x < site_url.length; x++)
+    for (let x = 0; x < url.length; x++)
     {
-        console.log("\nVisiting URL " + site_url[x])
+        console.log("\nVisiting URL " + url[x])
         try
         {
-            await driver.get(site_url[x])
+            await driver.get(url[x])
             await opt_module.results_page(ad_urls,driver)
         }
         catch(err)
@@ -107,47 +116,48 @@ class Scrape {
           s++
         })
 
-        if (total_ads && typeof total_ads !== 'number' )
+        if (totalAds && typeof totalAds !== 'number' )
         {
-            console.log('\nError - total_ads is not a number')
+            console.log('\nError - totalAds is not a number')
             await driver.quit()
             process.exit()
         }
         else
         {
-            if ( total_ads > ad_urls.length ) total_ads = ad_urls.length
+            if ( totalAds > ad_urls.length ) totalAds = ad_urls.length
         }
 
-        for (let i = 0; i < total_ads; i++)
+        for (let i = 0; i < totalAds; i++)
         {
             console.log(`\nvisiting url: ${ad_urls[i]}`)
             await driver.get(ad_urls[i])
 
+            //deep clone ad fields
+            let adfields = {...this.getAdFields()}
+
             //fetch filter values
             console.log(`\n=========================\nAd ${i + 1} \n\nFetching ad fields:`)
-            let ad_fields_mut = await opt_module.ad_page(driver,ad_urls[i],this.getAdFields(),filter)
+            let ad_fields_mut = await opt_module.ad_page(driver, ad_urls[i], adfields)
 
             if (ad_fields_mut !== null)
             {
-                export_json.push({"result_page": site_url[x], "ad_fields": ad_fields_mut})
+                export_json.push(ad_fields_mut)
                 console.log(ad_fields_mut)
             }
-            else
-            {
-                console.log(`\nAd Got filtered for value "${filter.value}" in ad field "${filter.field}"\n`)
-            }
+
             console.log("\n=========================\n")
         }
 
-        //we empty the ad_urls array to refill it with the ads of the next site_url
+        //we empty the ad_urls array to refill it with the ads of the next url
         ad_urls = []
     }
 
     //export data to json file
-    let conf_path = this.getConf().getConfPath()
-    const dateNow = new Date('YYYYMMDDHHSS')
-    conf_path     = conf_path.replace(".json", `-${dateNow.getDateTimeNow()}.json`)
-    exportJSON(`./exports${conf_path.match(/\/.*?\.json/)}`, export_json)
+    const dateNow = new Date('YYYYMMDDHHSS').getDateTimeNow()
+    exportJSON(`./exports/${this.getConf().getName()}-${dateNow}.json`, export_json)
+
+    //index ads to mongodb job collection
+    this.indexAd(export_json)
 
     await driver.quit()
     process.exit()
