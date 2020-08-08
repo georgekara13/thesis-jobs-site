@@ -1,7 +1,4 @@
 const webdriver = require('selenium-webdriver')
-const saltedMd5 = require('salted-md5')
-const salt      = '0Yy LUm@o'
-
 
 module.exports =
 {
@@ -11,7 +8,6 @@ module.exports =
     for ( let i = 0; i < fetched_urls.length; i++ )
     {
       ad_urls.push(await fetched_urls[i].getAttribute('href'))
-      //ad_urls[i] = ad_urls[i].replace(/^/, 'https://weworkremotely.com')
     }
   },
 
@@ -20,7 +16,6 @@ module.exports =
     ad_fields.location = "Remote"
     ad_fields.jobTag   = ["it"]
     ad_fields.url      = ad_url
-    ad_fields.id       = saltedMd5(ad_url, salt)
 
     //Title
     driver.wait(
@@ -36,15 +31,15 @@ module.exports =
 
     await driver.findElement(webdriver.By.xpath("/html/body/div[3]/div/div[1]/h1")).getText()
                 .then((title) => {ad_fields.title = title})
-                .catch(err => {console.log(err.message)})
+                .catch(err => {console.log(`title: ${err.message}`)})
 
     await driver.findElement(webdriver.By.xpath("/html/body/div[3]/div/div[2]/h2/a")).getText()
                 .then((company) => {ad_fields.company = company})
-                .catch(err => {console.log(err.message)})
+                .catch(err => {console.log(`company: ${err.message}`)})
 
     await driver.findElement(webdriver.By.id("job-listing-show-container")).getText()
                 .then((description) => {ad_fields.description = description})
-                .catch(err => {console.log(err.message)})
+                .catch(err => {console.log(`description: ${err.message}`)})
 
     return ad_fields
   }

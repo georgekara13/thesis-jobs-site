@@ -17,7 +17,6 @@ class Scrape {
       location:"",
       salaryMin:"",
       salaryMax:"",
-      id:"",
       company:"",
       jobTag:[],
       contactPhone:"",
@@ -67,12 +66,17 @@ class Scrape {
   }
 
   indexAd(ads){
-    axios.post(`${scraperConf.HOST}/api/addjobs`, ads)
-         .then(response => {console.log(response.data)})
+    if (ads.length !== 0) {
+      axios.post(`${scraperConf.HOST}/api/addjobs`, ads)
+           .then(response => {console.log(response.data)})
+    }
+    else {
+      //TODO add to logger
+      console.log('Error: No ads to post')
+    }
   }
 
   //scraper methods
-  //TODO refactor to es6
   async start(){
 
     /*use module functions defined in json
@@ -135,16 +139,21 @@ class Scrape {
             //deep clone ad fields
             let adfields = {...this.getAdFields()}
 
-            //fetch filter values
             console.log(`\n=========================\nAd ${i + 1} \n\nFetching ad fields:`)
             let ad_fields_mut = await opt_module.ad_page(driver, ad_urls[i], adfields)
 
-            if (ad_fields_mut !== null)
+            //if all required ad fields are present, add ad for indexing
+            if (ad_fields_mut !== null && ad_fields_mut.title && ad_fields_mut.description && ad_fields_mut.url)
             {
                 export_json.push(ad_fields_mut)
                 console.log(ad_fields_mut)
             }
-
+            //else, reject
+            else
+            {
+                console.log('Ad got rejected due to missing required title/description/url fields')
+                //TODO add to logger
+            }
             console.log("\n=========================\n")
         }
 
