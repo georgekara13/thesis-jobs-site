@@ -18,6 +18,7 @@
     "jsonlint": "^1.6.3",
     "moment": "^2.24.0",
     "salted-md5": "^2.2.0",
-    "selenium-webdriver": "^4.0.0-alpha.1"
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "winston": "^3.3.3"
   }
 }

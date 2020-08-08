@@ -2,6 +2,7 @@ const {exportJSON} = require('../../Parser/readjson')
 const {Date}       = require('../date')
 const axios        = require('axios')
 const scraperConf  = require('../../../configuration/environment/scraperconf').scraperConf()
+const {logger}     = require('../../../configuration/environment/logger')
 
 class Scrape {
   constructor(Conf, Driver){
@@ -17,7 +18,6 @@ class Scrape {
       location:"",
       salaryMin:"",
       salaryMax:"",
-      id:"",
       company:"",
       jobTag:[],
       contactPhone:"",
@@ -67,20 +67,30 @@ class Scrape {
   }
 
   indexAd(ads){
-    axios.post(`${scraperConf.HOST}/api/addjobs`, ads)
-         .then(response => {console.log(response.data)})
+    if (ads.length !== 0) {
+      axios.post(`${scraperConf.HOST}/api/addjobs`, ads)
+           .then(response => {
+                  console.log(response.data)
+                  logger.info(JSON.stringify(response.data))
+                })
+    }
+    else {
+      console.log('Error: No ads to post')
+      logger.error('Error: No ads to post')
+    }
   }
 
   //scraper methods
-  //TODO refactor to es6
   async start(){
 
     /*use module functions defined in json
     fix path and require it
     */
+    logger.info(`Starting scrape for '${this.getConf().getName()}'`)
     let redirect_module = this.getConf().getModule()
     redirect_module     = redirect_module.replace(/^\.\//, '../../../')
     const opt_module    = require(redirect_module)
+    logger.info(`Using module '${redirect_module}'`)
 
     let url      = this.getConf().getUrl()
     let totalAds = this.getConf().getTotalAds()
@@ -91,12 +101,14 @@ class Scrape {
 
     if ( !url[0] )
     {
-        console.log("No URL parameter found");
+        console.log("No URL parameter found")
+        logger.error(`No URL parameter found`)
         process.exit()
     }
     for (let x = 0; x < url.length; x++)
     {
-        console.log("\nVisiting URL " + url[x])
+        console.log(`\nVisiting URL ${url[x]}`)
+        logger.info(`Visiting URL ${url[x]}`)
         try
         {
             await driver.get(url[x])
@@ -105,11 +117,12 @@ class Scrape {
         catch(err)
         {
             console.log(err.message)
+            logger.error(err.message)
             await driver.quit()
             process.exit()
         }
         console.log(`\nTotal ad urls found:|${ad_urls.length}|\n=====================================\n`)
-
+        logger.info(`Total ad urls found:${ad_urls.length}`)
         let s = 1
         ad_urls.forEach((ad, s) => {
           console.log(`Ad url ${s + 1} : ${ad}`)
@@ -119,6 +132,7 @@ class Scrape {
         if (totalAds && typeof totalAds !== 'number' )
         {
             console.log('\nError - totalAds is not a number')
+            logger.error(`Error - totalAds is not a number`)
             await driver.quit()
             process.exit()
         }
@@ -135,16 +149,24 @@ class Scrape {
             //deep clone ad fields
             let adfields = {...this.getAdFields()}
 
-            //fetch filter values
             console.log(`\n=========================\nAd ${i + 1} \n\nFetching ad fields:`)
+            logger.info(`${ad_urls[i]}: Fetching ad fields`)
             let ad_fields_mut = await opt_module.ad_page(driver, ad_urls[i], adfields)
 
-            if (ad_fields_mut !== null)
+            //if all required ad fields are present, add ad for indexing
+            if (ad_fields_mut !== null && ad_fields_mut.title && ad_fields_mut.description && ad_fields_mut.url)
             {
                 export_json.push(ad_fields_mut)
                 console.log(ad_fields_mut)
+                // avoid showing ad fields - too much noise for the logs
+                logger.info(`${ad_urls[i]}: Fetched ad fields successfully`)
             }
-
+            //else, reject
+            else
+            {
+                console.log('Ad got rejected due to missing required title/description/url fields')
+                logger.error('Ad got rejected due to missing required title/description/url fields')
+            }
             console.log("\n=========================\n")
         }
 
