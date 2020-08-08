@@ -162,7 +162,7 @@ app.post('/api/addjobs', (req,res) => {
     })
   })
 
-  res.status(200).json({post: true})
+  res.status(200).json({total_ads: jobs.length, post: true})
 })
 
 app.post('/api/addsource', (req,res) => {
