@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 /*
   We may need one more type for the schema - jobHash
@@ -62,8 +63,16 @@ const jobSchema = mongoose.Schema({
   contactEmail: {
     type: String,
     default: '-'
+  },
+  jobHash: {
+    type: String,
+    required: true,
+    unique: true
   }
 }, {timestamps: true})
+
+//apply unique validator plugin to jobschema
+jobSchema.plugin(uniqueValidator)
 
 const Job = mongoose.model('Job', jobSchema)
 
