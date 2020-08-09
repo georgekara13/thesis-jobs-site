@@ -201,9 +201,9 @@ class Scrape {
 
     //index ads to mongodb job collection
     //handle job indexing in chunks of 20 ads - avoid big payloads
-    const result = new Array(Math.ceil(export_json.length / 20)).fill().map(_ => export_json.splice(0, 20))
+    const adchunks = new Array(Math.ceil(export_json.length / 20)).fill().map(_ => export_json.splice(0, 20))
 
-    result.forEach(chunk => {
+    adchunks.forEach(chunk => {
       this.indexAd(chunk)
     })
 
