@@ -62,6 +62,12 @@ const jobSchema = mongoose.Schema({
   contactEmail: {
     type: String,
     default: '-'
+  },
+  jobHash: {
+    type: String,
+    required: true,
+    unique: true,
+    dropDups: true
   }
 }, {timestamps: true})
 

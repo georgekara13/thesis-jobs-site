@@ -3,6 +3,8 @@ const {Date}       = require('../date')
 const axios        = require('axios')
 const scraperConf  = require('../../../configuration/environment/scraperconf').scraperConf()
 const {logger}     = require('../../../configuration/environment/logger')
+const saltedMd5    = require('salted-md5');
+const salt         = '0Yy LUm@o';
 
 class Scrape {
   constructor(Conf, Driver){
@@ -22,7 +24,8 @@ class Scrape {
       jobTag:[],
       contactPhone:"",
       contactEmail:"",
-      url:""
+      url:"",
+      jobHash:""
     }
   }
 
@@ -78,6 +81,19 @@ class Scrape {
       console.log('Error: No ads to post')
       logger.error('Error: No ads to post')
     }
+  }
+
+  sanitizeField(field){
+    const sanitizedField = field.replace(/[^A-Za-z0-9]/g, '')
+
+    return sanitizedField.toLowerCase()
+  }
+
+  createJobHash(job){
+    const combineFields = `${this.sanitizeField(job.title)}${this.sanitizeField(job.location)}${this.sanitizeField(job.company)}`
+    logger.info(`Will sanitize ${combineFields}`)
+    job.jobHash = saltedMd5(combineFields, salt)
+    logger.info(`Resulting jobhash: ${job.jobHash}`)
   }
 
   //scraper methods
@@ -156,6 +172,7 @@ class Scrape {
             //if all required ad fields are present, add ad for indexing
             if (ad_fields_mut !== null && ad_fields_mut.title && ad_fields_mut.description && ad_fields_mut.url)
             {
+                this.createJobHash(ad_fields_mut)
                 export_json.push(ad_fields_mut)
                 console.log(ad_fields_mut)
                 // avoid showing ad fields - too much noise for the logs
