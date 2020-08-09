@@ -23,6 +23,9 @@ const app  = express()
 const ldap = new ldapClient({url: dbconf.LDAP})
 
 app.use(bodyParser.json())
+//change payload size in mbs. Not recommended
+//app.use(bodyParser.json({limit:'50mb'}))
+//app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}))
 app.use(cookieParser())
 
 
@@ -159,13 +162,14 @@ app.post('/api/addjobs', (req,res) => {
       if (err){
         logger.warn(err)
       }
+      //FIXME no increment, returns a false positive post: false response
       else {
         savedCounter++
       }
     })
   })
 
-  if (savedCounter !== 0) {
+  if (savedCounter > 0) {
     res.status(200).json({total_ads: savedCounter, post: true})
   }
   else {

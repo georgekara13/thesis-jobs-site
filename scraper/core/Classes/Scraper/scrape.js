@@ -83,12 +83,16 @@ class Scrape {
     }
   }
 
+  //used by md5 jobhash
   sanitizeField(field){
     const sanitizedField = field.replace(/[^A-Za-z0-9]/g, '')
 
     return sanitizedField.toLowerCase()
   }
 
+  /*combine title + location + company into a unique md5 hash
+  used for deduplication - consider moving this to the server as middleware
+  in case we add a manual ad post functionality*/
   createJobHash(job){
     const combineFields = `${this.sanitizeField(job.title)}${this.sanitizeField(job.location)}${this.sanitizeField(job.company)}`
     logger.info(`Will sanitize ${combineFields}`)
@@ -196,7 +200,12 @@ class Scrape {
     exportJSON(`./exports/${this.getConf().getName()}-${dateNow}.json`, export_json)
 
     //index ads to mongodb job collection
-    this.indexAd(export_json)
+    //handle job indexing in chunks of 20 ads - avoid big payloads
+    const result = new Array(Math.ceil(export_json.length / 20)).fill().map(_ => export_json.splice(0, 20))
+
+    result.forEach(chunk => {
+      this.indexAd(chunk)
+    })
 
     await driver.quit()
     process.exit()
