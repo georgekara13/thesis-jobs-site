@@ -150,19 +150,27 @@ app.post('/api/addjob', (req,res) => {
 })
 
 app.post('/api/addjobs', (req,res) => {
-  const jobs = req.body
+  const jobs       = req.body
+  let savedCounter = 0
 
   jobs.forEach( job => {
     const newJob = new Job(job)
     newJob.save((err, doc) => {
       if (err){
         logger.warn(err)
-        return res.status(400).send(err)
+      }
+      else {
+        savedCounter++
       }
     })
   })
 
-  res.status(200).json({total_ads: jobs.length, post: true})
+  if (savedCounter !== 0) {
+    res.status(200).json({total_ads: savedCounter, post: true})
+  }
+  else {
+    res.status(200).json({total_ads: savedCounter, post: false})
+  }
 })
 
 app.post('/api/addsource', (req,res) => {
