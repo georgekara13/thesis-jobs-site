@@ -4,7 +4,7 @@
   "mode":"headless",
   "module": "./functions/WeWorkRemotely.js",
   "url":["https://weworkremotely.com/categories/remote-programming-jobs#job-listings"],
-  "totalAds":35,
+  "totalAds":105,
   "scrapeFrequency":720,
   "scrapeType":"jobs"
 }

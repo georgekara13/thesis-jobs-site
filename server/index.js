@@ -153,8 +153,7 @@ app.post('/api/addjob', (req,res) => {
 })
 
 app.post('/api/addjobs', (req,res) => {
-  const jobs       = req.body
-  let savedCounter = 0
+  const jobs = req.body
 
   jobs.forEach( job => {
     const newJob = new Job(job)
@@ -162,19 +161,10 @@ app.post('/api/addjobs', (req,res) => {
       if (err){
         logger.warn(err)
       }
-      //FIXME no increment, returns a false positive post: false response
-      else {
-        savedCounter++
-      }
     })
   })
 
-  if (savedCounter > 0) {
-    res.status(200).json({total_ads: savedCounter, post: true})
-  }
-  else {
-    res.status(200).json({total_ads: savedCounter, post: false})
-  }
+  res.status(200).json({total_ads: jobs.length, post: true})
 })
 
 app.post('/api/addsource', (req,res) => {
