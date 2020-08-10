@@ -197,7 +197,7 @@ class Scrape {
 
     //export data to json file
     const dateNow = new Date('YYYYMMDDHHSS').getDateTimeNow()
-    exportJSON(`./exports/${this.getConf().getName()}-${dateNow}.json`, export_json)
+    exportJSON(`./exports/${this.sanitizeField(this.getConf().getName())}-${dateNow}.json`, export_json)
 
     //index ads to mongodb job collection
     //handle job indexing in chunks of 20 ads - avoid big payloads
