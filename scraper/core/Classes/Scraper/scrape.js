@@ -3,8 +3,7 @@ const {Date}       = require('../date')
 const axios        = require('axios')
 const scraperConf  = require('../../../configuration/environment/scraperconf').scraperConf()
 const {logger}     = require('../../../configuration/environment/logger')
-const saltedMd5    = require('salted-md5');
-const salt         = '0Yy LUm@o';
+
 
 class Scrape {
   constructor(Conf, Driver){
@@ -24,8 +23,7 @@ class Scrape {
       jobTag:[],
       contactPhone:"",
       contactEmail:"",
-      url:"",
-      jobHash:""
+      url:""
     }
   }
 
@@ -83,21 +81,11 @@ class Scrape {
     }
   }
 
-  //used by md5 jobhash
+  //used by exportjson function
   sanitizeField(field){
     const sanitizedField = field.replace(/[^A-Za-z0-9]/g, '')
 
     return sanitizedField.toLowerCase()
-  }
-
-  /*combine title + location + company into a unique md5 hash
-  used for deduplication - consider moving this to the server as middleware
-  in case we add a manual ad post functionality*/
-  createJobHash(job){
-    const combineFields = `${this.sanitizeField(job.title)}${this.sanitizeField(job.location)}${this.sanitizeField(job.company)}`
-    logger.info(`Will sanitize ${combineFields}`)
-    job.jobHash = saltedMd5(combineFields, salt)
-    logger.info(`Resulting jobhash: ${job.jobHash}`)
   }
 
   //scraper methods
@@ -176,7 +164,6 @@ class Scrape {
             //if all required ad fields are present, add ad for indexing
             if (ad_fields_mut !== null && ad_fields_mut.title && ad_fields_mut.description && ad_fields_mut.url)
             {
-                this.createJobHash(ad_fields_mut)
                 export_json.push(ad_fields_mut)
                 console.log(ad_fields_mut)
                 // avoid showing ad fields - too much noise for the logs

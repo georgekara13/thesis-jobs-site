@@ -14,6 +14,7 @@ const { Source } = require('./model/source')
 //middleware
 const { jobQuery, sourceQuery } = require('./middleware/constructquery')
 const { auth }                  = require('./middleware/auth')
+const { createJobHash }         = require('./middleware/jobhash')
 
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
@@ -152,10 +153,9 @@ app.post('/api/addjob', (req,res) => {
   })
 })
 
-app.post('/api/addjobs', (req,res) => {
-  const jobs = req.body
+app.post('/api/addjobs', createJobHash, (req,res) => {
 
-  jobs.forEach( job => {
+  req.hashedjobs.forEach( job => {
     const newJob = new Job(job)
     newJob.save((err, doc) => {
       if (err){
@@ -164,7 +164,7 @@ app.post('/api/addjobs', (req,res) => {
     })
   })
 
-  res.status(200).json({total_ads: jobs.length, post: true})
+  res.status(200).json({total_ads: req.hashedjobs.length, post: true})
 })
 
 app.post('/api/addsource', (req,res) => {

@@ -24,6 +24,7 @@
     "mongoose": "^5.9.13",
     "mongoose-unique-validator": "^2.0.3",
     "promised-ldap": "^0.3.0",
+    "salted-md5": "^4.0.2",
     "winston": "^3.2.1"
   }
 }
