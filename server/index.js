@@ -14,6 +14,7 @@ const { Source } = require('./model/source')
 //middleware
 const { jobQuery, sourceQuery } = require('./middleware/constructquery')
 const { auth }                  = require('./middleware/auth')
+const { createJobHash }         = require('./middleware/jobhash')
 
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
@@ -23,6 +24,9 @@ const app  = express()
 const ldap = new ldapClient({url: dbconf.LDAP})
 
 app.use(bodyParser.json())
+//change payload size in mbs. Not recommended
+//app.use(bodyParser.json({limit:'50mb'}))
+//app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}))
 app.use(cookieParser())
 
 
@@ -149,28 +153,18 @@ app.post('/api/addjob', (req,res) => {
   })
 })
 
-app.post('/api/addjobs', (req,res) => {
-  const jobs       = req.body
-  let savedCounter = 0
+app.post('/api/addjobs', createJobHash, (req,res) => {
 
-  jobs.forEach( job => {
+  req.hashedjobs.forEach( job => {
     const newJob = new Job(job)
     newJob.save((err, doc) => {
       if (err){
         logger.warn(err)
       }
-      else {
-        savedCounter++
-      }
     })
   })
 
-  if (savedCounter !== 0) {
-    res.status(200).json({total_ads: savedCounter, post: true})
-  }
-  else {
-    res.status(200).json({total_ads: savedCounter, post: false})
-  }
+  res.status(200).json({total_ads: req.hashedjobs.length, post: true})
 })
 
 app.post('/api/addsource', (req,res) => {

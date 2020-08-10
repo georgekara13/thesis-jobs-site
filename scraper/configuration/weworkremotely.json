@@ -1,10 +1,10 @@
 {
   "name":"We Work Remotely",
   "browser":"firefox",
-  "mode":"gui",
+  "mode":"headless",
   "module": "./functions/WeWorkRemotely.js",
   "url":["https://weworkremotely.com/categories/remote-programming-jobs#job-listings"],
-  "totalAds":10,
+  "totalAds":30,
   "scrapeFrequency":720,
   "scrapeType":"jobs"
 }
