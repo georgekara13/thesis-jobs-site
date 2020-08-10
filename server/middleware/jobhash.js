@@ -1,5 +1,5 @@
-const saltedMd5  = require('salted-md5');
-const salt       = '0Yy LUm@o';
+const saltedMd5  = require('salted-md5')
+const salt       = '0Yy LUm@o'
 const { logger } = require('../configuration/logger')
 
 //used by md5 jobhash
