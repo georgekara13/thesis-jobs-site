@@ -1,0 +1,72 @@
+
+const validate = (element, formdata = []) => {
+  let error = [true, '']
+
+  if(element.validation.email) {
+    const valid = /^.*?@.*?\.[a-zA-Z]+$/.test(element.value)
+    const message = `${!valid ? 'Must be a valid email' : ''}`
+    error = !valid ? [valid, message] : error
+  }
+
+  if (element.validation.confirm) {
+    const valid = element.value.trim() === formdata[element.validation.confirm].value
+
+    const message = `${!valid ? 'Must be matching passwords' : ''}`
+    error = !valid ? [valid, message] : error
+  }
+
+  if(element.validation.required){
+    const valid = element.value.trim() !== ''
+    const message = `${!valid ? 'This field is required' : ''}`
+    error = !valid ? [valid, message] : error
+  }
+
+  return error
+}
+
+const update = (element, formdata, formName) => {
+  let newFormData = {
+    ...formdata
+  }
+
+  let newElement = {
+    ...newFormData[element.id]
+  }
+
+  newElement.value = element.event.target.value
+
+  if(element.blur){
+    let validData    = validate(newElement, formdata)
+    newElement.valid = validData[0]
+    newElement.validationMessage = validData[1]
+  }
+
+  newElement.touched = element.blur
+  newFormData[element.id] = newElement
+
+  return newFormData
+}
+
+const generateData = (formdata, formName) => {
+  let dataToSubmit = {}
+
+  for (let key in formdata) {
+    if (key !== 'confirmPassword'){
+      dataToSubmit[key] = formdata[key].value
+    }
+  }
+
+  return dataToSubmit
+}
+
+const isFormValid = (formdata, formName) => {
+  let formIsValid = true
+
+  for (let key in formdata) {
+    formIsValid = formdata[key].valid && formIsValid
+  }
+
+  return formIsValid
+}
+
+module.exports = {update, validate, generateData, isFormValid}
