@@ -11,6 +11,7 @@ class Login extends Component {
 
   state = {
     formError: false,
+    errorMsg:'',
     formSuccess:'',
     formdata: {
       email: {
@@ -65,20 +66,27 @@ class Login extends Component {
 
     if (formIsValid) {
       this.props.dispatch(loginUser(dataToSubmit)).then(response => {
-        if(response.payload.loginsuccess){
-          console.log(response.payload)
-          this.props.history.push('/user/dashboard')
+        if(response.payload.isAuth){
+          this.props.history.push('/')
         }
         else {
           this.setState({
-            formError: true
+            formError: true,
+            errorMsg: 'Wrong credentials'
           })
         }
+      })
+      .catch(err => {
+        this.setState({
+          formError: true,
+          errorMsg: 'Wrong credentials'
+        })
       })
     }
     else {
       this.setState({
-        formError: true
+        formError: true,
+        errorMsg: 'Check your input'
       })
     }
   }
@@ -99,7 +107,7 @@ class Login extends Component {
             change={(element) => this.updateForm(element)}
           />
 
-          { this.state.formError ? <div className="error_label">Please check your data</div>
+        { this.state.formError ? <div className="error_label">Error: {this.state.errorMsg}</div>
                                  : null
           }
 

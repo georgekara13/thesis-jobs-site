@@ -12,22 +12,21 @@ export default function(ComposedClass, reload, adminRoute = null){
     }
 
     componentDidMount(){
-      console.log('Auth Component mounted')
       this.props.dispatch(auth()).then(response => {
         let user = this.props.user.userData
 
         if (!user.isAuth){
           if(reload){
-            this.props.history.push('/register_login')
+            this.props.history.push('/login')
           }
         }
         else {
           if (adminRoute && !user.isAdmin){
-            this.props.history.push('/user/dashboard')
+            this.props.history.push('/')
           }
           else {
             if (!reload) {
-              this.props.history.push('/user/dashboard')
+              this.props.history.push('/')
             }
           }
         }
