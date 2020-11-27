@@ -41,13 +41,13 @@ class Header extends Component {
 
   defaultLink = (item, i) => (
     item.name === 'Log out' ?
-    <Nav.Link className="log_out_link" key={i} onClick={() => this.logOutHandler()}>
-      {item.name}
-    </Nav.Link>
+    <Nav.Item key={i} onClick={() => this.logOutHandler()}>
+      <Nav.Link href={item.linkTo}>{item.name}</Nav.Link>
+    </Nav.Item>
     :
-    <Nav.Link><Link to={item.linkTo} key={i}>
+    <Nav.Item key={i}><Nav.Link href={item.linkTo}>
       {item.name}
-    </Link></Nav.Link>
+    </Nav.Link></Nav.Item>
   )
 
   logOutHandler = () => {
@@ -72,7 +72,7 @@ class Header extends Component {
         }
         else {
           //push all items but the login, for authenticated user
-          if (item.name !== 'Log in'){
+          if (item.name !== 'ΕΙΣΟΔΟΣ'){
             list.push(item)
           }
         }
