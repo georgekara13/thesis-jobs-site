@@ -7,12 +7,13 @@ var ldapClient     = require('promised-ldap')
 const {logger}     = require('./configuration/logger')
 
 //models
-const { User }   = require('./model/user')
-const { Job }    = require('./model/job')
-const { Source } = require('./model/source')
+const { User }         = require('./model/user')
+const { Job }          = require('./model/job')
+const { Source }       = require('./model/source')
+const { Announcement } = require('./model/announcement')
 
 //middleware
-const { jobQuery, sourceQuery } = require('./middleware/constructquery')
+const { jobQuery, sourceQuery, announcementQuery } = require('./middleware/constructquery')
 const { auth }                  = require('./middleware/auth')
 const { createJobHash }         = require('./middleware/jobhash')
 
@@ -68,6 +69,22 @@ app.get('/api/getjobs', jobQuery, async (req, res) => {
   res.status(200).json({
     results: req.jobs.length,
     jobs: req.jobs,
+    totalPages: req.totalPages,
+    currentPage: req.currentPage,
+    totalPages: Math.ceil(count/limit)
+  })
+})
+
+app.get('/api/getannouncements', announcementQuery, async (req, res) => {
+
+  const count = await Announcement.countDocuments()
+  let {limit = 10} = req.query
+
+  if (limit > 10) limit = 10
+
+  res.status(200).json({
+    results: req.announcements.length,
+    announcements: req.announcements,
     totalPages: req.totalPages,
     currentPage: req.currentPage,
     totalPages: Math.ceil(count/limit)
@@ -149,6 +166,23 @@ app.post('/api/addjob', (req,res) => {
     res.status(200).json({
       post: true,
       jobId: doc._id
+    })
+  })
+})
+
+/*TODO ADD ADMIN AUTH MIDDLEWARE - only admin users should be able to post
+announcements*/
+app.post('/api/addannouncement', (req,res) => {
+  const announcement = new Announcement(req.body)
+
+  announcement.save((err, doc) => {
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
+    res.status(200).json({
+      post: true,
+      announcementId: doc._id
     })
   })
 })

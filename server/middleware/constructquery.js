@@ -1,6 +1,7 @@
-const { Job }    = require('../model/job')
-const { Source } = require('../model/source')
-const { logger } = require('../configuration/logger')
+const { Job }          = require('../model/job')
+const { Source }       = require('../model/source')
+const { Announcement } = require('../model/announcement')
+const { logger }       = require('../configuration/logger')
 
 //middleware for constructing job queries
 let jobQuery = (req, res, next) => {
@@ -63,4 +64,26 @@ let sourceQuery = (req, res, next) => {
   })
 }
 
-module.exports = { jobQuery, sourceQuery }
+//middleware for announcement pagination
+let announcementQuery = (req, res, next) => {
+  let query    = req.query
+  let { page = 1, limit = 10 } = query
+
+  if (limit > 10) limit = 10
+
+  let queryObj = {}
+
+  Announcement.find(queryObj).limit(limit*1).skip((page-1) * limit).exec((err, doc) => {
+    if (err){
+      logger.warn(err)
+      return res.status(400).send(err)
+    }
+    if(!doc.length) return res.json({error:"No announcements found"})
+
+    req.announcements = doc
+    req.currentPage = page
+    next()
+  })
+}
+
+module.exports = { jobQuery, announcementQuery, sourceQuery }
