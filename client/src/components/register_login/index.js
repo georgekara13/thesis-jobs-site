@@ -6,11 +6,12 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 const RegisterLogin = ({}) => (
-  <div>
+  <div className="register_login_wrapper">
     <Container>
       <Row className="login_welcome_container">
         <Col>
           <h2>Καλωσήρθατε!</h2>
+          <hr/>
           <p>Ιστότοπος εύρεσης εργασίας πανεπιστημίου Πελλοπονήσου</p>
         </Col>
       </Row>
@@ -29,6 +30,7 @@ const RegisterLogin = ({}) => (
       <Row className="login_announcements_container">
         <Col>
           <h3>Ανακοινώσεις</h3>
+          <hr/>
           <div>TODO Afto tha antikatastathei apo ena Announcements component</div>
         </Col>
       </Row>
