@@ -12,7 +12,7 @@ const Routes = () => {
   return (
     <Layout>
       <Switch>
-        <Route path="/" exact component={Auth(Home, null)} />
+        <Route path="/" exact component={Auth(Home, true)} />
         <Route path="/dashboard" exact component={Auth(UserDashboard, true)} />
         <Route path="/login" exact component={Auth(RegisterLogin, false)} />
       </Switch>

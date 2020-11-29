@@ -17,7 +17,7 @@ class Header extends Component {
       {
         name: 'ΑΡΧΙΚΗ',
         linkTo: '/',
-        public: true
+        public: false
       },
       {
         name: 'ΕΙΣΟΔΟΣ',
@@ -91,7 +91,7 @@ class Header extends Component {
 
   render() {
     return (
-      <Navbar className="navbar-dark bg-dark" expand="lg">
+      <Navbar sticky="top" className="navbar-dark bg-dark" expand="lg">
         <Navbar.Brand>
           <img
             src="/assets/images/uop-logo-50x50.png"

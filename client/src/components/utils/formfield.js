@@ -22,7 +22,7 @@ const FormField = ({formdata, change, id, label}) => {
       case('input'):
         formTemplate = (
           <Form.Group controlId={id}>
-            <Form.Label>{label}</Form.Label>
+            <Form.Label className="text-light">{label}</Form.Label>
             <Form.Control
               type={id}
               {...formdata.config}
