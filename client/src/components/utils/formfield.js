@@ -1,7 +1,9 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form'
 
-const FormField = ({formdata, change, id, label}) => {
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+
+const FormField = ({formdata, change, id, label, icon}) => {
 
   const showError = () => {
     let errorMessage = null
@@ -15,6 +17,17 @@ const FormField = ({formdata, change, id, label}) => {
     return errorMessage
   }
 
+  const hasIcon = (icon) => {
+    if (icon) {
+      return (
+        <FontAwesomeIcon icon={icon} className="icon" />
+      )
+    }
+    else {
+      return ''
+    }
+  }
+
   const RenderTemplate = () => {
     let formTemplate = null
 
@@ -22,6 +35,7 @@ const FormField = ({formdata, change, id, label}) => {
       case('input'):
         formTemplate = (
           <Form.Group controlId={id}>
+            {hasIcon(icon)}
             <Form.Label className="text-light">{label}</Form.Label>
             <Form.Control
               type={id}

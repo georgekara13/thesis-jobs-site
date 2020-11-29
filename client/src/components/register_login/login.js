@@ -9,6 +9,9 @@ import { loginUser } from '../../actions/user_actions'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
+import faUser from '@fortawesome/fontawesome-free-solid/faUser'
+import faKey from '@fortawesome/fontawesome-free-solid/faKey'
+
 class Login extends Component {
 
   state = {
@@ -99,6 +102,7 @@ class Login extends Component {
         <Form onSubmit={(event) => this.submitForm()}>
           <FormField
             id={'email'}
+            icon={faUser}
             label={'Email'}
             formdata={this.state.formdata.email}
             change={(element) => this.updateForm(element)}
@@ -106,6 +110,7 @@ class Login extends Component {
 
           <FormField
             id={'password'}
+            icon={faKey}
             label={'Κωδικός πρόσβασης'}
             formdata={this.state.formdata.password}
             change={(element) => this.updateForm(element)}

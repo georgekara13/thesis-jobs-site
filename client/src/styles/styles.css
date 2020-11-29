@@ -63,3 +63,8 @@
 .register_login_wrapper {
   background: #FAFAFA;
 }
+
+.icon {
+  color: #fff;
+  margin-right: 4px;
+}
