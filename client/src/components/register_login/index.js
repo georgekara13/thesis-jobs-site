@@ -1,6 +1,8 @@
 import React from 'react'
 import MyButton from '../utils/button'
 import Login from './login'
+import Announcements from '../announcements'
+
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -31,7 +33,7 @@ const RegisterLogin = ({}) => (
         <Col>
           <h3>Ανακοινώσεις</h3>
           <hr/>
-          <div>TODO Afto tha antikatastathei apo ena Announcements component</div>
+          <Announcements/>
         </Col>
       </Row>
     </Container>

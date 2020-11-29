@@ -68,3 +68,19 @@
   color: #fff;
   margin-right: 4px;
 }
+
+.announcement_wrapper {
+  text-align: left;
+}
+
+.announcement_date {
+  font-size: 13px;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}

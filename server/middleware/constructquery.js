@@ -73,7 +73,8 @@ let announcementQuery = (req, res, next) => {
 
   let queryObj = {}
 
-  Announcement.find(queryObj).limit(limit*1).skip((page-1) * limit).exec((err, doc) => {
+  // latest announcements should display first
+  Announcement.find(queryObj).sort('-updatedAt').limit(limit*1).skip((page-1) * limit).exec((err, doc) => {
     if (err){
       logger.warn(err)
       return res.status(400).send(err)
