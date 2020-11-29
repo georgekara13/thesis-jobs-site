@@ -1,6 +1,7 @@
 import React from 'react'
+import Form from 'react-bootstrap/Form'
 
-const FormField = ({formdata, change, id}) => {
+const FormField = ({formdata, change, id, label}) => {
 
   const showError = () => {
     let errorMessage = null
@@ -20,15 +21,17 @@ const FormField = ({formdata, change, id}) => {
     switch(formdata.element){
       case('input'):
         formTemplate = (
-          <div className="formBlock">
-            <input
+          <Form.Group controlId={id}>
+            <Form.Label>{label}</Form.Label>
+            <Form.Control
+              type={id}
               {...formdata.config}
               value={formdata.value}
               onBlur={(event) => change({event,id,blur:true})}
               onChange={(event) => change({event,id})}
             />
           {showError()}
-          </div>
+          </Form.Group>
         )
         break
       default:

@@ -6,6 +6,8 @@ import { update, generateData, isFormValid } from '../utils/formactions'
 import { withRouter } from 'react-router-dom'
 
 import { loginUser } from '../../actions/user_actions'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 class Login extends Component {
 
@@ -20,7 +22,7 @@ class Login extends Component {
         config:{
           name:'email_input',
           type:'email',
-          placeholder:'Enter your email'
+          placeholder:'Εισάγετε διεύθυνση email'
         },
         validation:{
           required: true,
@@ -36,7 +38,7 @@ class Login extends Component {
         config:{
           name:'password_input',
           type:'password',
-          placeholder:'Enter your password'
+          placeholder:'Εισάγετε κωδικό πρόσβασης'
         },
         validation:{
           required: true,
@@ -94,15 +96,17 @@ class Login extends Component {
   render() {
     return (
       <div className="signin_wrapper">
-        <form onSubmit={(event) => this.submitForm()}>
+        <Form onSubmit={(event) => this.submitForm()}>
           <FormField
             id={'email'}
+            label={'Email'}
             formdata={this.state.formdata.email}
             change={(element) => this.updateForm(element)}
           />
 
           <FormField
             id={'password'}
+            label={'Κωδικός πρόσβασης'}
             formdata={this.state.formdata.password}
             change={(element) => this.updateForm(element)}
           />
@@ -111,8 +115,8 @@ class Login extends Component {
                                  : null
           }
 
-          <button onClick={(event) => this.submitForm(event)}>Log in</button>
-        </form>
+          <Button className="bg-dark" variant="primary" type="Submit" onClick={(event) => this.submitForm(event)}>Σύνδεση</Button>
+        </Form>
       </div>
     )
   }

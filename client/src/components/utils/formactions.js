@@ -4,7 +4,7 @@ const validate = (element, formdata = []) => {
 
   if(element.validation.email) {
     const valid = /^.*?@.*?\.[a-zA-Z]+$/.test(element.value)
-    const message = `${!valid ? 'Must be a valid email' : ''}`
+    const message = `${!valid ? 'Το email πρέπει να έχει σωστή μορφή' : ''}`
     error = !valid ? [valid, message] : error
   }
 
@@ -17,7 +17,7 @@ const validate = (element, formdata = []) => {
 
   if(element.validation.required){
     const valid = element.value.trim() !== ''
-    const message = `${!valid ? 'This field is required' : ''}`
+    const message = `${!valid ? 'Το πεδίο είναι απαραίτητο' : ''}`
     error = !valid ? [valid, message] : error
   }
 

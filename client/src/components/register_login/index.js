@@ -7,8 +7,8 @@ const RegisterLogin = ({}) => (
     <div className="container">
       <div className ="register_login_container">
         <div className="right">
-          <h2>Registered customers</h2>
-          <p>If you have an account, please login.</p>
+          <h2>Είσοδος με τα διαπιστευτήρια του πανεπιστημίου</h2>
+          <p>Παρακαλούμε χρησιμοποιήστε τα στοιχεία εισόδου του πανεπιστημίου.</p>
           <Login/>
         </div>
       </div>

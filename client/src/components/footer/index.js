@@ -11,7 +11,7 @@ import Col from 'react-bootstrap/Col'
 
 //TODO instead of using bootstrap css classes, use bootstrap  component  props and pass args
 const Footer = ({}) => (
-  <Container fluid className="pb-0 mb-0 justify-content-center text-dark bck-blue">
+  <Container fluid className="pb-0 mb-0 justify-content-center text-dark bg-dark">
       <footer>
           <Row className="my-5 justify-content-center py-5">
               <Col className="col-11">

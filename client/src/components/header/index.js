@@ -27,12 +27,17 @@ class Header extends Component {
     ],
     user: [
       {
-        name: 'My Account',
+        name: 'ΛΟΓΑΡΙΑΣΜΟΣ',
         linkTo: '/user/dashboard',
         public: false
       },
       {
-        name: 'Log out',
+        name: 'ΑΠΟΘΗΚΕΥΜΕΝΑ',
+        linkTo: '/user/wishlist',
+        public: false
+      },
+      {
+        name: 'ΑΠΟΣΥΝΔΕΣΗ',
         linkTo: '/user/logout',
         public: false
       }
@@ -40,7 +45,7 @@ class Header extends Component {
   }
 
   defaultLink = (item, i) => (
-    item.name === 'Log out' ?
+    item.name === 'ΑΠΟΣΥΝΔΕΣΗ' ?
     <Nav.Item key={i} onClick={() => this.logOutHandler()}>
       <Nav.Link href={item.linkTo}>{item.name}</Nav.Link>
     </Nav.Item>
@@ -86,13 +91,21 @@ class Header extends Component {
 
   render() {
     return (
-      <Navbar expand="lg" className="bck-blue">
-        <Navbar.Brand>UOP Jobsite</Navbar.Brand>
+      <Navbar className="navbar-dark bg-dark" expand="lg">
+        <Navbar.Brand>
+          <img
+            src="/assets/images/uop-logo-50x50.png"
+            width="50"
+            height="50"
+            className="d-inline-block align-top"
+            alt="UOP Job Site logo"
+          />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-              {this.showLinks(this.state.user)}
-              {this.showLinks(this.state.page)}
+            {this.showLinks(this.state.user)}
+            {this.showLinks(this.state.page)}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
