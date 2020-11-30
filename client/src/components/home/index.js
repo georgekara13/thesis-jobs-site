@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 
-import HomeSlider from './home_slider'
-import HomePromotion from './home_promotion'
+import Search from '../search'
+import Announcements from '../announcements'
 
 class Home extends Component {
 
   render() {
     return (
       <div className="bck-grey">
-        home
+        <Search/>
+        <Announcements/>
       </div>
     )
   }

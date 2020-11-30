@@ -28,15 +28,7 @@ const RegisterLogin = ({}) => (
             </Col>
         </Row>
     </Container>
-    <Container>
-      <Row className="login_announcements_container">
-        <Col>
-          <h3>Ανακοινώσεις</h3>
-          <hr/>
-          <Announcements/>
-        </Col>
-      </Row>
-    </Container>
+    <Announcements/>
   </div>
 )
 

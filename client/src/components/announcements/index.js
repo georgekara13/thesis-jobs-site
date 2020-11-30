@@ -4,6 +4,10 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getAnnouncements } from '../../actions/announcement_actions'
 
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
 class Announcements extends Component {
 
   state = {
@@ -42,7 +46,7 @@ class Announcements extends Component {
                                             <h6 className="announcement_date">{this.processDate(announcement.updatedAt)}</h6>
                                           </div>
                                           <br/><br/>
-                                          <p>{announcement.content}</p>
+                                          <p style={{'textAlign':'left'}}>{announcement.content}</p>
                                           <hr/>
                                         </div>
                                   ))
@@ -58,7 +62,15 @@ class Announcements extends Component {
     //TODO ADD pager
     return (
       <div className="announcement_wrapper">
-        {this.mapAnnouncements()}
+        <Container>
+          <Row className="login_announcements_container">
+            <Col>
+              <h3>Ανακοινώσεις</h3>
+              <hr/>
+              {this.mapAnnouncements()}
+            </Col>
+          </Row>
+        </Container>
       </div>
     )
   }
