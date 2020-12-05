@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 const RegisterLogin = ({}) => (
-  <div className="register_login_wrapper">
+  <div className="general_wrapper">
     <Container>
       <Row className="login_welcome_container">
         <Col>

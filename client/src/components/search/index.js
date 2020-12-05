@@ -4,7 +4,7 @@ class Search extends Component {
 
   render() {
     return (
-      <div className="bck-grey">
+      <div className="general_wrapper">
         search
       </div>
     )

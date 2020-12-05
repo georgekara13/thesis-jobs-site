@@ -38,7 +38,7 @@ class Header extends Component {
       },
       {
         name: 'ΑΠΟΣΥΝΔΕΣΗ',
-        linkTo: '/user/logout',
+        linkTo: '/login',
         public: false
       }
     ]

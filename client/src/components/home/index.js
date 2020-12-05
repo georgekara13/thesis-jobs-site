@@ -7,7 +7,7 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="bck-grey">
+      <div className="general_wrapper">
         <Search/>
         <Announcements/>
       </div>
