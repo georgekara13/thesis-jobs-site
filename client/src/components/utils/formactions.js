@@ -1,23 +1,23 @@
-
 const validate = (element, formdata = []) => {
-  let error = [true, '']
+  let error = [true, ""]
 
-  if(element.validation.email) {
+  if (element.validation.email) {
     const valid = /^.*?@.*?\.[a-zA-Z]+$/.test(element.value)
-    const message = `${!valid ? 'Το email πρέπει να έχει σωστή μορφή' : ''}`
+    const message = `${!valid ? "Το email πρέπει να έχει σωστή μορφή" : ""}`
     error = !valid ? [valid, message] : error
   }
 
   if (element.validation.confirm) {
-    const valid = element.value.trim() === formdata[element.validation.confirm].value
+    const valid =
+      element.value.trim() === formdata[element.validation.confirm].value
 
-    const message = `${!valid ? 'Must be matching passwords' : ''}`
+    const message = `${!valid ? "Must be matching passwords" : ""}`
     error = !valid ? [valid, message] : error
   }
 
-  if(element.validation.required){
-    const valid = element.value.trim() !== ''
-    const message = `${!valid ? 'Το πεδίο είναι απαραίτητο' : ''}`
+  if (element.validation.required) {
+    const valid = element.value.trim() !== ""
+    const message = `${!valid ? "Το πεδίο είναι απαραίτητο" : ""}`
     error = !valid ? [valid, message] : error
   }
 
@@ -26,17 +26,17 @@ const validate = (element, formdata = []) => {
 
 const update = (element, formdata, formName) => {
   let newFormData = {
-    ...formdata
+    ...formdata,
   }
 
   let newElement = {
-    ...newFormData[element.id]
+    ...newFormData[element.id],
   }
 
   newElement.value = element.event.target.value
 
-  if(element.blur){
-    let validData    = validate(newElement, formdata)
+  if (element.blur) {
+    let validData = validate(newElement, formdata)
     newElement.valid = validData[0]
     newElement.validationMessage = validData[1]
   }
@@ -51,7 +51,7 @@ const generateData = (formdata, formName) => {
   let dataToSubmit = {}
 
   for (let key in formdata) {
-    if (key !== 'confirmPassword'){
+    if (key !== "confirmPassword") {
       dataToSubmit[key] = formdata[key].value
     }
   }
@@ -69,4 +69,4 @@ const isFormValid = (formdata, formName) => {
   return formIsValid
 }
 
-module.exports = {update, validate, generateData, isFormValid}
+module.exports = { update, validate, generateData, isFormValid }

@@ -1,10 +1,9 @@
-import React from 'react'
-import Form from 'react-bootstrap/Form'
+import React from "react"
+import Form from "react-bootstrap/Form"
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FontAwesomeIcon from "@fortawesome/react-fontawesome"
 
-const FormField = ({formdata, change, id, label, icon}) => {
-
+const FormField = ({ formdata, change, id, label, icon }) => {
   const showError = () => {
     let errorMessage = null
 
@@ -19,20 +18,17 @@ const FormField = ({formdata, change, id, label, icon}) => {
 
   const hasIcon = (icon) => {
     if (icon) {
-      return (
-        <FontAwesomeIcon icon={icon} className="icon" />
-      )
-    }
-    else {
-      return ''
+      return <FontAwesomeIcon icon={icon} className="icon" />
+    } else {
+      return ""
     }
   }
 
   const RenderTemplate = () => {
     let formTemplate = null
 
-    switch(formdata.element){
-      case('input'):
+    switch (formdata.element) {
+      case "input":
         formTemplate = (
           <Form.Group controlId={id}>
             {hasIcon(icon)}
@@ -41,10 +37,10 @@ const FormField = ({formdata, change, id, label, icon}) => {
               type={id}
               {...formdata.config}
               value={formdata.value}
-              onBlur={(event) => change({event,id,blur:true})}
-              onChange={(event) => change({event,id})}
+              onBlur={(event) => change({ event, id, blur: true })}
+              onChange={(event) => change({ event, id })}
             />
-          {showError()}
+            {showError()}
           </Form.Group>
         )
         break
@@ -55,9 +51,7 @@ const FormField = ({formdata, change, id, label, icon}) => {
     return formTemplate
   }
 
-  return (
-    <div>{RenderTemplate()}</div>
-  )
+  return <div>{RenderTemplate()}</div>
 }
 
 export default FormField

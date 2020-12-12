@@ -17,7 +17,7 @@ class Search extends Component {
     errorMsg: "",
     formSuccess: "",
     formdata: {
-      search: {
+      jobsearch: {
         element: "input",
         value: "",
         config: {
@@ -28,76 +28,80 @@ class Search extends Component {
         validation: {
           required: false,
         },
-        valid: false,
+        valid: true,
         touched: false,
         validationMessage: "",
       },
     },
     modalFields: {
-      location: {
-        element: "input",
-        value: "",
-        config: {
-          name: "location_keyword",
-          type: "search",
-          placeholder: "Περιοχή",
+      errorMsg: "",
+      formSuccess: "",
+      formdata: {
+        location_keyword: {
+          element: "input",
+          value: "",
+          config: {
+            name: "location_keyword",
+            type: "search",
+            placeholder: "Περιοχή",
+          },
+          validation: {
+            required: false,
+          },
         },
-        validation: {
-          required: false,
+        salarymin_keyword: {
+          element: "input",
+          value: "",
+          config: {
+            name: "salarymin_keyword",
+            type: "search",
+            placeholder: "Ελάχιστος μισθός",
+          },
+          validation: {
+            required: true,
+          },
+          valid: false,
+          touched: false,
+          validationMessage: "",
         },
-      },
-      salaryMin: {
-        element: "input",
-        value: "",
-        config: {
-          name: "salarymin_keyword",
-          type: "search",
-          placeholder: "Ελάχιστος μισθός",
+        salarymax_keyword: {
+          element: "input",
+          value: "",
+          config: {
+            name: "salarymax_keyword",
+            type: "search",
+            placeholder: "Μέγιστος μισθός",
+          },
+          validation: {
+            required: true,
+          },
+          valid: false,
+          touched: false,
+          validationMessage: "",
         },
-        validation: {
-          required: true,
+        jobtag_checkbox: {
+          element: "checkbox",
+          value: "",
+          config: {
+            name: "jobtag_checkbox",
+            type: "search",
+            placeholder: "Κατηγορίες",
+          },
+          validation: {
+            required: false,
+          },
         },
-        valid: false,
-        touched: false,
-        validationMessage: "",
-      },
-      salaryMax: {
-        element: "input",
-        value: "",
-        config: {
-          name: "salarymax_keyword",
-          type: "search",
-          placeholder: "Μέγιστος μισθός",
-        },
-        validation: {
-          required: true,
-        },
-        valid: false,
-        touched: false,
-        validationMessage: "",
-      },
-      jobTag: {
-        element: "checkbox",
-        value: "",
-        config: {
-          name: "jobtag_checkbox",
-          type: "search",
-          placeholder: "Κατηγορίες",
-        },
-        validation: {
-          required: false,
-        },
-      },
-      company: {
-        element: "input",
-        value: "",
-        config: {
-          name: "company_keyword",
-          type: "search",
-          placeholder: "Εταιρεία",
-        },
-        validation: {
-          required: false,
+        company_keyword: {
+          element: "input",
+          value: "",
+          config: {
+            name: "company_keyword",
+            type: "search",
+            placeholder: "Εταιρεία",
+          },
+          validation: {
+            required: false,
+          },
         },
       },
     },
@@ -111,8 +115,21 @@ class Search extends Component {
     this.setState({ showModal: true })
   }
 
-  updateForm = (element) => {
-    const newFormData = update(element, this.state.modalFields, "search")
+  updateFormModal = (element) => {
+    const newFormData = update(
+      element,
+      this.state.modalFields.formdata,
+      "search"
+    )
+
+    this.setState({
+      formError: false,
+      formdata: newFormData,
+    })
+  }
+
+  updateFormSearch = (element) => {
+    const newFormData = update(element, this.state.formdata, "search")
 
     this.setState({
       formError: false,
@@ -130,8 +147,8 @@ class Search extends Component {
                 <FormField
                   id={"jobsearch"}
                   label={"Search"}
-                  formdata={this.state.formdata.search}
-                  change={(element) => this.updateForm(element)}
+                  formdata={this.state.formdata.jobsearch}
+                  change={(element) => this.updateFormSearch(element)}
                 />
 
                 <Button
@@ -157,7 +174,7 @@ class Search extends Component {
           handleShow={this.handleShow}
           handleClose={this.handleClose}
           data={this.state}
-          updateForm={this.updateForm}
+          updateForm={this.updateFormModal}
         />
       </div>
     )

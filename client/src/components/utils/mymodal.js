@@ -20,12 +20,13 @@ const MyModal = ({ handleShow, handleClose, data, updateForm }) => {
   }
 
   const renderModalFields = () => {
-    let { modalFields } = data
+    let { formdata } = data.modalFields
     let fieldsArr = []
     //transform keys to array - required for map traversal
-    for (let field in modalFields) {
-      fieldsArr.push(modalFields[field])
+    for (let field in formdata) {
+      fieldsArr.push(formdata[field])
     }
+
     return fieldsArr.map((field) => (
       <FormField
         key={field.config.name}
