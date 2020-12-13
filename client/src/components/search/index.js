@@ -58,7 +58,7 @@ class Search extends Component {
             placeholder: "Ελάχιστος μισθός",
           },
           validation: {
-            required: true,
+            required: false,
           },
           valid: false,
           touched: false,
@@ -73,7 +73,7 @@ class Search extends Component {
             placeholder: "Μέγιστος μισθός",
           },
           validation: {
-            required: true,
+            required: false,
           },
           valid: false,
           touched: false,
@@ -124,7 +124,9 @@ class Search extends Component {
 
     this.setState({
       formError: false,
-      formdata: newFormData,
+      modalFields: {
+        formdata: newFormData,
+      },
     })
   }
 

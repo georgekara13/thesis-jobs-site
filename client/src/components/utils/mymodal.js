@@ -51,11 +51,8 @@ const MyModal = ({ handleShow, handleClose, data, updateForm }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
           <Button variant="primary" onClick={handleClose}>
-            Save Changes
+            Κλείσιμο
           </Button>
         </Modal.Footer>
       </Modal>
