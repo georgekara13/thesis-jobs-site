@@ -1,12 +1,12 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import React from "react"
+import { Switch, Route } from "react-router-dom"
 
-import Layout from './hoc/layout'
-import Home from './components/home'
-import RegisterLogin from './components/register_login'
-import Register from './components/register_login/register'
-import UserDashboard from './components/user'
-import Auth from './hoc/auth'
+import Layout from "./hoc/layout"
+import Home from "./components/home"
+import RegisterLogin from "./components/register_login"
+import Register from "./components/register_login/register"
+import UserDashboard from "./components/user"
+import Auth from "./hoc/auth"
 
 const Routes = () => {
   return (

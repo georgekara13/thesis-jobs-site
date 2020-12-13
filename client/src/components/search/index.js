@@ -1,17 +1,22 @@
 import React, { Component } from "react"
 
-import Form from "react-bootstrap/Form"
+import { connect } from "react-redux"
+import { withRouter } from "react-router-dom"
+import { getJobs } from "../../actions/job_actions"
 
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
+import Form from "react-bootstrap/Form"
 import FormField from "../utils/formfield"
 import MyModal from "../utils/mymodal"
+import SRC from "./src"
 import { update, generateData, isFormValid } from "../utils/formactions"
 
 class Search extends Component {
   state = {
+    searchResults: [],
     showModal: false,
     formError: false,
     errorMsg: "",
@@ -139,13 +144,40 @@ class Search extends Component {
     })
   }
 
+  dispatchSearch = (event) => {
+    event.preventDefault()
+    //TODO add the rest of the filter params
+    let keyword = this.state.formdata.jobsearch.value
+    let loc_keyword = this.state.modalFields.formdata.location_keyword.value
+    let company_keyword = this.state.modalFields.formdata.company_keyword.value
+
+    this.props
+      .dispatch(getJobs({ keyword, loc_keyword, company_keyword }))
+      .then((response) => {
+        if (response.payload.results) {
+          this.setState({
+            searchResults: response.payload.jobs,
+          })
+        } else {
+          this.setState({
+            errorMsg: "Δεν υπάρχουν Δουλειές!",
+          })
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          errorMsg: "Σφάλμα σύνδεσης με τον Διακομιστή",
+        })
+      })
+  }
+
   render() {
     return (
       <div className="general_wrapper">
         <Container>
           <Row>
             <Col>
-              <Form onSubmit={(event) => this.submitForm()}>
+              <Form onSubmit={(event) => this.dispatchSearch()}>
                 <FormField
                   id={"jobsearch"}
                   label={"Search"}
@@ -164,7 +196,7 @@ class Search extends Component {
                   className="bg-dark"
                   variant="primary"
                   type="Submit"
-                  onClick={(event) => this.submitForm(event)}
+                  onClick={(event) => this.dispatchSearch(event)}
                 >
                   Αναζήτηση
                 </Button>
@@ -172,6 +204,7 @@ class Search extends Component {
             </Col>
           </Row>
         </Container>
+        <SRC data={this.state.searchResults} />
         <MyModal
           handleShow={this.handleShow}
           handleClose={this.handleClose}
@@ -183,4 +216,4 @@ class Search extends Component {
   }
 }
 
-export default Search
+export default connect()(withRouter(Search))
