@@ -148,11 +148,9 @@ class Search extends Component {
     event.preventDefault()
     //TODO add the rest of the filter params
     let keyword = this.state.formdata.jobsearch.value
-    let loc_keyword = this.state.modalFields.formdata.location_keyword.value
-    let company_keyword = this.state.modalFields.formdata.company_keyword.value
 
     this.props
-      .dispatch(getJobs({ keyword, loc_keyword, company_keyword }))
+      .dispatch(getJobs({ keyword }))
       .then((response) => {
         if (response.payload.results) {
           this.setState({

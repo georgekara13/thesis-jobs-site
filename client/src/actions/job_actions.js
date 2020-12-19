@@ -1,6 +1,6 @@
-import axios from "axios"
+import axios from 'axios'
 
-import { GET_JOBS } from "./types"
+import { GET_JOBS } from './types'
 
 //TODO improve search both server & client side
 export function getJobs(params) {
@@ -8,7 +8,7 @@ export function getJobs(params) {
   let reqUrl = `/api/getjobs`
   let queryParams = []
 
-  if (keyword) queryParams.push(`title=${keyword}`)
+  if (keyword) queryParams.push(`keyword=${keyword}`)
   if (loc_keyword) queryParams.push(`location=${loc_keyword}`)
   if (company_keyword) queryParams.push(`company=${company_keyword}`)
 
