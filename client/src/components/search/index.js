@@ -147,6 +147,7 @@ class Search extends Component {
   dispatchSearch = (event) => {
     event.preventDefault()
     //TODO add the rest of the filter params
+    //TODO add page & limit options
     let keyword = this.state.formdata.jobsearch.value
 
     this.props
@@ -155,6 +156,7 @@ class Search extends Component {
         if (response.payload.results) {
           this.setState({
             searchResults: response.payload.jobs,
+            errorMsg: response.payload.error,
           })
         } else {
           this.setState({
