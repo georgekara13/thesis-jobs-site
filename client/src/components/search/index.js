@@ -1,108 +1,108 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 
-import { connect } from "react-redux"
-import { withRouter } from "react-router-dom"
-import { getJobs } from "../../actions/job_actions"
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { getJobs } from '../../actions/job_actions'
 
-import Container from "react-bootstrap/Container"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
-import Button from "react-bootstrap/Button"
-import Form from "react-bootstrap/Form"
-import FormField from "../utils/formfield"
-import MyModal from "../utils/mymodal"
-import SRC from "./src"
-import { update, generateData, isFormValid } from "../utils/formactions"
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import FormField from '../utils/formfield'
+import MyModal from '../utils/mymodal'
+import SRC from './src'
+import { update, generateData, isFormValid } from '../utils/formactions'
 
 class Search extends Component {
   state = {
     searchResults: [],
     showModal: false,
     formError: false,
-    errorMsg: "",
-    formSuccess: "",
+    errorMsg: '',
+    formSuccess: '',
     formdata: {
       jobsearch: {
-        element: "input",
-        value: "",
+        element: 'input',
+        value: '',
         config: {
-          name: "search_keyword",
-          type: "search",
-          placeholder: "Εισάγετε λέξεις κλειδιά για αναζήτηση",
+          name: 'search_keyword',
+          type: 'search',
+          placeholder: 'Εισάγετε λέξεις κλειδιά για αναζήτηση',
         },
         validation: {
           required: false,
         },
         valid: true,
         touched: false,
-        validationMessage: "",
+        validationMessage: '',
       },
     },
     modalFields: {
-      errorMsg: "",
-      formSuccess: "",
+      errorMsg: '',
+      formSuccess: '',
       formdata: {
         location_keyword: {
-          element: "input",
-          value: "",
+          element: 'input',
+          value: '',
           config: {
-            name: "location_keyword",
-            type: "search",
-            placeholder: "Περιοχή",
+            name: 'location_keyword',
+            type: 'search',
+            placeholder: 'Περιοχή',
           },
           validation: {
             required: false,
           },
         },
         salarymin_keyword: {
-          element: "input",
-          value: "",
+          element: 'input',
+          value: '',
           config: {
-            name: "salarymin_keyword",
-            type: "search",
-            placeholder: "Ελάχιστος μισθός",
+            name: 'salarymin_keyword',
+            type: 'search',
+            placeholder: 'Ελάχιστος μισθός',
           },
           validation: {
             required: false,
           },
           valid: false,
           touched: false,
-          validationMessage: "",
+          validationMessage: '',
         },
         salarymax_keyword: {
-          element: "input",
-          value: "",
+          element: 'input',
+          value: '',
           config: {
-            name: "salarymax_keyword",
-            type: "search",
-            placeholder: "Μέγιστος μισθός",
+            name: 'salarymax_keyword',
+            type: 'search',
+            placeholder: 'Μέγιστος μισθός',
           },
           validation: {
             required: false,
           },
           valid: false,
           touched: false,
-          validationMessage: "",
+          validationMessage: '',
         },
         jobtag_checkbox: {
-          element: "checkbox",
-          value: "",
+          element: 'checkbox',
+          value: '',
           config: {
-            name: "jobtag_checkbox",
-            type: "search",
-            placeholder: "Κατηγορίες",
+            name: 'jobtag_checkbox',
+            type: 'search',
+            placeholder: 'Κατηγορίες',
           },
           validation: {
             required: false,
           },
         },
         company_keyword: {
-          element: "input",
-          value: "",
+          element: 'input',
+          value: '',
           config: {
-            name: "company_keyword",
-            type: "search",
-            placeholder: "Εταιρεία",
+            name: 'company_keyword',
+            type: 'search',
+            placeholder: 'Εταιρεία',
           },
           validation: {
             required: false,
@@ -124,7 +124,7 @@ class Search extends Component {
     const newFormData = update(
       element,
       this.state.modalFields.formdata,
-      "search"
+      'search'
     )
 
     this.setState({
@@ -136,7 +136,7 @@ class Search extends Component {
   }
 
   updateFormSearch = (element) => {
-    const newFormData = update(element, this.state.formdata, "search")
+    const newFormData = update(element, this.state.formdata, 'search')
 
     this.setState({
       formError: false,
@@ -160,13 +160,13 @@ class Search extends Component {
           })
         } else {
           this.setState({
-            errorMsg: "Δεν υπάρχουν Δουλειές!",
+            errorMsg: 'Δεν βρέθηκαν αποτελέσματα!',
           })
         }
       })
       .catch((err) => {
         this.setState({
-          errorMsg: "Σφάλμα σύνδεσης με τον Διακομιστή",
+          errorMsg: 'Σφάλμα σύνδεσης με τον Διακομιστή',
         })
       })
   }
@@ -179,8 +179,8 @@ class Search extends Component {
             <Col>
               <Form onSubmit={(event) => this.dispatchSearch()}>
                 <FormField
-                  id={"jobsearch"}
-                  label={"Search"}
+                  id={'jobsearch'}
+                  label={'Search'}
                   formdata={this.state.formdata.jobsearch}
                   change={(element) => this.updateFormSearch(element)}
                 />
@@ -204,7 +204,8 @@ class Search extends Component {
             </Col>
           </Row>
         </Container>
-        <SRC data={this.state.searchResults} />
+        <br />
+        <SRC data={this.state.searchResults} error={this.state.errorMsg} />
         <MyModal
           handleShow={this.handleShow}
           handleClose={this.handleClose}
