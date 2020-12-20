@@ -7,10 +7,15 @@ import Col from 'react-bootstrap/Col'
 const MyPager = (props) => {
   const { pager } = props
   let items = []
+
   const renderPager = (pager) => {
     for (let num = 1; num <= pager.totalPages; num++) {
       items.push(
-        <Pagination.Item key={num} active={num === pager.currentPage}>
+        <Pagination.Item
+          key={num}
+          active={num == pager.currentPage}
+          onClick={(event) => props.action(event, num)}
+        >
           {num}
         </Pagination.Item>
       )
@@ -25,13 +30,7 @@ const MyPager = (props) => {
     <Container>
       <Row>
         <Col>
-          <Pagination size="sm">
-            <Pagination.First />
-            <Pagination.Prev />
-            {items}
-            <Pagination.Next />
-            <Pagination.Last />
-          </Pagination>
+          <Pagination size="sm">{items}</Pagination>
         </Col>
       </Row>
     </Container>

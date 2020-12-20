@@ -6,9 +6,9 @@ const { logger } = require('../configuration/logger')
 //middleware for constructing job queries
 let jobQuery = (req, res, next) => {
   let query = req.query
-  let { page = 1, limit = 10, keyword } = query
+  let { page = 1, limit = 9, keyword } = query
 
-  if (limit > 100) limit = 100
+  if (limit > 81) limit = 81
 
   /*fetch query params, append to json unless not defined
   note: ids are unique, no need to use here. Use getjobbyid route*/

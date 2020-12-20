@@ -163,7 +163,7 @@ class Search extends Component {
     )
   }
 
-  dispatchSearch = (event) => {
+  dispatchSearch = (event, page = 1) => {
     if (event) event.preventDefault()
 
     //TODO add the rest of the filter params
@@ -171,7 +171,7 @@ class Search extends Component {
     let keyword = this.state.formdata.jobsearch.value
 
     this.props
-      .dispatch(getJobs({ keyword }))
+      .dispatch(getJobs({ keyword, page }))
       .then((response) => {
         if (response.payload.results) {
           this.setState({
