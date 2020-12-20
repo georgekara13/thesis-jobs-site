@@ -23,6 +23,15 @@ let jobQuery = (req, res, next) => {
   if (query.contactPhone) queryObj.contactPhone = query.contactPhone
   if (query.contactEmail) queryObj.contactEmail = query.contactEmail
   if (query.company)      queryObj.company      = query.company*/
+
+  //get total count of docs
+  Job.fuzzySearch({ query: keyword, exact: true })
+    .countDocuments()
+    .then((count) => {
+      req.total = count
+    })
+
+  // redo the query to return paged results
   Job.fuzzySearch({ query: keyword, exact: true })
     .limit(limit * 1)
     .skip((page - 1) * limit)
