@@ -150,6 +150,19 @@ class Search extends Component {
     })
   }
 
+  showTotal = () => {
+    return this.state.pager.results && !this.state.errorMsg ? (
+      <Container>
+        <Row>
+          <Col>Σύνολο αποτελεσμάτων: {this.state.pager.results}</Col>
+        </Row>
+        <br />
+      </Container>
+    ) : (
+      ''
+    )
+  }
+
   dispatchSearch = (event) => {
     if (event) event.preventDefault()
 
@@ -173,12 +186,22 @@ class Search extends Component {
         } else {
           this.setState({
             errorMsg: 'Δεν βρέθηκαν αποτελέσματα!',
+            pager: {
+              totalPages: 0,
+              currentPage: 1,
+              results: 0,
+            },
           })
         }
       })
       .catch((err) => {
         this.setState({
           errorMsg: `Σφάλμα σύνδεσης με τον Διακομιστή: ${err}`,
+          pager: {
+            totalPages: 0,
+            currentPage: 1,
+            results: 0,
+          },
         })
       })
   }
@@ -217,6 +240,7 @@ class Search extends Component {
           </Row>
         </Container>
         <br />
+        {this.showTotal()}
         <SRC data={this.state.searchResults} error={this.state.errorMsg} />
         <MyPager pager={this.state.pager} action={this.dispatchSearch} />
         <MyModal
