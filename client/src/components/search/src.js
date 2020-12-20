@@ -45,7 +45,7 @@ const SRC = (props) => {
         </Col>
       ))
     ) : (
-      <div>{props.error}</div>
+      <Col>{props.error}</Col>
     )
   }
 

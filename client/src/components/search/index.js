@@ -11,12 +11,18 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import FormField from '../utils/formfield'
 import MyModal from '../utils/mymodal'
+import MyPager from '../utils/mypager'
 import SRC from './src'
 import { update, generateData, isFormValid } from '../utils/formactions'
 
 class Search extends Component {
   state = {
     searchResults: [],
+    pager: {
+      totalPages: 0,
+      currentPage: 1,
+      results: 0,
+    },
     showModal: false,
     formError: false,
     errorMsg: '',
@@ -145,7 +151,8 @@ class Search extends Component {
   }
 
   dispatchSearch = (event) => {
-    event.preventDefault()
+    if (event) event.preventDefault()
+
     //TODO add the rest of the filter params
     //TODO add page & limit options
     let keyword = this.state.formdata.jobsearch.value
@@ -156,6 +163,11 @@ class Search extends Component {
         if (response.payload.results) {
           this.setState({
             searchResults: response.payload.jobs,
+            pager: {
+              totalPages: response.payload.totalPages,
+              currentPage: response.payload.currentPage,
+              results: response.payload.results,
+            },
             errorMsg: response.payload.error,
           })
         } else {
@@ -166,7 +178,7 @@ class Search extends Component {
       })
       .catch((err) => {
         this.setState({
-          errorMsg: 'Σφάλμα σύνδεσης με τον Διακομιστή',
+          errorMsg: `Σφάλμα σύνδεσης με τον Διακομιστή: ${err}`,
         })
       })
   }
@@ -206,6 +218,7 @@ class Search extends Component {
         </Container>
         <br />
         <SRC data={this.state.searchResults} error={this.state.errorMsg} />
+        <MyPager pager={this.state.pager} action={this.dispatchSearch} />
         <MyModal
           handleShow={this.handleShow}
           handleClose={this.handleClose}
