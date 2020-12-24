@@ -21,6 +21,8 @@ class Search extends Component {
     pager: {
       totalPages: 0,
       currentPage: 1,
+      nextPage: 0,
+      previousPage: 0,
       results: 0,
     },
     showModal: false,
@@ -179,6 +181,8 @@ class Search extends Component {
             pager: {
               totalPages: response.payload.totalPages,
               currentPage: response.payload.currentPage,
+              nextPage: response.payload.nextPage,
+              previousPage: response.payload.previousPage,
               results: response.payload.results,
             },
             errorMsg: response.payload.error,
@@ -189,6 +193,8 @@ class Search extends Component {
             pager: {
               totalPages: 0,
               currentPage: 1,
+              nextPage: 0,
+              previousPage: 0,
               results: 0,
             },
           })
@@ -200,6 +206,8 @@ class Search extends Component {
           pager: {
             totalPages: 0,
             currentPage: 1,
+            nextPage: 0,
+            previousPage: 0,
             results: 0,
           },
         })

@@ -3,47 +3,16 @@ const { Source } = require('../model/source')
 const { Announcement } = require('../model/announcement')
 const { logger } = require('../configuration/logger')
 
-//middleware for constructing job queries
+//middleware for getting the total count of docs
 let jobQuery = (req, res, next) => {
-  let query = req.query
-  let { page = 1, limit = 9, keyword } = query
-
-  if (limit > 81) limit = 81
-
-  /*fetch query params, append to json unless not defined
-  note: ids are unique, no need to use here. Use getjobbyid route*/
-  /*
-  let queryObj = {}
-  if (query.title)        queryObj.title        = query.title
-  if (query.description)  queryObj.description  = query.description //overkill - TODO use keyword search
-  if (query.salaryMin)    queryObj.salaryMin    = query.salaryMin
-  if (query.salaryMax)    queryObj.salaryMax    = query.salaryMax
-  if (query.jobTag)       queryObj.jobTag       = query.jobTag
-  if (query.location)     queryObj.location     = query.location
-  if (query.contactPhone) queryObj.contactPhone = query.contactPhone
-  if (query.contactEmail) queryObj.contactEmail = query.contactEmail
-  if (query.company)      queryObj.company      = query.company*/
+  let { keyword } = req.query
 
   //get total count of docs
   Job.fuzzySearch({ query: keyword, exact: true })
     .countDocuments()
     .then((count) => {
       req.total = count
-    })
-
-  // redo the query to return paged results
-  Job.fuzzySearch({ query: keyword, exact: true })
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec((err, doc) => {
-      if (err) {
-        logger.warn(err)
-        return res.status(400).send(err)
-      }
-      if (!doc.length) return res.json({ error: 'No jobs found' })
-
-      req.jobs = doc
-      req.currentPage = page
+      logger.info(`Fetched ${count} results for keyword '${keyword}'`)
       next()
     })
 }

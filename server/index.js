@@ -68,17 +68,37 @@ app.get('/api/getjobbyid', (req, res) => {
 })
 
 app.get('/api/getjobs', jobQuery, async (req, res) => {
-  let { limit = 10 } = req.query
+  let { page = 1, limit = 9, keyword } = req.query
 
-  if (limit > 100) limit = 100
+  if (limit > 36) limit = 36
 
-  res.status(200).json({
-    results: req.total,
-    jobs: req.jobs,
-    totalPages: req.totalPages,
-    currentPage: req.currentPage,
-    totalPages: Math.ceil(req.total / limit),
-  })
+  // redo the query to return paged results
+  Job.fuzzySearch({ query: keyword, exact: true })
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec((err, doc) => {
+      if (err) {
+        logger.warn(err)
+        return res.status(400).send(err)
+      }
+      if (!doc.length) return res.json({ error: 'No jobs found' })
+
+      //cast to int
+      currentPage = parseInt(page)
+
+      let totalPages = Math.ceil(req.total / limit)
+      let nextPage = currentPage < totalPages ? currentPage + 1 : 0
+      let previousPage = currentPage > 1 ? currentPage - 1 : 0
+
+      res.status(200).json({
+        results: req.total,
+        jobs: doc,
+        currentPage,
+        totalPages,
+        nextPage,
+        previousPage,
+      })
+    })
 })
 
 app.get('/api/getannouncements', announcementQuery, async (req, res) => {
