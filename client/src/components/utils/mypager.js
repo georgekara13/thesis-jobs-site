@@ -30,7 +30,7 @@ const MyPager = (props) => {
     <Pagination.Next onClick={(event) => props.action(event, next)} />
   )
 
-  if (pager.results) {
+  if (pager.totalPages > 1) {
     renderPager(pager)
   }
 
