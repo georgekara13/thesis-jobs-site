@@ -22,6 +22,14 @@ const MyPager = (props) => {
     }
   }
 
+  const renderPrevious = (previous) => (
+    <Pagination.Prev onClick={(event) => props.action(event, previous)} />
+  )
+
+  const renderNext = (next) => (
+    <Pagination.Next onClick={(event) => props.action(event, next)} />
+  )
+
   if (pager.results) {
     renderPager(pager)
   }
@@ -30,7 +38,11 @@ const MyPager = (props) => {
     <Container>
       <Row>
         <Col>
-          <Pagination size="sm">{items}</Pagination>
+          <Pagination size="sm">
+            {pager.previousPage ? renderPrevious(pager.previousPage) : ''}
+            {items}
+            {pager.nextPage ? renderNext(pager.nextPage) : ''}
+          </Pagination>
         </Col>
       </Row>
     </Container>
