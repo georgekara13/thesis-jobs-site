@@ -212,12 +212,14 @@ class Search extends Component {
           },
         })
       })
+    //after getting the results - smooth scroll into view
+    this.myRef.scrollIntoView()
   }
 
   render() {
     return (
       <div className="general_wrapper">
-        <Container>
+        <Container ref={(ref) => (this.myRef = ref)}>
           <Row>
             <Col>
               <Form onSubmit={(event) => this.dispatchSearch()}>
@@ -249,6 +251,7 @@ class Search extends Component {
         </Container>
         <br />
         {this.showTotal()}
+        <MyPager pager={this.state.pager} action={this.dispatchSearch} />
         <SRC data={this.state.searchResults} error={this.state.errorMsg} />
         <MyPager pager={this.state.pager} action={this.dispatchSearch} />
         <MyModal
