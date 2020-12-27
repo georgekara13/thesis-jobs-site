@@ -15,9 +15,14 @@ import MyPager from '../utils/mypager'
 import SRC from './src'
 import { update, generateData, isFormValid } from '../utils/formactions'
 
+//TODO FIX Spaghetti code - Huge state, too many renders
 class Search extends Component {
   state = {
     searchResults: [],
+    adc: {
+      show: false,
+      item: '',
+    },
     pager: {
       totalPages: 0,
       currentPage: 1,
@@ -121,7 +126,19 @@ class Search extends Component {
   }
 
   handleClose = () => {
-    this.setState({ showModal: false })
+    this.setState({
+      showModal: false,
+    })
+  }
+
+  handleAdcShow = () => {
+    this.setState({ adc: { show: true } })
+  }
+
+  handleAdcClose = () => {
+    this.setState({
+      adc: { show: false, item: '' },
+    })
   }
 
   handleShow = () => {
@@ -216,6 +233,25 @@ class Search extends Component {
     this.myRef.scrollIntoView()
   }
 
+  renderAdc = () => (
+    <MyModal
+      handleShow={this.handleAdcShow}
+      handleClose={this.handleAdcClose}
+      data={this.state}
+      type={'adc'}
+    />
+  )
+
+  showAdc = (event, item) => {
+    event.preventDefault()
+    this.setState({
+      adc: {
+        show: true,
+        item,
+      },
+    })
+  }
+
   render() {
     return (
       <div className="general_wrapper">
@@ -248,17 +284,23 @@ class Search extends Component {
               </Form>
             </Col>
           </Row>
+          {this.state.adc.show ? this.renderAdc() : ''}
         </Container>
         <br />
         {this.showTotal()}
         <MyPager pager={this.state.pager} action={this.dispatchSearch} />
-        <SRC data={this.state.searchResults} error={this.state.errorMsg} />
+        <SRC
+          data={this.state.searchResults}
+          error={this.state.errorMsg}
+          handleShow={this.showAdc}
+        />
         <MyPager pager={this.state.pager} action={this.dispatchSearch} />
         <MyModal
           handleShow={this.handleShow}
           handleClose={this.handleClose}
           data={this.state}
           updateForm={this.updateFormModal}
+          type={'search'}
         />
       </div>
     )

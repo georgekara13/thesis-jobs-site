@@ -36,7 +36,10 @@ const SRC = (props) => {
               </h6>
               <hr />
               <Card.Text>{truncateDescription(result.description)}</Card.Text>
-              <Button variant="secondary" href={result.url} target="_blank">
+              <Button
+                variant="secondary"
+                onClick={(event) => props.handleShow(event, result)}
+              >
                 Περισσότερα
               </Button>
             </Card.Body>

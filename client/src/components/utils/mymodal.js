@@ -1,12 +1,13 @@
-import React from "react"
-import Form from "react-bootstrap/Form"
-import Modal from "react-bootstrap/Modal"
-import Button from "react-bootstrap/Button"
+import React from 'react'
+import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 
-import FormField from "./formfield"
-import FontAwesomeIcon from "@fortawesome/react-fontawesome"
+import FormField from './formfield'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
-const MyModal = ({ handleShow, handleClose, data, updateForm }) => {
+// TODO Fix spaghetti code - component should be more generic
+const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
   const showError = () => {
     let errorMessage = null
 
@@ -40,23 +41,45 @@ const MyModal = ({ handleShow, handleClose, data, updateForm }) => {
   }
 
   const RenderTemplate = () => {
-    let modalTemplate = (
-      <Modal show={data.showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Περισσότερα Φίλτρα</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={(event) => this.submitForm()}>
-            {renderModalFields()}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Κλείσιμο
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )
+    let modalTemplate =
+      type == 'search' ? (
+        <Modal show={data.showModal} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Περισσότερα Φίλτρα</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={(event) => this.submitForm()}>
+              {renderModalFields()}
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={handleClose}>
+              Κλείσιμο
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      ) : (
+        <Modal show={data.adc.show} onHide={handleClose} size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>{data.adc.item.title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>{data.adc.item.description}</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              href={data.adc.item.url}
+              target="_blank"
+            >
+              Μετάβαση στην σελίδα εργοδότη
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+              Κλείσιμο
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )
     return modalTemplate
   }
 
