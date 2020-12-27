@@ -40,6 +40,7 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
     ))
   }
 
+  // TODO Add renderers/formatters for ad fields
   const RenderTemplate = () => {
     let modalTemplate =
       type == 'search' ? (
@@ -64,6 +65,13 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
             <Modal.Title>{data.adc.item.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <ul>
+              <li>Τοποθεσία: {data.adc.item.location}</li>
+              <li>Εταιρεία: {data.adc.item.company}</li>
+              <li>Μισθός: {data.adc.item.salaryMin}</li>
+              <li>Ημερομηνία καταχώρησης: {data.adc.item.updatedAt}</li>
+            </ul>
+            <hr />
             <div>{data.adc.item.description}</div>
           </Modal.Body>
           <Modal.Footer>
