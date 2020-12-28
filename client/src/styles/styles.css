@@ -88,3 +88,7 @@ html {
 .right {
   float: right;
 }
+
+.adc_description {
+  text-align: justify;
+}

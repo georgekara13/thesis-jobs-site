@@ -6,6 +6,11 @@ import Button from 'react-bootstrap/Button'
 import FormField from './formfield'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
+import faCalendar from '@fortawesome/fontawesome-free-solid/faCalendar'
+import faMapMarkerAlt from '@fortawesome/fontawesome-free-solid/faMapMarkerAlt'
+import faBuilding from '@fortawesome/fontawesome-free-solid/faBuilding'
+import faMoneyBillWave from '@fortawesome/fontawesome-free-solid/faMoneyBillWave'
+
 // TODO Fix spaghetti code - component should be more generic
 const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
   const showError = () => {
@@ -65,14 +70,26 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
             <Modal.Title>{data.adc.item.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <ul>
-              <li>Τοποθεσία: {data.adc.item.location}</li>
-              <li>Εταιρεία: {data.adc.item.company}</li>
-              <li>Μισθός: {data.adc.item.salaryMin}</li>
-              <li>Ημερομηνία καταχώρησης: {data.adc.item.updatedAt}</li>
+            <ul className="fa-ul">
+              <li>
+                <FontAwesomeIcon icon={faMapMarkerAlt} /> Τοποθεσία:{' '}
+                {data.adc.item.location}
+              </li>
+              <li>
+                <FontAwesomeIcon icon={faBuilding} /> Εταιρεία:{' '}
+                {data.adc.item.company}
+              </li>
+              <li>
+                <FontAwesomeIcon icon={faMoneyBillWave} /> Μισθός:{' '}
+                {data.adc.item.salaryMin}
+              </li>
+              <li>
+                <FontAwesomeIcon icon={faCalendar} /> Ημερομηνία:{' '}
+                {data.adc.item.updatedAt}
+              </li>
             </ul>
             <hr />
-            <div>{data.adc.item.description}</div>
+            <div className="adc_description">{data.adc.item.description}</div>
           </Modal.Body>
           <Modal.Footer>
             <Button
