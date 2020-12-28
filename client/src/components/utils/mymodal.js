@@ -25,6 +25,43 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
     return errorMessage
   }
 
+  // TODO add the rest of the fields
+  const renderAdcFields = () => {
+    let { item } = data.adc
+    let itemsLi = []
+
+    if (item.location) {
+      itemsLi.push(
+        <li>
+          <FontAwesomeIcon icon={faMapMarkerAlt} /> Τοποθεσία: {item.location}
+        </li>
+      )
+    }
+
+    if (item.company) {
+      itemsLi.push(
+        <li>
+          <FontAwesomeIcon icon={faBuilding} /> Εταιρεία: {item.company}
+        </li>
+      )
+    }
+
+    if (item.salaryMin) {
+      itemsLi.push(
+        <li>
+          <FontAwesomeIcon icon={faMoneyBillWave} /> Μισθός: {item.salaryMin}
+        </li>
+      )
+    }
+
+    itemsLi.push(
+      <li>
+        <FontAwesomeIcon icon={faCalendar} /> Ημερομηνία: {item.updatedAt}
+      </li>
+    )
+    return <ul className="fa-ul">{itemsLi}</ul>
+  }
+
   const renderModalFields = () => {
     let { formdata } = data.modalFields
     let fieldsArr = []
@@ -45,7 +82,6 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
     ))
   }
 
-  // TODO Add renderers/formatters for ad fields
   const RenderTemplate = () => {
     let modalTemplate =
       type == 'search' ? (
@@ -70,24 +106,7 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
             <Modal.Title>{data.adc.item.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <ul className="fa-ul">
-              <li>
-                <FontAwesomeIcon icon={faMapMarkerAlt} /> Τοποθεσία:{' '}
-                {data.adc.item.location}
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faBuilding} /> Εταιρεία:{' '}
-                {data.adc.item.company}
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faMoneyBillWave} /> Μισθός:{' '}
-                {data.adc.item.salaryMin}
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faCalendar} /> Ημερομηνία:{' '}
-                {data.adc.item.updatedAt}
-              </li>
-            </ul>
+            {renderAdcFields()}
             <hr />
             <div className="adc_description">{data.adc.item.description}</div>
           </Modal.Body>
