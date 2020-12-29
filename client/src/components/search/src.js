@@ -16,7 +16,7 @@ const SRC = (props) => {
           <Card style={{ width: '18rem' }}>
             <Card.Body>
               <Card.Title>
-                <a href={result.url} target="_blank">
+                <a href={result.url} target="_blank" rel="noopener noreferrer">
                   {result.title}
                 </a>
               </Card.Title>

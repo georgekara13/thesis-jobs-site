@@ -30,7 +30,7 @@ const AdFields = ({ item, container }) => {
       )
     }
 
-    if ((item.salaryMin || item.salaryMax) && container == 'adc') {
+    if ((item.salaryMin || item.salaryMax) && container === 'adc') {
       itemsLi.push(
         <h6>
           <FontAwesomeIcon icon={faMoneyBillWave} />{' '}
@@ -39,7 +39,7 @@ const AdFields = ({ item, container }) => {
       )
     }
 
-    if (item.jobTag && container == 'adc') {
+    if (item.jobTag && container === 'adc') {
       itemsLi.push(
         <h6>
           <FontAwesomeIcon icon={faTags} /> {formatTags(item.jobTag)}
@@ -47,7 +47,7 @@ const AdFields = ({ item, container }) => {
       )
     }
 
-    if (item.contactEmail && container == 'adc') {
+    if (item.contactEmail && container === 'adc') {
       itemsLi.push(
         <h6>
           <FontAwesomeIcon icon={faEnvelope} /> {item.contactEmail}
@@ -55,7 +55,7 @@ const AdFields = ({ item, container }) => {
       )
     }
 
-    if (item.contactPhone && container == 'adc') {
+    if (item.contactPhone && container === 'adc') {
       itemsLi.push(
         <h6>
           <FontAwesomeIcon icon={faPhone} /> {item.contactPhone}

@@ -42,7 +42,7 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
 
   const RenderTemplate = () => {
     let modalTemplate =
-      type == 'search' ? (
+      type === 'search' ? (
         <Modal show={data.showModal} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Περισσότερα Φίλτρα</Modal.Title>

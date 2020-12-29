@@ -13,7 +13,7 @@ const MyPager = (props) => {
       items.push(
         <Pagination.Item
           key={num}
-          active={num == pager.currentPage}
+          active={num === pager.currentPage}
           onClick={(event) => props.action(event, num)}
         >
           {num}
