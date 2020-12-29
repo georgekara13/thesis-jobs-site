@@ -94,6 +94,7 @@ app.get('/api/getjobs', jobQuery, async (req, res) => {
         results: req.total,
         jobs: doc,
         currentPage,
+        perPage: limit,
         totalPages,
         nextPage,
         previousPage,

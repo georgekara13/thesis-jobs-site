@@ -104,7 +104,8 @@ html {
 }
 
 .adfields_container {
-  color: #007bff;
+  color: #6c757d;
   font-style: italic;
-  font-size: 17px;
+  font-weight: bold;
+  font-size: 15px;
 }

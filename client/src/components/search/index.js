@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Dropdown from 'react-bootstrap/Dropdown'
 import FormField from '../utils/formfield'
 import MyModal from '../utils/mymodal'
 import MyPager from '../utils/mypager'
@@ -26,6 +27,7 @@ class Search extends Component {
     pager: {
       totalPages: 0,
       currentPage: 1,
+      perPage: 9,
       nextPage: 0,
       previousPage: 0,
       results: 0,
@@ -176,21 +178,48 @@ class Search extends Component {
           <Col>Σύνολο αποτελεσμάτων: {this.state.pager.results}</Col>
         </Row>
         <br />
+        <Row>
+          <Col>
+            Ανά σελίδα:
+            <Dropdown>
+              <Dropdown.Toggle variant="primary" id="dropdown-variants-primary">
+                {this.state.pager.perPage}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={(event) => this.dispatchSearch(event, 1, 9)}
+                >
+                  9
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={(event) => this.dispatchSearch(event, 1, 18)}
+                >
+                  18
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={(event) => this.dispatchSearch(event, 1, 36)}
+                >
+                  36
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Col>
+        </Row>
+        <br />
       </Container>
     ) : (
       ''
     )
   }
 
-  dispatchSearch = (event, page = 1) => {
+  dispatchSearch = (event, page = 1, perPage = this.state.pager.perPage) => {
     if (event) event.preventDefault()
 
     //TODO add the rest of the filter params
-    //TODO add page & limit options
     let keyword = this.state.formdata.jobsearch.value
-
     this.props
-      .dispatch(getJobs({ keyword, page }))
+      .dispatch(getJobs({ keyword, page, perPage }))
       .then((response) => {
         if (response.payload.results) {
           this.setState({
@@ -201,6 +230,7 @@ class Search extends Component {
               nextPage: response.payload.nextPage,
               previousPage: response.payload.previousPage,
               results: response.payload.results,
+              perPage: response.payload.perPage,
             },
             errorMsg: response.payload.error,
           })
@@ -213,6 +243,7 @@ class Search extends Component {
               nextPage: 0,
               previousPage: 0,
               results: 0,
+              perPage: 9,
             },
           })
         }
@@ -221,11 +252,13 @@ class Search extends Component {
         this.setState({
           errorMsg: `Σφάλμα σύνδεσης με τον Διακομιστή: ${err}`,
           pager: {
+            ...this.state.pager,
             totalPages: 0,
             currentPage: 1,
             nextPage: 0,
             previousPage: 0,
             results: 0,
+            perPage: 9,
           },
         })
       })
