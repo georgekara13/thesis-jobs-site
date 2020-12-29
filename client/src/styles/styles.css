@@ -91,4 +91,5 @@ html {
 
 .adc_description {
   text-align: justify;
+  white-space: pre-line;
 }
