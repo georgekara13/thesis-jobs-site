@@ -99,6 +99,21 @@ html {
   box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
 }
 
+.src_fa {
+  margin-left: 30px;
+  padding-top: 50px;
+  font-size: 90px;
+  color: #6c757d;
+}
+
+.src_fa :hover {
+  margin-left: 30px;
+  padding-top: 50px;
+  font-size: 90px;
+  color: #007bff;
+  cursor: pointer;
+}
+
 .button_submit_src {
   margin-left: 5px;
 }

@@ -6,6 +6,8 @@ import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import AdFields from '../utils/adfields'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faHeart from '@fortawesome/fontawesome-free-solid/faHeart'
 
 // Search results container
 const SRC = (props) => {
@@ -24,11 +26,12 @@ const SRC = (props) => {
               <hr />
               <Card.Text>{truncateDescription(result.description)}</Card.Text>
               <Button
-                variant="secondary"
+                variant="primary"
                 onClick={(event) => props.handleShow(event, result)}
               >
                 Περισσότερα
               </Button>
+              <FontAwesomeIcon icon={faHeart} className="src_fa" />
             </Card.Body>
           </Card>
           <br />

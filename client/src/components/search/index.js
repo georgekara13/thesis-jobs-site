@@ -299,15 +299,11 @@ class Search extends Component {
                   change={(element) => this.updateFormSearch(element)}
                 />
 
-                <Button
-                  className="bg-dark"
-                  variant="primary"
-                  onClick={this.handleShow}
-                >
+                <Button variant="secondary" onClick={this.handleShow}>
                   Περισσότερα φίλτρα
                 </Button>
                 <Button
-                  className="bg-dark button_submit_src"
+                  className="button_submit_src"
                   variant="primary"
                   type="Submit"
                   onClick={(event) => this.dispatchSearch(event)}

@@ -9,16 +9,59 @@ const MyPager = (props) => {
   let items = []
 
   const renderPager = (pager) => {
-    for (let num = 1; num <= pager.totalPages; num++) {
-      items.push(
-        <Pagination.Item
-          key={num}
-          active={num === pager.currentPage}
-          onClick={(event) => props.action(event, num)}
-        >
-          {num}
-        </Pagination.Item>
-      )
+    //TODO Ellipsis pager - remove pager.EllipsisInProgress condition when done!
+    if (pager.totalPages > 10 && pager.EllipsisInProgress) {
+      if (pager.currentPage < pager.totalPages - 4) {
+        for (let num = pager.currentPage; num <= pager.currentPage + 2; num++) {
+          items.push(
+            <Pagination.Item
+              key={num}
+              active={num === pager.currentPage}
+              onClick={(event) => props.action(event, num)}
+            >
+              {num}
+            </Pagination.Item>
+          )
+        }
+      } else {
+        for (let num = 1; num <= 3; num++) {
+          items.push(
+            <Pagination.Item
+              key={num}
+              active={num === pager.currentPage}
+              onClick={(event) => props.action(event, num)}
+            >
+              {num}
+            </Pagination.Item>
+          )
+        }
+      }
+
+      items.push(<Pagination.Ellipsis />)
+
+      for (let num = pager.totalPages - 2; num <= pager.totalPages; num++) {
+        items.push(
+          <Pagination.Item
+            key={num}
+            active={num === pager.currentPage}
+            onClick={(event) => props.action(event, num)}
+          >
+            {num}
+          </Pagination.Item>
+        )
+      }
+    } else {
+      for (let num = 1; num <= pager.totalPages; num++) {
+        items.push(
+          <Pagination.Item
+            key={num}
+            active={num === pager.currentPage}
+            onClick={(event) => props.action(event, num)}
+          >
+            {num}
+          </Pagination.Item>
+        )
+      }
     }
   }
 

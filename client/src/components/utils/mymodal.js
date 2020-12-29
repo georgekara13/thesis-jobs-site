@@ -53,7 +53,7 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="secondary" onClick={handleClose}>
               Κλείσιμο
             </Button>
           </Modal.Footer>
@@ -69,14 +69,10 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
             <div className="adc_description">{data.adc.item.description}</div>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="secondary"
-              href={data.adc.item.url}
-              target="_blank"
-            >
+            <Button variant="primary" href={data.adc.item.url} target="_blank">
               Μετάβαση στην σελίδα εργοδότη
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="secondary" onClick={handleClose}>
               Κλείσιμο
             </Button>
           </Modal.Footer>
