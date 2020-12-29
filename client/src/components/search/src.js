@@ -13,7 +13,7 @@ const SRC = (props) => {
     return !props.error ? (
       props.data.map((result) => (
         <Col key={result._id} xs>
-          <Card style={{ width: '18rem' }}>
+          <Card className="src_jobcard">
             <Card.Body>
               <Card.Title>
                 <a href={result.url} target="_blank" rel="noopener noreferrer">

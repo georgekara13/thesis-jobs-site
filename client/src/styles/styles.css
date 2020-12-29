@@ -93,3 +93,18 @@ html {
   text-align: justify;
   white-space: pre-line;
 }
+
+.src_jobcard {
+  width: 18rem;
+  box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
+}
+
+.button_submit_src {
+  margin-left: 5px;
+}
+
+.adfields_container {
+  color: #007bff;
+  font-style: italic;
+  font-size: 17px;
+}

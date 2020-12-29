@@ -274,7 +274,7 @@ class Search extends Component {
                   Περισσότερα φίλτρα
                 </Button>
                 <Button
-                  className="bg-dark"
+                  className="bg-dark button_submit_src"
                   variant="primary"
                   type="Submit"
                   onClick={(event) => this.dispatchSearch(event)}
