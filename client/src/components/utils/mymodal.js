@@ -4,12 +4,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
 import FormField from './formfield'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-
-import faCalendar from '@fortawesome/fontawesome-free-solid/faCalendar'
-import faMapMarkerAlt from '@fortawesome/fontawesome-free-solid/faMapMarkerAlt'
-import faBuilding from '@fortawesome/fontawesome-free-solid/faBuilding'
-import faMoneyBillWave from '@fortawesome/fontawesome-free-solid/faMoneyBillWave'
+import AdFields from './adfields'
 
 // TODO Fix spaghetti code - component should be more generic
 const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
@@ -23,43 +18,6 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
     }
 
     return errorMessage
-  }
-
-  // TODO add the rest of the fields
-  const renderAdcFields = () => {
-    let { item } = data.adc
-    let itemsLi = []
-
-    if (item.location) {
-      itemsLi.push(
-        <li>
-          <FontAwesomeIcon icon={faMapMarkerAlt} /> Τοποθεσία: {item.location}
-        </li>
-      )
-    }
-
-    if (item.company) {
-      itemsLi.push(
-        <li>
-          <FontAwesomeIcon icon={faBuilding} /> Εταιρεία: {item.company}
-        </li>
-      )
-    }
-
-    if (item.salaryMin) {
-      itemsLi.push(
-        <li>
-          <FontAwesomeIcon icon={faMoneyBillWave} /> Μισθός: {item.salaryMin}
-        </li>
-      )
-    }
-
-    itemsLi.push(
-      <li>
-        <FontAwesomeIcon icon={faCalendar} /> Ημερομηνία: {item.updatedAt}
-      </li>
-    )
-    return <ul className="fa-ul">{itemsLi}</ul>
   }
 
   const renderModalFields = () => {
@@ -106,7 +64,7 @@ const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
             <Modal.Title>{data.adc.item.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {renderAdcFields()}
+            <AdFields item={data.adc.item} container="adc" />
             <hr />
             <div className="adc_description">{data.adc.item.description}</div>
           </Modal.Body>

@@ -5,11 +5,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-
-import faCalendar from '@fortawesome/fontawesome-free-solid/faCalendar'
-import faMapMarkerAlt from '@fortawesome/fontawesome-free-solid/faMapMarkerAlt'
-import faBuilding from '@fortawesome/fontawesome-free-solid/faBuilding'
+import AdFields from '../utils/adfields'
 
 // Search results container
 const SRC = (props) => {
@@ -24,16 +20,7 @@ const SRC = (props) => {
                   {result.title}
                 </a>
               </Card.Title>
-              <h6>
-                <FontAwesomeIcon icon={faCalendar} />{' '}
-                {result.updatedAt.replace(/T.*/, '')}
-              </h6>
-              <h6>
-                <FontAwesomeIcon icon={faMapMarkerAlt} /> {result.location}
-              </h6>
-              <h6>
-                <FontAwesomeIcon icon={faBuilding} /> {result.company}
-              </h6>
+              <AdFields item={result} container="src" />
               <hr />
               <Card.Text>{truncateDescription(result.description)}</Card.Text>
               <Button
