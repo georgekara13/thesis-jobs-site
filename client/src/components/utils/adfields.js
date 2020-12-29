@@ -16,7 +16,7 @@ const AdFields = ({ item, container }) => {
 
     if (item.location) {
       itemsLi.push(
-        <h6>
+        <h6 key="ad_location">
           <FontAwesomeIcon icon={faMapMarkerAlt} /> {item.location}
         </h6>
       )
@@ -24,7 +24,7 @@ const AdFields = ({ item, container }) => {
 
     if (item.company) {
       itemsLi.push(
-        <h6>
+        <h6 key="ad_company">
           <FontAwesomeIcon icon={faBuilding} /> {item.company}
         </h6>
       )
@@ -32,7 +32,7 @@ const AdFields = ({ item, container }) => {
 
     if ((item.salaryMin || item.salaryMax) && container === 'adc') {
       itemsLi.push(
-        <h6>
+        <h6 key="ad_salary">
           <FontAwesomeIcon icon={faMoneyBillWave} />{' '}
           {formatSalary(item.salaryMin, item.salaryMax)}
         </h6>
@@ -41,7 +41,7 @@ const AdFields = ({ item, container }) => {
 
     if (item.jobTag && container === 'adc') {
       itemsLi.push(
-        <h6>
+        <h6 key="ad_jobTag">
           <FontAwesomeIcon icon={faTags} /> {formatTags(item.jobTag)}
         </h6>
       )
@@ -49,7 +49,7 @@ const AdFields = ({ item, container }) => {
 
     if (item.contactEmail && container === 'adc') {
       itemsLi.push(
-        <h6>
+        <h6 key="ad_email">
           <FontAwesomeIcon icon={faEnvelope} /> {item.contactEmail}
         </h6>
       )
@@ -57,14 +57,14 @@ const AdFields = ({ item, container }) => {
 
     if (item.contactPhone && container === 'adc') {
       itemsLi.push(
-        <h6>
+        <h6 key="ad_phone">
           <FontAwesomeIcon icon={faPhone} /> {item.contactPhone}
         </h6>
       )
     }
 
     itemsLi.push(
-      <h6>
+      <h6 key="ad_date">
         <FontAwesomeIcon icon={faCalendar} /> {formatDate(item.updatedAt)}
       </h6>
     )
