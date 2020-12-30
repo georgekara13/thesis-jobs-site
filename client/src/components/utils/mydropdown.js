@@ -20,12 +20,11 @@ const MyDropDown = (props) => {
   return (
     <Row>
       <Col>
-        Ανά σελίδα:
         <Dropdown>
+          Ανά σελίδα:{' '}
           <Dropdown.Toggle variant="primary" id="dropdown-variants-primary">
             {label}
           </Dropdown.Toggle>
-
           <Dropdown.Menu>{renderItems()}</Dropdown.Menu>
         </Dropdown>
       </Col>
