@@ -9,10 +9,10 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import Dropdown from 'react-bootstrap/Dropdown'
 import FormField from '../utils/formfield'
 import MyModal from '../utils/mymodal'
 import MyPager from '../utils/mypager'
+import MyDropdown from '../utils/mydropdown'
 import SRC from './src'
 import { update, generateData, isFormValid } from '../utils/formactions'
 
@@ -178,34 +178,11 @@ class Search extends Component {
           <Col>Σύνολο αποτελεσμάτων: {this.state.pager.results}</Col>
         </Row>
         <br />
-        <Row>
-          <Col>
-            Ανά σελίδα:
-            <Dropdown>
-              <Dropdown.Toggle variant="primary" id="dropdown-variants-primary">
-                {this.state.pager.perPage}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(event) => this.dispatchSearch(event, 1, 9)}
-                >
-                  9
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(event) => this.dispatchSearch(event, 1, 18)}
-                >
-                  18
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={(event) => this.dispatchSearch(event, 1, 36)}
-                >
-                  36
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Col>
-        </Row>
+        <MyDropdown
+          label={this.state.pager.perPage}
+          items={[9, 18, 36]}
+          action={this.dispatchSearch}
+        />
         <br />
       </Container>
     ) : (
