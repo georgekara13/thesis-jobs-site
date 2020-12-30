@@ -45,6 +45,7 @@ app.get('/api/userisauth', auth, (req, res) => {
     isAuth: true,
     id: req.user._id,
     email: req.user.email,
+    favourites: req.user.favourites,
   })
 })
 
@@ -196,6 +197,39 @@ app.post('/api/addjob', (req, res) => {
   })
 })
 
+app.post('/api/addtofavourites', auth, (req, res) => {
+  const { userid, jobid } = req.query
+
+  logger.info(`Add to favs for user ${userid} , for job ${jobid}`)
+
+  User.findById({ _id: userid })
+    .exec()
+    .then((user) => {
+      user.favourites.push(jobid)
+
+      // filter out duplicate ids
+      let uniqueFavs = user.favourites.filter((c, index) => {
+        return user.favourites.indexOf(c) === index
+      })
+      user.favourites = uniqueFavs
+
+      user.save((err, doc) => {
+        if (err) {
+          logger.warn(err)
+          return res.status(400).send(err)
+        }
+        res.status(200).json({
+          post: true,
+          doc,
+        })
+      })
+    })
+    .catch((err) => {
+      logger.warn(err)
+      return res.status(400).send(err)
+    })
+})
+
 /*TODO ADD ADMIN AUTH MIDDLEWARE - only admin users should be able to post
 announcements*/
 app.post('/api/addannouncement', (req, res) => {
@@ -277,6 +311,30 @@ app.delete('/api/deletesource', (req, res) => {
     }
     res.json(true)
   })
+})
+
+app.delete('/api/deletefromfavourites', auth, (req, res) => {
+  const { userid, jobid } = req.query
+
+  logger.info(`Delete favs for user ${userid} , for job ${jobid}`)
+
+  User.updateOne(
+    { _id: userid },
+    { $pull: { favourites: jobid } },
+    (err, doc) => {
+      if (!err) {
+        res.status(200).json({
+          delete: true,
+          jobid,
+        })
+      } else {
+        logger.warn(err)
+        res.status(400).json({
+          err,
+        })
+      }
+    }
+  )
 })
 
 //UPDATE routes
