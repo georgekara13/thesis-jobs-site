@@ -139,4 +139,7 @@ client/npm-debug.log*
 client/yarn-debug.log*
 client/yarn-error.log*
 
+# dev
+*.code-workspace
+
 # End of https://www.gitignore.io/api/node

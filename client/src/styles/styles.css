@@ -1,0 +1,126 @@
+/* color palette: https://colorhunt.co/palette/212984 */
+
+html {
+  scroll-behavior: smooth;
+}
+
+.bck-blue {
+  background: #14274e;
+}
+
+.bck-grey {
+  background: #9ba4b4;
+}
+
+.signin_wrapper {
+  background: rgba(52, 58, 64, 0.8);
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.login_info_wrapper {
+  background: rgba(52, 58, 64, 0.8);
+  padding: 30px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: justify;
+  margin-left: 10px;
+}
+
+.login_page_wrapper {
+  background: url('/assets/images/delphi.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: 100px;
+  min-height: 100%;
+  min-width: 100%;
+}
+
+.error_label {
+  color: red;
+}
+
+.login_welcome_container {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding-top: 10px;
+  margin-bottom: 20px;
+  color: #000;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: #f6f6f6;
+}
+
+.login_announcements_container {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding-top: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #000;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: #f6f6f6;
+}
+
+.general_wrapper {
+  background: #fafafa;
+}
+
+.icon {
+  color: #fff;
+  margin-right: 4px;
+}
+
+.announcement_wrapper {
+  text-align: left;
+}
+
+.announcement_date {
+  font-size: 13px;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.adc_description {
+  text-align: justify;
+  white-space: pre-line;
+}
+
+.src_jobcard {
+  width: 18rem;
+  box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
+}
+
+.src_fa {
+  margin-left: 30px;
+  padding-top: 50px;
+  font-size: 90px;
+  color: #6c757d;
+}
+
+.src_fa :hover {
+  margin-left: 30px;
+  padding-top: 50px;
+  font-size: 90px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.button_submit_src {
+  margin-left: 5px;
+}
+
+.adfields_container {
+  color: #6c757d;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 15px;
+}
