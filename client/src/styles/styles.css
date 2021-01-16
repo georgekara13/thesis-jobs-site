@@ -103,10 +103,25 @@ html {
   margin-left: 30px;
   padding-top: 50px;
   font-size: 90px;
-  color: #6c757d;
+  color: #007bff;
 }
 
 .src_fa :hover {
+  margin-left: 30px;
+  padding-top: 50px;
+  font-size: 90px;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.src_fa_nofav {
+  margin-left: 30px;
+  padding-top: 50px;
+  font-size: 90px;
+  color: #6c757d;
+}
+
+.src_fa_nofav :hover {
   margin-left: 30px;
   padding-top: 50px;
   font-size: 90px;

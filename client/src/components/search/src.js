@@ -31,7 +31,7 @@ const SRC = (props) => {
               >
                 Περισσότερα
               </Button>
-              <FontAwesomeIcon icon={faHeart} className="src_fa" />
+              {renderFavouriteIcon(result._id)}
             </Card.Body>
           </Card>
           <br />
@@ -45,6 +45,13 @@ const SRC = (props) => {
   const truncateDescription = (description) => {
     return description.substring(0, 300).concat('...')
   }
+
+  const renderFavouriteIcon = (jobid) =>
+    props.userFavourites.includes(jobid) ? (
+      <FontAwesomeIcon icon={faHeart} className="src_fa" />
+    ) : (
+      <FontAwesomeIcon icon={faHeart} className="src_fa_nofav" />
+    )
 
   return (
     <div className="src_wrapper">

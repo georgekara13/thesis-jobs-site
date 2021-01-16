@@ -4,16 +4,14 @@ import Search from '../search'
 import Announcements from '../announcements'
 
 class Home extends Component {
-
   render() {
     return (
       <div className="general_wrapper">
-        <Search/>
-        <Announcements/>
+        <Search user={this.props.user} />
+        <Announcements />
       </div>
     )
   }
-
 }
 
 export default Home

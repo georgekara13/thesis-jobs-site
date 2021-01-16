@@ -263,6 +263,8 @@ class Search extends Component {
   }
 
   render() {
+    //DEBUG
+    //console.log(this.props.user)
     return (
       <div className="general_wrapper">
         <Container ref={(ref) => (this.myRef = ref)}>
@@ -299,6 +301,7 @@ class Search extends Component {
           data={this.state.searchResults}
           error={this.state.errorMsg}
           handleShow={this.showAdc}
+          userFavourites={this.props.user.userData.favourites}
         />
         <MyPager pager={this.state.pager} action={this.dispatchSearch} />
         <MyModal
