@@ -199,7 +199,6 @@ class Search extends Component {
     event.preventDefault()
 
     this.props.dispatch(rmUserFav(jobId, uid)).then((response) => {
-      console.log(`Removed: ${response.payload}`)
       this.setState({
         user: {
           favourites: response.payload,
@@ -212,7 +211,6 @@ class Search extends Component {
     event.preventDefault()
 
     this.props.dispatch(addUserFav(jobId, uid)).then((response) => {
-      console.log(`Added: ${response.payload}`)
       this.setState({
         user: {
           favourites: response.payload,
