@@ -291,6 +291,27 @@ class Search extends Component {
     })
   }
 
+  toggleSearchButton = () =>
+    this.state.formdata.jobsearch.value ? (
+      <Button
+        className="button_submit_src"
+        variant="primary"
+        type="Submit"
+        onClick={(event) => this.dispatchSearch(event)}
+      >
+        Αναζήτηση
+      </Button>
+    ) : (
+      <Button
+        className="button_submit_src"
+        variant="primary"
+        type="Submit"
+        onClick={(event) => this.dispatchSearch(event)}
+        disabled
+      >
+        Αναζήτηση
+      </Button>
+    )
   render() {
     //DEBUG
     //console.log(this.props.user)
@@ -310,14 +331,7 @@ class Search extends Component {
                 <Button variant="secondary" onClick={this.handleShow}>
                   Περισσότερα φίλτρα
                 </Button>
-                <Button
-                  className="button_submit_src"
-                  variant="primary"
-                  type="Submit"
-                  onClick={(event) => this.dispatchSearch(event)}
-                >
-                  Αναζήτηση
-                </Button>
+                {this.toggleSearchButton()}
               </Form>
             </Col>
           </Row>
