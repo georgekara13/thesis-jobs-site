@@ -5,11 +5,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import Tooltip from 'react-bootstrap/Tooltip'
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import AdFields from '../utils/adfields'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faHeart from '@fortawesome/fontawesome-free-solid/faHeart'
+import FavButton from '../utils/favbutton'
 
 // Search results container
 const SRC = (props) => {
@@ -33,7 +30,13 @@ const SRC = (props) => {
               >
                 Περισσότερα
               </Button>
-              {renderFavouriteIcon(result._id)}
+              <FavButton
+                uid={props.uid}
+                userFavourites={props.userFavourites}
+                jobId={result._id}
+                addFav={props.addFav}
+                rmFav={props.rmFav}
+              />
             </Card.Body>
           </Card>
           <br />
@@ -47,24 +50,6 @@ const SRC = (props) => {
   const truncateDescription = (description) => {
     return description.substring(0, 300).concat('...')
   }
-
-  // TODO Move to separate component
-  const renderFavouriteIcon = (jobid) =>
-    props.userFavourites.includes(jobid) ? (
-      <OverlayTrigger
-        placement={'bottom'}
-        overlay={<Tooltip>Αφαίρεση απ'τα αγαπημένα</Tooltip>}
-      >
-        <FontAwesomeIcon icon={faHeart} className="src_fa" />
-      </OverlayTrigger>
-    ) : (
-      <OverlayTrigger
-        placement={'bottom'}
-        overlay={<Tooltip>Προσθήκη στα αγαπημένα</Tooltip>}
-      >
-        <FontAwesomeIcon icon={faHeart} className="src_fa_nofav" />
-      </OverlayTrigger>
-    )
 
   return (
     <div className="src_wrapper">
