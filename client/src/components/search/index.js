@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getJobs } from '../../actions/job_actions'
+import { addUserFav, rmUserFav } from '../../actions/user_actions'
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -19,6 +20,9 @@ import { update, generateData, isFormValid } from '../utils/formactions'
 //TODO FIX Spaghetti code - Huge state, too many renders
 class Search extends Component {
   state = {
+    user: {
+      favourites: this.props.user.userData.favourites,
+    },
     searchResults: [],
     adc: {
       show: false,
@@ -190,6 +194,31 @@ class Search extends Component {
     )
   }
 
+  //used by the favourites component to set/remove favourite jobs
+  dispatchRemoveFavourites = (event, jobId, uid) => {
+    event.preventDefault()
+
+    this.props.dispatch(rmUserFav(jobId, uid)).then((response) => {
+      this.setState({
+        user: {
+          favourites: response.payload,
+        },
+      })
+    })
+  }
+
+  dispatchAddFavourites = (event, jobId, uid) => {
+    event.preventDefault()
+
+    this.props.dispatch(addUserFav(jobId, uid)).then((response) => {
+      this.setState({
+        user: {
+          favourites: response.payload,
+        },
+      })
+    })
+  }
+
   dispatchSearch = (event, page = 1, perPage = this.state.pager.perPage) => {
     if (event) event.preventDefault()
 
@@ -262,7 +291,30 @@ class Search extends Component {
     })
   }
 
+  toggleSearchButton = () =>
+    this.state.formdata.jobsearch.value ? (
+      <Button
+        className="button_submit_src"
+        variant="primary"
+        type="Submit"
+        onClick={(event) => this.dispatchSearch(event)}
+      >
+        Αναζήτηση
+      </Button>
+    ) : (
+      <Button
+        className="button_submit_src"
+        variant="primary"
+        type="Submit"
+        onClick={(event) => this.dispatchSearch(event)}
+        disabled
+      >
+        Αναζήτηση
+      </Button>
+    )
   render() {
+    //DEBUG
+    //console.log(this.props.user)
     return (
       <div className="general_wrapper">
         <Container ref={(ref) => (this.myRef = ref)}>
@@ -279,14 +331,7 @@ class Search extends Component {
                 <Button variant="secondary" onClick={this.handleShow}>
                   Περισσότερα φίλτρα
                 </Button>
-                <Button
-                  className="button_submit_src"
-                  variant="primary"
-                  type="Submit"
-                  onClick={(event) => this.dispatchSearch(event)}
-                >
-                  Αναζήτηση
-                </Button>
+                {this.toggleSearchButton()}
               </Form>
             </Col>
           </Row>
@@ -299,6 +344,10 @@ class Search extends Component {
           data={this.state.searchResults}
           error={this.state.errorMsg}
           handleShow={this.showAdc}
+          uid={this.props.user.userData.id}
+          userFavourites={this.state.user.favourites}
+          addFav={this.dispatchAddFavourites}
+          rmFav={this.dispatchRemoveFavourites}
         />
         <MyPager pager={this.state.pager} action={this.dispatchSearch} />
         <MyModal

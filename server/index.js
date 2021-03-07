@@ -318,14 +318,15 @@ app.delete('/api/deletefromfavourites', auth, (req, res) => {
 
   logger.info(`Delete favs for user ${userid} , for job ${jobid}`)
 
-  User.updateOne(
-    { _id: userid },
+  User.findByIdAndUpdate(
+    userid,
     { $pull: { favourites: jobid } },
+    { new: true },
     (err, doc) => {
       if (!err) {
         res.status(200).json({
           delete: true,
-          jobid,
+          doc,
         })
       } else {
         logger.warn(err)

@@ -9,7 +9,7 @@ const MyDropDown = (props) => {
   const renderItems = () => {
     let renderedItems = []
     renderedItems = items.map((item) => (
-      <Dropdown.Item onClick={(event) => action(event, 1, item)}>
+      <Dropdown.Item key={item} onClick={(event) => action(event, 1, item)}>
         {item}
       </Dropdown.Item>
     ))
