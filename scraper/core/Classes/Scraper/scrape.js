@@ -1,5 +1,3 @@
-const axios = require('axios')
-const scraperConf = require('../../../configuration/environment/scraperconf').scraperConf()
 const { logger } = require('../../../configuration/environment/logger')
 
 class Scrape {
@@ -64,19 +62,8 @@ class Scrape {
     return this._adfields
   }
 
-  // TODO handle with emittable event
-  indexAd(ads) {
-    if (ads.length !== 0) {
-      axios.post(`${scraperConf.HOST}/api/addjobs`, ads).then((response) => {
-        logger.info(JSON.stringify(response.data))
-      })
-    } else {
-      logger.error('Error: No ads to post')
-    }
-  }
-
   //scraper methods
-  async start() {
+  async start(emitter) {
     /*use module functions defined in json
     fix path and require it
     */
@@ -84,7 +71,6 @@ class Scrape {
     let redirect_module = this.getConf().getModule()
     redirect_module = redirect_module.replace(/^\.\//, '../../../')
     const opt_module = require(redirect_module)
-    logger.info(`Using module '${redirect_module}'`)
 
     let url = this.getConf().getUrl()
     let totalAds = this.getConf().getTotalAds()
@@ -168,7 +154,11 @@ class Scrape {
       .map((_) => export_json.splice(0, 20))
 
     adchunks.forEach((chunk) => {
-      this.indexAd(chunk)
+      if (chunk.length !== 0) {
+        emitter.emit('indexAds', chunk)
+      } else {
+        logger.warn('Will not emit an indexAds event - No ads to post')
+      }
     })
 
     return

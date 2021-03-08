@@ -18,9 +18,13 @@ axios.get(`${scraperConf.HOST}/api/getsources`).then((response) => {
     response.data.sources.forEach((source) => {
       if (source.scrapeFrequency > 0) {
         logger.info(
-          `Will broadcast a scrapeSource event for source id: ${source._id}`
+          `Will broadcast a scrapeSource event for source '${source.name}' id: ${source._id}`
         )
         emitter.emit('scrapeSource', source)
+      } else {
+        logger.info(
+          `Source '${source.name}' id: ${source._id} is inactive. Skipping scrape`
+        )
       }
     })
   }

@@ -8,6 +8,8 @@ const { Conf } = require('./conf')
 const { logger } = require('../../configuration/environment/logger')
 const scraperConf = require('../../configuration/environment/scraperconf').scraperConf()
 
+// Class for registering & emitting scraper events
+
 class Broadcaster extends EventEmitter {
   constructor() {
     super()
@@ -25,7 +27,7 @@ class Broadcaster extends EventEmitter {
     webdriver.USE_PROMISE_MANAGER = false
 
     logger.info(
-      `Broadcasted a scrapeSource event for source ${conf.name} - id ${conf._id}`
+      `Emitted a scrapeSource event for source ${conf.name} - id ${conf._id}`
     )
 
     const confFile = new Conf(conf)
@@ -45,23 +47,23 @@ class Broadcaster extends EventEmitter {
     //instantiate scrape object
     const scrape = scrapeBuilder(confFile, driver)
 
-    scrape.start()
-    logger.info(`Source id ${conf._id} - scrape finished`)
+    // pass the emitter instance as parameter to the scraper
+    scrape.start(this)
   }
 
-  // TODO emit on scrape
   indexAds(ads) {
+    logger.info(`Emitted an indexAds event for ${ads.length} ads`)
+
     axios
       .post(`${scraperConf.HOST}/api/addjobs`, ads)
       .then((response) => {
-        //console.log(response.data)
         logger.info(JSON.stringify(response.data))
       })
       .catch((e) => logger.error(e))
   }
 }
 
-// create an event emitter instance, and share it
+// create an event emitter instance, and export it
 const emitter = new Broadcaster()
 
 module.exports = { emitter }
