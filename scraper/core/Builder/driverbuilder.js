@@ -1,16 +1,16 @@
-const {Chrome}  = require('../Classes/Browser/Chrome/chrome')
-const {Firefox} = require('../Classes/Browser/Firefox/firefox')
+const { Chrome } = require('../Classes/Browser/Chrome/chrome')
+const { Firefox } = require('../Classes/Browser/Firefox/firefox')
+const { logger } = require('../../configuration/environment/logger')
 
 const driverBuilder = (browser, mode) => {
-  switch (browser){
+  switch (browser) {
     case 'chrome':
       return new Chrome(mode)
-      break
     case 'firefox':
       return new Firefox(mode)
-      break
     default:
-      return console.log('Unknown browser. Either use "firefox" or "chrome".\n')
+      logger.warn('Unknown browser. Falling back to "firefox"')
+      return new Firefox(mode)
   }
 }
 
