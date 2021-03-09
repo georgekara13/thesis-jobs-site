@@ -1,10 +1,16 @@
 {
-  "name":"Jobfind",
-  "browser":"firefox",
-  "mode":"headless",
+  "name": "Jobfind",
+  "browser": "firefox",
+  "mode": "headless",
   "module": "./functions/JobFind.js",
-  "url":["https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias","https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=2","https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=3","https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=4","https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=5"],
-  "totalAds":80,
-  "scrapeFrequency":360,
-  "scrapeType":"jobs"
+  "url": [
+    "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias",
+    "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=2",
+    "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=3",
+    "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=4",
+    "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=5"
+  ],
+  "totalAds": 10,
+  "scrapeFrequency": 360,
+  "scrapeType": "jobs"
 }

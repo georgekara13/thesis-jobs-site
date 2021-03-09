@@ -1,10 +1,10 @@
 {
-  "name":"remoteOK",
-  "browser":"firefox",
-  "mode":"gui",
+  "name": "remoteOK",
+  "browser": "firefox",
+  "mode": "headless",
   "module": "./functions/RemoteOK.js",
-  "url":["https://remoteok.io/remote-junior-jobs"],
-  "totalAds":30,
-  "scrapeFrequency":720,
-  "scrapeType":"jobs"
+  "url": ["https://remoteok.io/remote-junior-jobs"],
+  "totalAds": 10,
+  "scrapeFrequency": 720,
+  "scrapeType": "jobs"
 }
