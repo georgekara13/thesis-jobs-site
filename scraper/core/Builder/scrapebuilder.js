@@ -7,7 +7,6 @@ const scrapeBuilder = (Conf, Driver) => {
   switch (scrapetype) {
     case 'jobs':
       return new JobScrape(Conf, Driver)
-      break
     default:
       if (scrapetype)
         logger.warn(

@@ -81,8 +81,8 @@ class Scrape {
 
     if (!url[0]) {
       logger.error(`No URL parameter found`)
+      await driver.quit()
       return
-      //process.exit()
     }
     for (let x = 0; x < url.length; x++) {
       logger.info(`Visiting URL ${url[x]}`)
@@ -91,9 +91,8 @@ class Scrape {
         await opt_module.results_page(ad_urls, driver)
       } catch (err) {
         logger.error(err.message)
+        await driver.quit()
         return
-        //await driver.quit()
-        //process.exit()
       }
 
       logger.info(`Total ad urls found:${ad_urls.length}`)
@@ -104,9 +103,8 @@ class Scrape {
 
       if (totalAds && typeof totalAds !== 'number') {
         logger.error(`Error - totalAds is not a number`)
+        await driver.quit()
         return
-        //await driver.quit()
-        //process.exit()
       } else {
         if (totalAds > ad_urls.length) totalAds = ad_urls.length
       }
@@ -161,9 +159,8 @@ class Scrape {
       }
     })
 
+    await driver.quit()
     return
-    //await driver.quit()
-    //process.exit()
   }
 }
 
