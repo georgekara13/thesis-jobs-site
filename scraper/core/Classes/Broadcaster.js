@@ -94,19 +94,21 @@ class Broadcaster extends EventEmitter {
 
     /*update lastRun timestamp for source - we don't care if the run was sucessful.
     If we would, then it should be handled by the indexAds event*/
-    axios
-      .post(`${scraperConf.HOST}/api/updatesource`, {
-        _id: conf._id,
-        lastRun: Date.now(),
-      })
-      .then((response) => {
-        response.data.success
-          ? logger.info(`Updated lastRun timestamp for source ${conf._id}`)
-          : logger.error(
-              `Could not update lastRun timestamp for source ${conf._id}`
-            )
-      })
-      .catch((e) => logger.error(e))
+    if (conf._id) {
+      axios
+        .post(`${scraperConf.HOST}/api/updatesource`, {
+          _id: conf._id,
+          lastRun: Date.now(),
+        })
+        .then((response) => {
+          response.data.success
+            ? logger.info(`Updated lastRun timestamp for source ${conf._id}`)
+            : logger.error(
+                `Could not update lastRun timestamp for source ${conf._id}`
+              )
+        })
+        .catch((e) => logger.error(e))
+    }
   }
 
   indexAds(ads) {
