@@ -1,4 +1,5 @@
 const webdriver = require('selenium-webdriver')
+const { logger } = require('../configuration/environment/logger')
 
 module.exports = {
   results_page: async function (ad_urls, driver) {
@@ -34,7 +35,7 @@ module.exports = {
         ad_fields.title = title
       })
       .catch((err) => {
-        console.log(`title: ${err.message}`)
+        logger.warn(`title: ${err.message}`)
       })
 
     await driver
@@ -44,7 +45,7 @@ module.exports = {
         ad_fields.company = company
       })
       .catch((err) => {
-        console.log(`company: ${err.message}`)
+        logger.warn(`company: ${err.message}`)
       })
 
     await driver
@@ -54,7 +55,7 @@ module.exports = {
         ad_fields.description = description
       })
       .catch((err) => {
-        console.log(`description: ${err.message}`)
+        logger.warn(`description: ${err.message}`)
       })
 
     return ad_fields
