@@ -2,6 +2,7 @@ const EventEmitter = require('events')
 const webdriver = require('selenium-webdriver') //By,Builder,Key,promise,until
 const { promisify } = require('util')
 const axios = require('axios')
+const moment = require('moment')
 const { driverBuilder } = require('../Builder/driverbuilder')
 const { scrapeBuilder } = require('../Builder/scrapebuilder')
 const { Conf } = require('./conf')
@@ -13,6 +14,10 @@ const scraperConf = require('../../configuration/environment/scraperconf').scrap
 class Broadcaster extends EventEmitter {
   constructor() {
     super()
+    this.on('scheduleScrapes', () => {
+      this.scheduleScrapes()
+    })
+
     this.on('scrapeSource', (args) => {
       this.scrapeSource(args)
     })
@@ -20,6 +25,43 @@ class Broadcaster extends EventEmitter {
     this.on('indexAds', (args) => {
       this.indexAds(args)
     })
+  }
+
+  scheduleScrapes() {
+    logger.info('Emitted a scheduleScrapes event')
+
+    axios
+      .get(`${scraperConf.HOST}/api/getsources`)
+      .then((response) => {
+        if (response.data.results == 0) {
+          logger.warn(`No sources found, will not emit scrape events`)
+        } else {
+          response.data.sources.forEach((source) => {
+            // calculate the minutes difference between now & last scrape
+            let calculateMinutes = Math.floor(
+              moment
+                .duration(moment(Date.now()).diff(moment(source.lastRun)))
+                .asMinutes()
+            )
+
+            // only scrape active sources & it's time for them to scrape
+            if (
+              source.scrapeFrequency > 0 &&
+              calculateMinutes >= source.scrapeFrequency
+            ) {
+              logger.info(
+                `Will broadcast a scrapeSource event for source '${source.name}' id: ${source._id}`
+              )
+              this.emit('scrapeSource', source)
+            } else {
+              logger.info(
+                `Difference now->lastRun: ${calculateMinutes} , Source frequency: ${source.scrapeFrequency}. Skipping scrape`
+              )
+            }
+          })
+        }
+      })
+      .catch((e) => logger.error(e))
   }
 
   scrapeSource(conf) {
