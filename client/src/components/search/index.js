@@ -8,12 +8,12 @@ import { addUserFav, rmUserFav } from '../../actions/user_actions'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import FormField from '../utils/formfield'
 import MyModal from '../utils/mymodal'
 import MyPager from '../utils/mypager'
 import MyDropdown from '../utils/mydropdown'
+import SearchFilter from './searchfilter'
 import SRC from './src'
 import { update, generateData, isFormValid } from '../utils/formactions'
 
@@ -291,27 +291,6 @@ class Search extends Component {
     })
   }
 
-  toggleSearchButton = () =>
-    this.state.formdata.jobsearch.value ? (
-      <Button
-        className="button_submit_src"
-        variant="primary"
-        type="Submit"
-        onClick={(event) => this.dispatchSearch(event)}
-      >
-        Αναζήτηση
-      </Button>
-    ) : (
-      <Button
-        className="button_submit_src"
-        variant="primary"
-        type="Submit"
-        onClick={(event) => this.dispatchSearch(event)}
-        disabled
-      >
-        Αναζήτηση
-      </Button>
-    )
   render() {
     //DEBUG
     //console.log(this.props.user)
@@ -328,10 +307,10 @@ class Search extends Component {
                   change={(element) => this.updateFormSearch(element)}
                 />
 
-                <Button variant="secondary" onClick={this.handleShow}>
-                  Περισσότερα φίλτρα
-                </Button>
-                {this.toggleSearchButton()}
+                <SearchFilter
+                  dispatchSearch={this.dispatchSearch}
+                  active={this.state.formdata.jobsearch.value}
+                />
               </Form>
             </Col>
           </Row>

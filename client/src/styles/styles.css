@@ -139,3 +139,12 @@ html {
   font-weight: bold;
   font-size: 15px;
 }
+
+.searchfilter_card {
+  border: none !important;
+}
+
+.searchfilter_card .card-header {
+  background-color: #fafafa !important;
+  padding: 0 !important;
+}
