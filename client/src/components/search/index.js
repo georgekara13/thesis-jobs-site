@@ -310,6 +310,8 @@ class Search extends Component {
                 <SearchFilter
                   dispatchSearch={this.dispatchSearch}
                   active={this.state.formdata.jobsearch.value}
+                  searchFields={this.state.modalFields.formdata}
+                  updateFields={this.updateFormModal}
                 />
               </Form>
             </Col>

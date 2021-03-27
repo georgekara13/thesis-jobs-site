@@ -1,5 +1,6 @@
 import React from 'react'
 import Accordion from 'react-bootstrap/Accordion'
+import FormField from '../utils/formfield'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -7,6 +8,18 @@ import faSort from '@fortawesome/fontawesome-free-solid/faSort'
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
 
 const SearchFilter = (props) => {
+  const mapFormFields = () =>
+    Object.keys(props.searchFields).map((field) => (
+      <FormField
+        key={props.searchFields[field].config.name}
+        id={props.searchFields[field].config.name}
+        icon={props.searchFields[field].config.icon}
+        label={props.searchFields[field].config.placeholder}
+        formdata={props.searchFields[field]}
+        change={(element) => props.updateFields(element)}
+      />
+    ))
+
   return (
     <Accordion defaultActiveKey="0">
       <Card className="searchfilter_card">
@@ -36,7 +49,7 @@ const SearchFilter = (props) => {
           )}
         </Card.Header>
         <Accordion.Collapse eventKey="1">
-          <Card.Body>Hello! I'm another body</Card.Body>
+          <Card.Body>{mapFormFields()}</Card.Body>
         </Accordion.Collapse>
       </Card>
     </Accordion>
