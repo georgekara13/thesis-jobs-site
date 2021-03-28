@@ -142,9 +142,20 @@ html {
 
 .searchfilter_card {
   border: none !important;
+  background-color: #fafafa !important;
 }
 
 .searchfilter_card .card-header {
   background-color: #fafafa !important;
   padding: 0 !important;
+  border-bottom: none !important;
+}
+
+.searchfilter_card .card-body {
+  background: rgba(255, 255, 255, 0.8) !important;
+  padding-top: 10px !important;
+  margin-top: 20px !important;
+  border-radius: 10px !important;
+  border-style: solid !important;
+  border-color: #f6f6f6 !important;
 }

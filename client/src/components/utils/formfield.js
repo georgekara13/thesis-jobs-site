@@ -18,7 +18,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
 
   const hasIcon = (icon) => {
     if (icon) {
-      return <FontAwesomeIcon icon={icon} className="icon" />
+      return <FontAwesomeIcon icon={icon} />
     } else {
       return ''
     }
