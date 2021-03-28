@@ -74,27 +74,12 @@ class Search extends Component {
           },
         },
         salarymin_keyword: {
-          element: 'input',
+          element: 'range',
           value: '',
           config: {
             name: 'salarymin_keyword',
-            type: 'search',
+            type: 'range',
             placeholder: 'Ελάχιστος μισθός',
-          },
-          validation: {
-            required: false,
-          },
-          valid: false,
-          touched: false,
-          validationMessage: '',
-        },
-        salarymax_keyword: {
-          element: 'input',
-          value: '',
-          config: {
-            name: 'salarymax_keyword',
-            type: 'search',
-            placeholder: 'Μέγιστος μισθός',
           },
           validation: {
             required: false,
@@ -105,23 +90,23 @@ class Search extends Component {
         },
         jobtag_checkbox: {
           element: 'checkbox',
-          value: '',
+          items: [
+            { label: 'Αθλητισμός', value: 'sports' },
+            { label: 'Αποθήκες', value: 'logistics' },
+            { label: 'Απροσδιόριστο', value: 'unknown' },
+            { label: 'Εξυπηρέτηση Πελατών', value: 'customer-service' },
+            { label: 'Marketing', value: 'marketing' },
+            { label: 'Οικονομικά', value: 'economics' },
+            { label: 'Πληροφορική', value: 'it' },
+            { label: 'Πωλήσεις', value: 'sales' },
+            { label: 'Σερβιτόροι', value: 'catering' },
+            { label: 'Τέχνες', value: 'arts' },
+            { label: 'Υγεία', value: 'healthcare' },
+          ],
           config: {
             name: 'jobtag_checkbox',
-            type: 'search',
+            type: 'checkbox',
             placeholder: 'Κατηγορίες',
-          },
-          validation: {
-            required: false,
-          },
-        },
-        company_keyword: {
-          element: 'input',
-          value: '',
-          config: {
-            name: 'company_keyword',
-            type: 'search',
-            placeholder: 'Εταιρεία',
           },
           validation: {
             required: false,
@@ -302,7 +287,6 @@ class Search extends Component {
               <Form onSubmit={(event) => this.dispatchSearch()}>
                 <FormField
                   id={'jobsearch'}
-                  label={'Search'}
                   formdata={this.state.formdata.jobsearch}
                   change={(element) => this.updateFormSearch(element)}
                 />

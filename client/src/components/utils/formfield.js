@@ -1,7 +1,7 @@
-import React from "react"
-import Form from "react-bootstrap/Form"
+import React from 'react'
+import Form from 'react-bootstrap/Form'
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome"
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
 const FormField = ({ formdata, change, id, label, icon }) => {
   const showError = () => {
@@ -20,7 +20,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
     if (icon) {
       return <FontAwesomeIcon icon={icon} className="icon" />
     } else {
-      return ""
+      return ''
     }
   }
 
@@ -28,11 +28,11 @@ const FormField = ({ formdata, change, id, label, icon }) => {
     let formTemplate = null
 
     switch (formdata.element) {
-      case "input":
+      case 'input':
         formTemplate = (
           <Form.Group controlId={id}>
             {hasIcon(icon)}
-            <Form.Label className="text-light">{label}</Form.Label>
+            <Form.Label className="text-dark">{label}</Form.Label>
             <Form.Control
               type={id}
               {...formdata.config}
@@ -40,6 +40,40 @@ const FormField = ({ formdata, change, id, label, icon }) => {
               onBlur={(event) => change({ event, id, blur: true })}
               onChange={(event) => change({ event, id })}
             />
+            {showError()}
+          </Form.Group>
+        )
+        break
+      case 'range':
+        formTemplate = (
+          <Form.Group controlId={id}>
+            {hasIcon(icon)}
+            <Form.Label className="text-dark">{label}</Form.Label>
+            <Form.Control
+              {...formdata.config}
+              value={formdata.value}
+              onBlur={(event) => change({ event, id, blur: true })}
+              onChange={(event) => change({ event, id })}
+            />
+            {showError()}
+          </Form.Group>
+        )
+        break
+      case 'checkbox':
+        formTemplate = (
+          <Form.Group controlId={id}>
+            {hasIcon(icon)}
+            <Form.Label className="text-dark">{label}</Form.Label>
+            {formdata.items.map((item) => (
+              <Form.Check
+                {...formdata.config}
+                value={item.value}
+                onBlur={(event) => change({ event, id, blur: true })}
+                onChange={(event) => change({ event, id })}
+                label={item.label}
+                key={item.value}
+              />
+            ))}
             {showError()}
           </Form.Group>
         )
