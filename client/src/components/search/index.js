@@ -75,7 +75,7 @@ class Search extends Component {
         },
         salarymin_keyword: {
           element: 'range',
-          value: '',
+          value: 0,
           config: {
             name: 'salarymin_keyword',
             type: 'range',
@@ -90,6 +90,7 @@ class Search extends Component {
         },
         jobtag_checkbox: {
           element: 'checkbox',
+          value: [],
           items: [
             { label: 'Αθλητισμός', value: 'sports' },
             { label: 'Αποθήκες', value: 'logistics' },
@@ -137,11 +138,19 @@ class Search extends Component {
   }
 
   updateFormModal = (element) => {
-    const newFormData = update(
-      element,
-      this.state.modalFields.formdata,
-      'search'
-    )
+    let newFormData = update(element, this.state.modalFields.formdata, 'search')
+
+    if (element.id === 'jobtag_checkbox') {
+      let currentJobTags = this.state.modalFields.formdata.jobtag_checkbox.value
+      if (currentJobTags.includes(element.event.target.value)) {
+        currentJobTags = currentJobTags.filter(
+          (item) => item !== element.event.target.value
+        )
+      } else {
+        currentJobTags.push(element.event.target.value)
+      }
+      newFormData.jobtag_checkbox.value = currentJobTags
+    }
 
     this.setState({
       formError: false,
@@ -315,13 +324,6 @@ class Search extends Component {
           rmFav={this.dispatchRemoveFavourites}
         />
         <MyPager pager={this.state.pager} action={this.dispatchSearch} />
-        <MyModal
-          handleShow={this.handleShow}
-          handleClose={this.handleClose}
-          data={this.state}
-          updateForm={this.updateFormModal}
-          type={'search'}
-        />
       </div>
     )
   }

@@ -48,7 +48,12 @@ const FormField = ({ formdata, change, id, label, icon }) => {
         formTemplate = (
           <Form.Group controlId={id}>
             {hasIcon(icon)}
-            <Form.Label className="text-dark">{label}</Form.Label>
+            <Form.Label className="text-dark">
+              {label}{' '}
+              {formdata.value && formdata.value > 0
+                ? `: €${formdata.value}00+`
+                : ''}
+            </Form.Label>
             <Form.Control
               {...formdata.config}
               value={formdata.value}
@@ -68,7 +73,6 @@ const FormField = ({ formdata, change, id, label, icon }) => {
               <Form.Check
                 {...formdata.config}
                 value={item.value}
-                onBlur={(event) => change({ event, id, blur: true })}
                 onChange={(event) => change({ event, id })}
                 label={item.label}
                 key={item.value}
