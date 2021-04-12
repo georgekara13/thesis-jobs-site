@@ -9,8 +9,8 @@ const MyPager = (props) => {
   let items = []
 
   const renderPager = (pager) => {
-    //TODO Ellipsis pager - remove pager.EllipsisInProgress condition when done!
-    if (pager.totalPages > 10 && pager.EllipsisInProgress) {
+    //TODO always show active pager item
+    if (pager.totalPages > 10) {
       if (pager.currentPage < pager.totalPages - 4) {
         for (let num = pager.currentPage; num <= pager.currentPage + 2; num++) {
           items.push(
@@ -66,11 +66,19 @@ const MyPager = (props) => {
   }
 
   const renderPrevious = (previous) => (
-    <Pagination.Prev onClick={(event) => props.action(event, previous)} />
+    <React.Fragment>
+      <Pagination.First onClick={(event) => props.action(event, 1)} />
+      <Pagination.Prev onClick={(event) => props.action(event, previous)} />
+    </React.Fragment>
   )
 
   const renderNext = (next) => (
-    <Pagination.Next onClick={(event) => props.action(event, next)} />
+    <React.Fragment>
+      <Pagination.Next onClick={(event) => props.action(event, next)} />
+      <Pagination.Last
+        onClick={(event) => props.action(event, pager.totalPages)}
+      />
+    </React.Fragment>
   )
 
   if (pager.totalPages > 1) {
