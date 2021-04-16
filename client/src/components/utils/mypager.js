@@ -37,7 +37,7 @@ const MyPager = (props) => {
         }
       }
 
-      items.push(<Pagination.Ellipsis />)
+      items.push(<Pagination.Ellipsis key="ellipsis" />)
 
       for (let num = pager.totalPages - 2; num <= pager.totalPages; num++) {
         items.push(

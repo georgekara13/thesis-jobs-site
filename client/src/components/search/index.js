@@ -218,8 +218,11 @@ class Search extends Component {
 
     //TODO add the rest of the filter params
     let keyword = this.state.formdata.jobsearch.value
+    let jobTag = this.state.modalFields.formdata.jobtag_checkbox.value.join(',')
+    let location = this.state.modalFields.formdata.location_keyword.value
+
     this.props
-      .dispatch(getJobs({ keyword, page, perPage }))
+      .dispatch(getJobs({ keyword, jobTag, location, page, perPage }))
       .then((response) => {
         if (response.payload.results) {
           this.setState({
