@@ -220,9 +220,13 @@ class Search extends Component {
     let keyword = this.state.formdata.jobsearch.value
     let jobTag = this.state.modalFields.formdata.jobtag_checkbox.value.join(',')
     let location = this.state.modalFields.formdata.location_keyword.value
+    let salaryMin =
+      this.state.modalFields.formdata.salarymin_keyword.value * 100
 
     this.props
-      .dispatch(getJobs({ keyword, jobTag, location, page, perPage }))
+      .dispatch(
+        getJobs({ keyword, jobTag, location, salaryMin, page, perPage })
+      )
       .then((response) => {
         if (response.payload.results) {
           this.setState({
