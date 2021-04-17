@@ -19,7 +19,6 @@ export function getJobs(params) {
     reqUrl += reqUrl.match(/\?/) ? `&${param}` : `?${param}`
   }
 
-  //console.log(reqUrl)
   const request = axios.get(reqUrl).then((response) => response.data)
   return {
     type: GET_JOBS,

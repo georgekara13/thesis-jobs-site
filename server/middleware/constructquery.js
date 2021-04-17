@@ -42,7 +42,7 @@ let jobQuery = (req, res, next) => {
     .then((count) => {
       req.total = count
       req.filter = filter
-      logger.info(`Fetched ${count} results for keyword '${keyword}'`)
+      logger.info(`Fetched ${count} results for '${JSON.stringify(req.query)}'`)
       next()
     })
 }
