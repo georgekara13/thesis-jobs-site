@@ -3,16 +3,46 @@ const { Source } = require('../model/source')
 const { Announcement } = require('../model/announcement')
 const { logger } = require('../configuration/logger')
 
-//middleware for getting the total count of docs
+//middleware for constructing a filter object & getting the total count of docs
 let jobQuery = (req, res, next) => {
-  let { keyword } = req.query
+  let { keyword, jobTag, salaryMin, location } = req.query
 
-  //get total count of docs
-  Job.fuzzySearch({ query: keyword, exact: true })
+  // filter for the 'where' clause
+  let filter = {}
+
+  if (jobTag) {
+    // The jobTag param contains multiple values e.g it,sales,unknown
+    if (jobTag.includes(',')) {
+      filter['$or'] = []
+
+      // add each jobtag under the 'or' clause: { $or: [ {jobTag: it}, {jobTag: marketing}, {jobTag: sales} ] }
+      jobTag.split(',').forEach((tag) => {
+        filter['$or'].push({ jobTag: tag })
+      })
+    } else {
+      // single jobTag value, no need for an 'or' clause
+      filter.jobTag = jobTag
+    }
+  }
+
+  if (location) {
+    filter.location = location
+  }
+
+  if (salaryMin) {
+    filter.salaryMin = { $gte: salaryMin }
+  }
+
+  /*final filter looks like this(if any params):
+  filter = {$and: [{$or: [ {jobTag: it}, {jobTag: marketing}, {jobTag: sales} ]}, {salaryMin: { $gte: salaryMin }}, {location: location}]}
+  get total count of docs*/
+  Job.find(filter)
+    .fuzzySearch({ query: keyword, exact: true })
     .countDocuments()
     .then((count) => {
       req.total = count
-      logger.info(`Fetched ${count} results for keyword '${keyword}'`)
+      req.filter = filter
+      logger.info(`Fetched ${count} results for '${JSON.stringify(req.query)}'`)
       next()
     })
 }

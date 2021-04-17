@@ -73,8 +73,9 @@ app.get('/api/getjobs', jobQuery, async (req, res) => {
 
   if (limit > 36) limit = 36
 
-  // redo the query to return paged results
-  Job.fuzzySearch({ query: keyword, exact: true })
+  // filter is constructed by the middleware (see constructquery.js)
+  Job.find(req.filter)
+    .fuzzySearch({ query: keyword, exact: true })
     .limit(limit * 1)
     .skip((page - 1) * limit)
     .exec((err, doc) => {

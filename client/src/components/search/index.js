@@ -8,12 +8,12 @@ import { addUserFav, rmUserFav } from '../../actions/user_actions'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import FormField from '../utils/formfield'
 import MyModal from '../utils/mymodal'
 import MyPager from '../utils/mypager'
 import MyDropdown from '../utils/mydropdown'
+import SearchFilter from './searchfilter'
 import SRC from './src'
 import { update, generateData, isFormValid } from '../utils/formactions'
 
@@ -74,27 +74,12 @@ class Search extends Component {
           },
         },
         salarymin_keyword: {
-          element: 'input',
-          value: '',
+          element: 'range',
+          value: 0,
           config: {
             name: 'salarymin_keyword',
-            type: 'search',
+            type: 'range',
             placeholder: 'Ελάχιστος μισθός',
-          },
-          validation: {
-            required: false,
-          },
-          valid: false,
-          touched: false,
-          validationMessage: '',
-        },
-        salarymax_keyword: {
-          element: 'input',
-          value: '',
-          config: {
-            name: 'salarymax_keyword',
-            type: 'search',
-            placeholder: 'Μέγιστος μισθός',
           },
           validation: {
             required: false,
@@ -105,23 +90,24 @@ class Search extends Component {
         },
         jobtag_checkbox: {
           element: 'checkbox',
-          value: '',
+          value: [],
+          items: [
+            { label: 'Αθλητισμός', value: 'sports' },
+            { label: 'Αποθήκες', value: 'logistics' },
+            { label: 'Απροσδιόριστο', value: 'unknown' },
+            { label: 'Εξυπηρέτηση Πελατών', value: 'customer-service' },
+            { label: 'Marketing', value: 'marketing' },
+            { label: 'Οικονομικά', value: 'economics' },
+            { label: 'Πληροφορική', value: 'it' },
+            { label: 'Πωλήσεις', value: 'sales' },
+            { label: 'Σερβιτόροι', value: 'catering' },
+            { label: 'Τέχνες', value: 'arts' },
+            { label: 'Υγεία', value: 'healthcare' },
+          ],
           config: {
             name: 'jobtag_checkbox',
-            type: 'search',
+            type: 'checkbox',
             placeholder: 'Κατηγορίες',
-          },
-          validation: {
-            required: false,
-          },
-        },
-        company_keyword: {
-          element: 'input',
-          value: '',
-          config: {
-            name: 'company_keyword',
-            type: 'search',
-            placeholder: 'Εταιρεία',
           },
           validation: {
             required: false,
@@ -152,11 +138,19 @@ class Search extends Component {
   }
 
   updateFormModal = (element) => {
-    const newFormData = update(
-      element,
-      this.state.modalFields.formdata,
-      'search'
-    )
+    let newFormData = update(element, this.state.modalFields.formdata, 'search')
+
+    if (element.id === 'jobtag_checkbox') {
+      let currentJobTags = this.state.modalFields.formdata.jobtag_checkbox.value
+      if (currentJobTags.includes(element.event.target.value)) {
+        currentJobTags = currentJobTags.filter(
+          (item) => item !== element.event.target.value
+        )
+      } else {
+        currentJobTags.push(element.event.target.value)
+      }
+      newFormData.jobtag_checkbox.value = currentJobTags
+    }
 
     this.setState({
       formError: false,
@@ -224,8 +218,15 @@ class Search extends Component {
 
     //TODO add the rest of the filter params
     let keyword = this.state.formdata.jobsearch.value
+    let jobTag = this.state.modalFields.formdata.jobtag_checkbox.value.join(',')
+    let location = this.state.modalFields.formdata.location_keyword.value
+    let salaryMin =
+      this.state.modalFields.formdata.salarymin_keyword.value * 100
+
     this.props
-      .dispatch(getJobs({ keyword, page, perPage }))
+      .dispatch(
+        getJobs({ keyword, jobTag, location, salaryMin, page, perPage })
+      )
       .then((response) => {
         if (response.payload.results) {
           this.setState({
@@ -291,27 +292,6 @@ class Search extends Component {
     })
   }
 
-  toggleSearchButton = () =>
-    this.state.formdata.jobsearch.value ? (
-      <Button
-        className="button_submit_src"
-        variant="primary"
-        type="Submit"
-        onClick={(event) => this.dispatchSearch(event)}
-      >
-        Αναζήτηση
-      </Button>
-    ) : (
-      <Button
-        className="button_submit_src"
-        variant="primary"
-        type="Submit"
-        onClick={(event) => this.dispatchSearch(event)}
-        disabled
-      >
-        Αναζήτηση
-      </Button>
-    )
   render() {
     //DEBUG
     //console.log(this.props.user)
@@ -323,15 +303,16 @@ class Search extends Component {
               <Form onSubmit={(event) => this.dispatchSearch()}>
                 <FormField
                   id={'jobsearch'}
-                  label={'Search'}
                   formdata={this.state.formdata.jobsearch}
                   change={(element) => this.updateFormSearch(element)}
                 />
 
-                <Button variant="secondary" onClick={this.handleShow}>
-                  Περισσότερα φίλτρα
-                </Button>
-                {this.toggleSearchButton()}
+                <SearchFilter
+                  dispatchSearch={this.dispatchSearch}
+                  active={this.state.formdata.jobsearch.value}
+                  searchFields={this.state.modalFields.formdata}
+                  updateFields={this.updateFormModal}
+                />
               </Form>
             </Col>
           </Row>
@@ -350,13 +331,6 @@ class Search extends Component {
           rmFav={this.dispatchRemoveFavourites}
         />
         <MyPager pager={this.state.pager} action={this.dispatchSearch} />
-        <MyModal
-          handleShow={this.handleShow}
-          handleClose={this.handleClose}
-          data={this.state}
-          updateForm={this.updateFormModal}
-          type={'search'}
-        />
       </div>
     )
   }
