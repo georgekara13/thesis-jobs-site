@@ -5,7 +5,7 @@ const { logger } = require('../configuration/logger')
 
 //middleware for constructing a filter object & getting the total count of docs
 let jobQuery = (req, res, next) => {
-  let { keyword, jobTag, salaryMin, location } = req.query
+  let { keyword, jobTag, salaryMin, location, _id } = req.query
 
   // filter for the 'where' clause
   let filter = {}
@@ -22,6 +22,22 @@ let jobQuery = (req, res, next) => {
     } else {
       // single jobTag value, no need for an 'or' clause
       filter.jobTag = jobTag
+    }
+  }
+
+  // this is not part of the search query - used only by the favourites view
+  if (_id) {
+    // The _id param contains multiple values e.g uwefu3hf,3i23rnf,e2fvced
+    if (_id.includes(',')) {
+      filter['$or'] = []
+
+      // add each _id under the 'or' clause: { $or: [ {_id: euff3h}, {_id: wdiuf3}, {_id: csncewc} ] }
+      _id.split(',').forEach((id) => {
+        filter['$or'].push({ _id: id })
+      })
+    } else {
+      // single _id value, no need for an 'or' clause
+      filter._id = _id
     }
   }
 
