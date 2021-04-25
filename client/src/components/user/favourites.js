@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import MyPager from '../utils/mypager'
+import MyModal from '../utils/mymodal'
 
 // TODO Improve styling
 /* Used by the favourites route. Atm, we are stringifying the 'favourites' list
@@ -29,7 +30,10 @@ class UserFavourites extends Component {
       previousPage: 0,
       results: 0,
     },
-    showModal: false,
+    adc: {
+      show: false,
+      item: '',
+    },
   }
 
   componentDidMount = () => {
@@ -44,6 +48,7 @@ class UserFavourites extends Component {
     this.props.dispatch(getJobs({ _id, page })).then((response) => {
       if (response.payload.results) {
         this.setState({
+          ...this.state,
           items: response.payload.jobs,
           pager: {
             totalPages: response.payload.totalPages,
@@ -56,6 +61,40 @@ class UserFavourites extends Component {
           errorMsg: response.payload.error,
         })
       }
+    })
+  }
+
+  handleAdcShow = () => {
+    this.setState({
+      ...this.state,
+      adc: { show: true },
+    })
+  }
+
+  handleAdcClose = () => {
+    this.setState({
+      ...this.state,
+      adc: { show: false, item: '' },
+    })
+  }
+
+  renderAdc = () => (
+    <MyModal
+      handleShow={this.handleAdcShow}
+      handleClose={this.handleAdcClose}
+      data={this.state}
+      type={'adc'}
+    />
+  )
+
+  showAdc = (event, item) => {
+    event.preventDefault()
+    this.setState({
+      ...this.state,
+      adc: {
+        show: true,
+        item,
+      },
     })
   }
 
@@ -73,9 +112,10 @@ class UserFavourites extends Component {
         <th>{item.company ? item.company : '-'}</th>
         <th>{item.salary ? item.salary : '-'}</th>
         <th>
-          <Button>More</Button>
+          <Button onClick={(event) => this.showAdc(event, item)}>
+            Εμφάνιση
+          </Button>
         </th>
-        <th>remove from items</th>
       </tr>
     ))
   }
@@ -93,12 +133,12 @@ class UserFavourites extends Component {
                   <th>Εταιρεία</th>
                   <th>Μισθός</th>
                   <th>Λεπτομέρειες</th>
-                  <th>Αφαίρεση</th>
                 </tr>
               </thead>
               <tbody>{this.mapFavourites()}</tbody>
             </Table>
           </Row>
+          {this.state.adc.show ? this.renderAdc() : ''}
           <MyPager pager={this.state.pager} action={this.dispatchSearch} />
         </Container>
       </div>
