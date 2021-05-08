@@ -3,7 +3,15 @@ import axios from 'axios'
 import { GET_JOBS } from './types'
 
 export function getJobs(params) {
-  let { keyword, location, jobTag, salaryMin, page = 1, perPage = 9 } = params
+  let {
+    keyword,
+    location,
+    jobTag,
+    salaryMin,
+    page = 1,
+    perPage = 9,
+    _id,
+  } = params
   let reqUrl = `/api/getjobs`
   let queryParams = []
 
@@ -11,6 +19,7 @@ export function getJobs(params) {
   if (location) queryParams.push(`location=${location}`)
   if (jobTag) queryParams.push(`jobTag=${jobTag}`)
   if (salaryMin) queryParams.push(`salaryMin=${salaryMin}`)
+  if (_id) queryParams.push(`_id=${_id}`)
 
   queryParams.push(`page=${page}`)
   queryParams.push(`limit=${perPage}`)

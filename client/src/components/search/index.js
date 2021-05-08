@@ -15,7 +15,7 @@ import MyPager from '../utils/mypager'
 import MyDropdown from '../utils/mydropdown'
 import SearchFilter from './searchfilter'
 import SRC from './src'
-import { update, generateData, isFormValid } from '../utils/formactions'
+import { update } from '../utils/formactions'
 
 //TODO FIX Spaghetti code - Huge state, too many renders
 class Search extends Component {
@@ -298,6 +298,16 @@ class Search extends Component {
     return (
       <div className="general_wrapper">
         <Container ref={(ref) => (this.myRef = ref)}>
+          <Row className="justify-content-md-center">
+            <Col md="auto">
+              <img
+                src="/assets/images/uop-logo.png"
+                width="200"
+                height="200"
+                alt="UOP Job Site logo"
+              />
+            </Col>
+          </Row>
           <Row>
             <Col>
               <Form onSubmit={(event) => this.dispatchSearch()}>

@@ -1,63 +1,53 @@
 import React, { Component } from 'react'
-import { Link,withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logoutUser } from '../../actions/user_actions'
 
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import NavDropdown from 'react-bootstrap/NavDropdown'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 
 class Header extends Component {
-
   state = {
     page: [
       {
         name: 'ΑΡΧΙΚΗ',
         linkTo: '/',
-        public: false
+        public: false,
       },
       {
         name: 'ΕΙΣΟΔΟΣ',
         linkTo: '/login',
-        public: true
-      }
+        public: true,
+      },
     ],
     user: [
       {
-        name: 'ΛΟΓΑΡΙΑΣΜΟΣ',
-        linkTo: '/user/dashboard',
-        public: false
-      },
-      {
         name: 'ΑΠΟΘΗΚΕΥΜΕΝΑ',
-        linkTo: '/user/wishlist',
-        public: false
+        linkTo: '/user/favourites',
+        public: false,
       },
       {
         name: 'ΑΠΟΣΥΝΔΕΣΗ',
         linkTo: '/login',
-        public: false
-      }
-    ]
+        public: false,
+      },
+    ],
   }
 
-  defaultLink = (item, i) => (
-    item.name === 'ΑΠΟΣΥΝΔΕΣΗ' ?
-    <Nav.Item key={i} onClick={() => this.logOutHandler()}>
-      <Nav.Link href={item.linkTo}>{item.name}</Nav.Link>
-    </Nav.Item>
-    :
-    <Nav.Item key={i}><Nav.Link href={item.linkTo}>
-      {item.name}
-    </Nav.Link></Nav.Item>
-  )
+  defaultLink = (item, i) =>
+    item.name === 'ΑΠΟΣΥΝΔΕΣΗ' ? (
+      <Nav.Item key={i} onClick={() => this.logOutHandler()}>
+        <Nav.Link href={item.linkTo}>{item.name}</Nav.Link>
+      </Nav.Item>
+    ) : (
+      <Nav.Item key={i}>
+        <Nav.Link href={item.linkTo}>{item.name}</Nav.Link>
+      </Nav.Item>
+    )
 
   logOutHandler = () => {
-    this.props.dispatch(logoutUser()).then(response => {
-      if (response.payload.sucess){
+    this.props.dispatch(logoutUser()).then((response) => {
+      if (response.payload.sucess) {
         this.props.history.push('/')
       }
     })
@@ -66,26 +56,25 @@ class Header extends Component {
   showLinks = (type) => {
     let list = []
 
-    if(this.props.user.userData){
-      type.forEach(item => {
+    if (this.props.user.userData) {
+      type.forEach((item) => {
         //check if user is authenticated
-        if (!this.props.user.userData.isAuth){
+        if (!this.props.user.userData.isAuth) {
           //push public links
-          if (item.public){
+          if (item.public) {
             list.push(item)
           }
-        }
-        else {
+        } else {
           //push all items but the login, for authenticated user
-          if (item.name !== 'ΕΙΣΟΔΟΣ'){
+          if (item.name !== 'ΕΙΣΟΔΟΣ') {
             list.push(item)
           }
         }
       })
     }
 
-    return list.map((item,i)  =>  {
-      return this.defaultLink(item,i)
+    return list.map((item, i) => {
+      return this.defaultLink(item, i)
     })
   }
 
@@ -104,19 +93,18 @@ class Header extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            {this.showLinks(this.state.user)}
             {this.showLinks(this.state.page)}
+            {this.showLinks(this.state.user)}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
     )
   }
-
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
-    user: state.user
+    user: state.user,
   }
 }
 

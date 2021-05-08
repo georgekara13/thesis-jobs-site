@@ -6,20 +6,7 @@ import Button from 'react-bootstrap/Button'
 import FormField from './formfield'
 import AdFields from './adfields'
 
-// TODO Fix spaghetti code - component should be more generic
 const MyModal = ({ handleShow, handleClose, data, updateForm, type }) => {
-  const showError = () => {
-    let errorMessage = null
-
-    if (data.fields.validation && !data.fields.valid) {
-      errorMessage = (
-        <div className="error_label">{data.fields.validationMessage}</div>
-      )
-    }
-
-    return errorMessage
-  }
-
   const renderModalFields = () => {
     let { formdata } = data.modalFields
     let fieldsArr = []

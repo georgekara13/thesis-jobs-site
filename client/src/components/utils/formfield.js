@@ -30,9 +30,11 @@ const FormField = ({ formdata, change, id, label, icon }) => {
     switch (formdata.element) {
       case 'input':
         formTemplate = (
-          <Form.Group controlId={id}>
-            {hasIcon(icon)}
-            <Form.Label className="text-dark">{label}</Form.Label>
+          <Form.Group
+            controlId={id}
+            className={formdata.className ? formdata.className : 'text-dark'}
+          >
+            {hasIcon(icon)} <Form.Label>{label}</Form.Label>
             <Form.Control
               type={id}
               {...formdata.config}
