@@ -22,11 +22,6 @@ class Header extends Component {
     ],
     user: [
       {
-        name: 'ΛΟΓΑΡΙΑΣΜΟΣ',
-        linkTo: '/user/dashboard',
-        public: false,
-      },
-      {
         name: 'ΑΠΟΘΗΚΕΥΜΕΝΑ',
         linkTo: '/user/favourites',
         public: false,
@@ -98,8 +93,8 @@ class Header extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            {this.showLinks(this.state.user)}
             {this.showLinks(this.state.page)}
+            {this.showLinks(this.state.user)}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -15,7 +15,7 @@ import MyPager from '../utils/mypager'
 import MyDropdown from '../utils/mydropdown'
 import SearchFilter from './searchfilter'
 import SRC from './src'
-import { update, generateData, isFormValid } from '../utils/formactions'
+import { update } from '../utils/formactions'
 
 //TODO FIX Spaghetti code - Huge state, too many renders
 class Search extends Component {

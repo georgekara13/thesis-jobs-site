@@ -1,58 +1,52 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {  auth } from '../actions/user_actions'
+import { auth } from '../actions/user_actions'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-export default function(ComposedClass, reload, adminRoute = null){
+export default function (ComposedClass, reload, adminRoute = null) {
   class AuthenticationCheck extends React.Component {
-
     state = {
-      loading: true
+      loading: true,
     }
 
-    componentDidMount(){
-      this.props.dispatch(auth()).then(response => {
+    componentDidMount() {
+      this.props.dispatch(auth()).then((response) => {
         let user = this.props.user.userData
 
-        if (!user.isAuth){
-          if(reload){
+        if (!user.isAuth) {
+          if (reload) {
             this.props.history.push('/login')
           }
-        }
-        else {
-          if (adminRoute && !user.isAdmin){
+        } else {
+          if (adminRoute && !user.isAdmin) {
             this.props.history.push('/')
-          }
-          else {
+          } else {
             if (!reload) {
               this.props.history.push('/')
             }
           }
         }
 
-        this.setState({loading: false})
+        this.setState({ loading: false })
       })
     }
 
-    render () {
-      if(this.state.loading){
+    render() {
+      if (this.state.loading) {
         return (
-          <div  className="main_loader">
-            <CircularProgress style={{color: '#2196F3'}} thickness={7}/>
+          <div className="main_loader">
+            <CircularProgress style={{ color: '#2196F3' }} thickness={7} />
           </div>
         )
       }
 
-      return (
-        <ComposedClass {...this.props} user={this.props.user}/>
-      )
+      return <ComposedClass {...this.props} user={this.props.user} />
     }
   }
 
-  function mapStateToProps(state){
+  function mapStateToProps(state) {
     return {
-      user: state.user
+      user: state.user,
     }
   }
 
