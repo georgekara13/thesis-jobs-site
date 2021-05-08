@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 import FormField from '../utils/formfield'
@@ -13,53 +13,54 @@ import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 import faKey from '@fortawesome/fontawesome-free-solid/faKey'
 
 class Login extends Component {
-
   state = {
     formError: false,
-    errorMsg:'',
-    formSuccess:'',
+    errorMsg: '',
+    formSuccess: '',
     formdata: {
       email: {
         element: 'input',
-        value:'',
-        config:{
-          name:'email_input',
-          type:'email',
-          placeholder:'Εισάγετε διεύθυνση email'
+        className: 'text-light',
+        value: '',
+        config: {
+          name: 'email_input',
+          type: 'email',
+          placeholder: 'Εισάγετε διεύθυνση email',
         },
-        validation:{
+        validation: {
           required: true,
-          email: true
+          email: true,
         },
         valid: false,
         touched: false,
-        validationMessage:''
+        validationMessage: '',
       },
       password: {
         element: 'input',
-        value:'',
-        config:{
-          name:'password_input',
-          type:'password',
-          placeholder:'Εισάγετε κωδικό πρόσβασης'
+        className: 'text-light',
+        value: '',
+        config: {
+          name: 'password_input',
+          type: 'password',
+          placeholder: 'Εισάγετε κωδικό πρόσβασης',
         },
-        validation:{
+        validation: {
           required: true,
-          password: true
+          password: true,
         },
         valid: false,
         touched: false,
-        validationMessage:''
-      }
-    }
+        validationMessage: '',
+      },
+    },
   }
 
   updateForm = (element) => {
-    const newFormData = update(element,this.state.formdata,'login')
+    const newFormData = update(element, this.state.formdata, 'login')
 
     this.setState({
       formError: false,
-      formdata: newFormData
+      formdata: newFormData,
     })
   }
 
@@ -67,31 +68,31 @@ class Login extends Component {
     event.preventDefault()
 
     let dataToSubmit = generateData(this.state.formdata, 'login')
-    let formIsValid  = isFormValid(this.state.formdata, 'login')
+    let formIsValid = isFormValid(this.state.formdata, 'login')
 
     if (formIsValid) {
-      this.props.dispatch(loginUser(dataToSubmit)).then(response => {
-        if(response.payload.isAuth){
-          this.props.history.push('/')
-        }
-        else {
+      this.props
+        .dispatch(loginUser(dataToSubmit))
+        .then((response) => {
+          if (response.payload.isAuth) {
+            this.props.history.push('/')
+          } else {
+            this.setState({
+              formError: true,
+              errorMsg: 'Λάθος στοιχεία εισόδου',
+            })
+          }
+        })
+        .catch((err) => {
           this.setState({
             formError: true,
-            errorMsg: 'Wrong credentials'
+            errorMsg: 'Λάθος στοιχεία εισόδου',
           })
-        }
-      })
-      .catch(err => {
-        this.setState({
-          formError: true,
-          errorMsg: 'Wrong credentials'
         })
-      })
-    }
-    else {
+    } else {
       this.setState({
         formError: true,
-        errorMsg: 'Check your input'
+        errorMsg: 'Ελέγξτε τα πεδία',
       })
     }
   }
@@ -116,16 +117,22 @@ class Login extends Component {
             change={(element) => this.updateForm(element)}
           />
 
-        { this.state.formError ? <div className="error_label">Error: {this.state.errorMsg}</div>
-                                 : null
-          }
+          {this.state.formError ? (
+            <div className="error_label">Σφάλμα: {this.state.errorMsg}</div>
+          ) : null}
 
-          <Button className="bg-dark" variant="primary" type="Submit" onClick={(event) => this.submitForm(event)}>Σύνδεση</Button>
+          <Button
+            className="bg-dark"
+            variant="primary"
+            type="Submit"
+            onClick={(event) => this.submitForm(event)}
+          >
+            Σύνδεση
+          </Button>
         </Form>
       </div>
     )
   }
-
 }
 
 export default connect()(withRouter(Login))
