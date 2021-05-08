@@ -67,6 +67,7 @@ html {
 .general_wrapper {
   background: #fafafa;
   min-height: calc(40vh - 30px);
+  padding-top: 5px;
 }
 
 .icon {
@@ -112,6 +113,18 @@ html {
   margin-left: 30px;
   padding-top: 50px;
   font-size: 90px;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.favourites_fav_align {
+  font-size: 45px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.favourites_nofav_align {
+  font-size: 45px;
   color: #6c757d;
   cursor: pointer;
 }

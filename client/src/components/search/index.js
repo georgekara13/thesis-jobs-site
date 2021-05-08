@@ -298,6 +298,16 @@ class Search extends Component {
     return (
       <div className="general_wrapper">
         <Container ref={(ref) => (this.myRef = ref)}>
+          <Row className="justify-content-md-center">
+            <Col md="auto">
+              <img
+                src="/assets/images/uop-logo.png"
+                width="200"
+                height="200"
+                alt="UOP Job Site logo"
+              />
+            </Col>
+          </Row>
           <Row>
             <Col>
               <Form onSubmit={(event) => this.dispatchSearch()}>

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getJobs } from '../../actions/job_actions'
+import { addUserFav, rmUserFav } from '../../actions/user_actions'
 
 import Table from 'react-bootstrap/Table'
 import Container from 'react-bootstrap/Container'
@@ -9,8 +10,8 @@ import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import MyPager from '../utils/mypager'
 import MyModal from '../utils/mymodal'
+import FavButton from '../utils/favbutton'
 
-// TODO Improve styling
 /* Used by the favourites route. Atm, we are stringifying the 'favourites' list
 found in the user.userData props, and dispatch a getjobs action. It's not optimal,
 as in theory we could get the result objects beforehand
@@ -33,6 +34,7 @@ class UserFavourites extends Component {
       show: false,
       item: '',
     },
+    userFavourites: this.props.user.userData.favourites,
   }
 
   componentDidMount = () => {
@@ -97,6 +99,28 @@ class UserFavourites extends Component {
     })
   }
 
+  //used by the favourites component to set/remove favourite jobs
+  dispatchRemoveFavourites = (event, jobId, uid) => {
+    event.preventDefault()
+    this.props.dispatch(rmUserFav(jobId, uid)).then((response) => {
+      this.setState({
+        ...this.state,
+        userFavourites: response.payload,
+      })
+    })
+  }
+
+  dispatchAddFavourites = (event, jobId, uid) => {
+    event.preventDefault()
+
+    this.props.dispatch(addUserFav(jobId, uid)).then((response) => {
+      this.setState({
+        ...this.state,
+        userFavourites: response.payload,
+      })
+    })
+  }
+
   mapFavourites = () => {
     let { items } = this.state
 
@@ -109,11 +133,25 @@ class UserFavourites extends Component {
         </th>
         <th>{item.location ? item.location : '-'}</th>
         <th>{item.company ? item.company : '-'}</th>
-        <th>{item.salary ? item.salary : '-'}</th>
+        <th>{item.salaryMin ? item.salaryMin : '-'}</th>
         <th>
           <Button onClick={(event) => this.showAdc(event, item)}>
             Εμφάνιση
           </Button>
+        </th>
+        <th>
+          <FavButton
+            uid={this.props.user.userData.id}
+            userFavourites={this.state.userFavourites}
+            jobId={item._id}
+            addFav={this.dispatchAddFavourites}
+            rmFav={this.dispatchRemoveFavourites}
+            className={
+              this.state.userFavourites.includes(item._id)
+                ? 'favourites_fav_align'
+                : 'favourites_nofav_align'
+            }
+          />
         </th>
       </tr>
     ))
@@ -132,6 +170,7 @@ class UserFavourites extends Component {
                   <th>Εταιρεία</th>
                   <th>Μισθός</th>
                   <th>Λεπτομέρειες</th>
+                  <th>Αφαίρεση</th>
                 </tr>
               </thead>
               <tbody>{this.mapFavourites()}</tbody>
