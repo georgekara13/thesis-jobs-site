@@ -6,7 +6,6 @@ import { getJobs } from '../../actions/job_actions'
 import Table from 'react-bootstrap/Table'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import MyPager from '../utils/mypager'
 import MyModal from '../utils/mymodal'
@@ -104,7 +103,7 @@ class UserFavourites extends Component {
     return items.map((item) => (
       <tr key={item._id}>
         <th>
-          <a href={item.url} target="_blank">
+          <a href={item.url} target="_blank" rel="noopener noreferrer">
             {item.title}
           </a>
         </th>
