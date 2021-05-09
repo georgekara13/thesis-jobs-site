@@ -1,10 +1,11 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const dbconf = require('./configuration/dbconf').dbconf()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 var ldapClient = require('promised-ldap')
+const dbconf = require('./configuration/dbconf').dbconf()
 const { logger } = require('./configuration/logger')
+const { emitter } = require('./configuration/broadcaster')
 
 //models
 const { User } = require('./model/user')
@@ -374,4 +375,9 @@ app.post('/api/updatesource', (req, res) => {
 app.listen(port, () => {
   console.log(`API is up in port ${port}, running in ${dbconf.MODE} mode`)
   logger.info(`API is up in port ${port}, running in ${dbconf.MODE} mode`)
+
+  // delete old ads(>14 days) from the index every 15 mins
+  const interval = setInterval(() => {
+    emitter.emit('deleteAds')
+  }, 900000)
 })
