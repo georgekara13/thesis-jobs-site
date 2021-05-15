@@ -12,3 +12,8 @@ async function run() {
 }
 
 run()
+
+process.on('SIGINT', () => {
+  logger.info('Received exit signal')
+  process.exit()
+})

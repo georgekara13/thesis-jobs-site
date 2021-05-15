@@ -1,0 +1,10 @@
+{
+  "name": "Ergasia",
+  "browser": "firefox",
+  "mode": "headless",
+  "module": "./functions/Ergasia.js",
+  "url": ["https://ergasia.gr/anazitisi?cat-id=283"],
+  "totalAds": 220,
+  "scrapeFrequency": 360,
+  "scrapeType": "jobs"
+}
