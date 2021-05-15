@@ -96,9 +96,10 @@ class Scrape {
       }
 
       logger.info(`Total ad urls found:${ad_urls.length}`)
-      let s = 1
+
       ad_urls.forEach((ad, s) => {
         s++
+        logger.info(`Ad ${s}: ${ad}`)
       })
 
       if (totalAds && typeof totalAds !== 'number') {
