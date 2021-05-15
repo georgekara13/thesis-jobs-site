@@ -16,7 +16,7 @@ module.exports = {
 
   ad_page: async function (driver, ad_url, ad_fields) {
     ad_fields.location = 'Remote'
-    ad_fields.jobTag = ['it']
+    ad_fields.jobTag = ['it', 'marketing']
     ad_fields.url = ad_url
     ad_fields.id = saltedMd5(ad_url, salt)
 
@@ -57,7 +57,9 @@ module.exports = {
       })
 
     await driver
-      .findElement(webdriver.By.css('#jobsboard td.position h2'))
+      .findElement(
+        webdriver.By.xpath('/html/body/div[8]/div/table/tbody/tr[1]/td[2]/a/h2')
+      )
       .getText()
       .then((title) => {
         ad_fields.title = title
@@ -68,8 +70,8 @@ module.exports = {
 
     await driver
       .findElement(
-        webdriver.By.css(
-          '.insert .bsa .default-description, #jobsboard td.company h3'
+        webdriver.By.xpath(
+          '/html/body/div[8]/div/table/tbody/tr[1]/td[2]/span[1]/h3'
         )
       )
       .getText()

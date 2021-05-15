@@ -4,7 +4,7 @@ const { logger } = require('../configuration/environment/logger')
 module.exports = {
   results_page: async function (ad_urls, driver) {
     const fetched_urls = await driver.findElements(
-      webdriver.By.xpath('/html/body/div[2]/div/section/article/ul/li/a')
+      webdriver.By.xpath('/html/body/div[3]/div/section/article/ul/li/a')
     )
     for (let i = 0; i < fetched_urls.length; i++) {
       ad_urls.push(await fetched_urls[i].getAttribute('href'))
@@ -29,7 +29,7 @@ module.exports = {
       })
 
     await driver
-      .findElement(webdriver.By.xpath('/html/body/div[3]/div/div[1]/h1'))
+      .findElement(webdriver.By.xpath('/html/body/div[4]/div/div[1]/h1'))
       .getText()
       .then((title) => {
         ad_fields.title = title
@@ -39,7 +39,7 @@ module.exports = {
       })
 
     await driver
-      .findElement(webdriver.By.xpath('/html/body/div[3]/div/div[2]/h2/a'))
+      .findElement(webdriver.By.xpath('/html/body/div[4]/div/div[2]/h2/a'))
       .getText()
       .then((company) => {
         ad_fields.company = company

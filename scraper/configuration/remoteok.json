@@ -3,8 +3,12 @@
   "browser": "firefox",
   "mode": "headless",
   "module": "./functions/RemoteOK.js",
-  "url": ["https://remoteok.io/remote-junior-jobs"],
-  "totalAds": 10,
+  "url": [
+    "https://remoteok.io/remote-junior-jobs",
+    "https://remoteok.io/remote-marketing-jobs",
+    "https://remoteok.io/remote-design-jobs"
+  ],
+  "totalAds": 250,
   "scrapeFrequency": 720,
   "scrapeType": "jobs"
 }

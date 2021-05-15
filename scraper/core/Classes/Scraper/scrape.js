@@ -96,9 +96,10 @@ class Scrape {
       }
 
       logger.info(`Total ad urls found:${ad_urls.length}`)
-      let s = 1
+
       ad_urls.forEach((ad, s) => {
         s++
+        logger.info(`Ad ${s}: ${ad}`)
       })
 
       if (totalAds && typeof totalAds !== 'number') {
@@ -131,12 +132,16 @@ class Scrape {
         ) {
           export_json.push(ad_fields_mut)
           // avoid showing ad fields - too much noise for the logs
-          logger.info(`${ad_urls[i]}: Fetched ad fields successfully`)
+          logger.info(
+            `${ad_urls[i]}: Fetched ad fields successfully: ${JSON.stringify(
+              ad_fields_mut
+            )}`
+          )
         }
         //else, reject
         else {
           logger.error(
-            'Ad got rejected due to missing required title/description/url fields'
+            `${ad_urls[i]}: Ad got rejected due to missing required title/description/url fields`
           )
         }
       }
