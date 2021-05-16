@@ -184,21 +184,6 @@ app.post('/api/login', (req, res) => {
     .catch((err) => res.status(200).json({ error: err }))
 })
 
-app.post('/api/addjob', (req, res) => {
-  const job = new Job(req.body)
-
-  job.save((err, doc) => {
-    if (err) {
-      logger.warn(err)
-      return res.status(400).send(err)
-    }
-    res.status(200).json({
-      post: true,
-      jobId: doc._id,
-    })
-  })
-})
-
 app.post('/api/addtofavourites', auth, (req, res) => {
   const { userid, jobid } = req.query
 
@@ -250,9 +235,14 @@ app.post('/api/addannouncement', (req, res) => {
 })
 
 app.post('/api/addjobs', createJobHash, (req, res) => {
+  const options = { upsert: true, new: true, setDefaultsOnInsert: true }
+
+  /* if document already exists, update it - otherwise, create it
+  we are using the jobhash middleware to figure it out
+  req body looks like this [{job 1 fields},{job 2 fields},...{job n fields}]
+  */
   req.hashedjobs.forEach((job) => {
-    const newJob = new Job(job)
-    newJob.save((err, doc) => {
+    Job.findOneAndUpdate({ jobHash: job.jobHash }, job, options, (err, doc) => {
       if (err) {
         logger.warn(err)
       }
