@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: uop-findajob-server
     container_name: uop-findajob-node-server
-    command: npm run dev
+    command: npm run prod
     volumes:
       - ./server/:/usr/src/app
       - /usr/src/app/node_modules

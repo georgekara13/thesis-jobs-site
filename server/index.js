@@ -32,6 +32,8 @@ mongoose.connect(dbconf.DATABASE, {
 
 const port = process.env.PORT || 3001
 const app = express()
+
+// TODO this shouldnt happen in production
 const ldap = new ldapClient({ url: dbconf.LDAP })
 
 app.use(bodyParser.json())

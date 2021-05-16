@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon index.js",
-    "dev": "concurrently \"nodemon index.js\" \"nodemon node_modules/ldap-server-mock/server.js --conf=dev/ldap-server-mock-conf.json --database=dev/users-conf.json\""
+    "dev": "concurrently \"nodemon index.js\" \"nodemon node_modules/ldap-server-mock/server.js --conf=dev/ldap-server-mock-conf.json --database=dev/users-conf.json\"",
+    "prod": "/usr/src/app/node_modules/.bin/nodemon index.js"
   },
   "author": "Georgekara",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "mongoose": "^5.9.13",
     "mongoose-fuzzy-searching": "^2.0.2",
     "mongoose-unique-validator": "^2.0.3",
+    "nodemon": "^2.0.2",
     "promised-ldap": "^0.3.0",
     "salted-md5": "^4.0.2",
     "winston": "^3.2.1"
