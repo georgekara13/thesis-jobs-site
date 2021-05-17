@@ -1,20 +1,12 @@
-# Dockerfile for React client
-
-# Build react client
-FROM node:10.16-alpine
-
-# Working directory be app
+# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
+FROM tiangolo/node-frontend:10 as build-stage
 WORKDIR /usr/src/app
-
 COPY package*.json ./
-
-###  Installing dependencies
-
-RUN npm install --silent
-
-# copy local files to app folder
-COPY . .
-
-EXPOSE 3000
-
-CMD ["npm","start"]
+RUN npm install
+COPY ./ /usr/src/app/
+RUN npm run build
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+FROM nginx:1.15
+COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
+# Copy the default nginx.conf provided by tiangolo/node-frontend
+COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf

@@ -1,9 +1,9 @@
-const validate = (element, formdata = []) => {
-  let error = [true, ""]
+export const validate = (element, formdata = []) => {
+  let error = [true, '']
 
   if (element.validation.email) {
     const valid = /^.*?@.*?\.[a-zA-Z]+$/.test(element.value)
-    const message = `${!valid ? "Το email πρέπει να έχει σωστή μορφή" : ""}`
+    const message = `${!valid ? 'Το email πρέπει να έχει σωστή μορφή' : ''}`
     error = !valid ? [valid, message] : error
   }
 
@@ -11,20 +11,20 @@ const validate = (element, formdata = []) => {
     const valid =
       element.value.trim() === formdata[element.validation.confirm].value
 
-    const message = `${!valid ? "Must be matching passwords" : ""}`
+    const message = `${!valid ? 'Must be matching passwords' : ''}`
     error = !valid ? [valid, message] : error
   }
 
   if (element.validation.required) {
-    const valid = element.value.trim() !== ""
-    const message = `${!valid ? "Το πεδίο είναι απαραίτητο" : ""}`
+    const valid = element.value.trim() !== ''
+    const message = `${!valid ? 'Το πεδίο είναι απαραίτητο' : ''}`
     error = !valid ? [valid, message] : error
   }
 
   return error
 }
 
-const update = (element, formdata, formName) => {
+export const update = (element, formdata, formName) => {
   let newFormData = {
     ...formdata,
   }
@@ -47,11 +47,11 @@ const update = (element, formdata, formName) => {
   return newFormData
 }
 
-const generateData = (formdata, formName) => {
+export const generateData = (formdata, formName) => {
   let dataToSubmit = {}
 
   for (let key in formdata) {
-    if (key !== "confirmPassword") {
+    if (key !== 'confirmPassword') {
       dataToSubmit[key] = formdata[key].value
     }
   }
@@ -59,7 +59,7 @@ const generateData = (formdata, formName) => {
   return dataToSubmit
 }
 
-const isFormValid = (formdata, formName) => {
+export const isFormValid = (formdata, formName) => {
   let formIsValid = true
 
   for (let key in formdata) {
@@ -68,5 +68,3 @@ const isFormValid = (formdata, formName) => {
 
   return formIsValid
 }
-
-module.exports = { update, validate, generateData, isFormValid }
