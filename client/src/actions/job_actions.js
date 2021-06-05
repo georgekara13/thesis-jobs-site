@@ -12,7 +12,7 @@ export function getJobs(params) {
     perPage = 9,
     _id,
   } = params
-  let reqUrl = `/api/getjobs`
+  let reqUrl = `${process.env.REACT_APP_API}/api/getjobs`
   let queryParams = []
 
   if (keyword) queryParams.push(`keyword=${keyword}`)

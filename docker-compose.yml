@@ -46,6 +46,8 @@ services:
       - '80:80'
     depends_on:
       - server
+    environment:
+      - NODE_ENV=production
     networks:
       - app-network
   mongo-express:
@@ -59,7 +61,7 @@ services:
     networks:
       - app-network
     ports:
-      - 8081:8081
+      - 8084:8084
     restart: unless-stopped
 networks:
   app-network:

@@ -2,6 +2,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
+
 const dbconf = require('./configuration/dbconf').dbconf()
 const { logger } = require('./configuration/logger')
 const { emitter } = require('./configuration/broadcaster')
@@ -37,6 +39,8 @@ app.use(bodyParser.json())
 //app.use(bodyParser.json({limit:'50mb'}))
 //app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}))
 app.use(cookieParser())
+
+app.use(cors())
 
 //GET routes
 app.get('/api/userisauth', auth, (req, res) => {
