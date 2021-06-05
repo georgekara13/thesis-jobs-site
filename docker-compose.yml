@@ -48,6 +48,19 @@ services:
       - server
     networks:
       - app-network
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
+      - mongo-seed
+    networks:
+      - app-network
+    ports:
+      - 8081:8081
+    restart: unless-stopped
 networks:
   app-network:
     driver: bridge
