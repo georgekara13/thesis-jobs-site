@@ -36,6 +36,18 @@ services:
       - NODE_ENV=production
     networks:
       - app-network
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: uop-findajob-client
+    container_name: uop-findajob-node-client
+    ports:
+      - '80:80'
+    depends_on:
+      - server
+    networks:
+      - app-network
 networks:
   app-network:
     driver: bridge
