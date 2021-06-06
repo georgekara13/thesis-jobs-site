@@ -36,6 +36,24 @@ services:
       - NODE_ENV=production
     networks:
       - app-network
+  scraper:
+    build:
+      context: ./scraper
+      dockerfile: Dockerfile
+    image: uop-findajob-scraper
+    container_name: uop-findajob-node-scraper
+    command: node scrape-scheduler.js
+    volumes:
+      - ./scraper/:/usr/src/app
+    ports:
+      - '5800:5800'
+    depends_on:
+      - server
+    #restart: always
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
   client:
     build:
       context: ./client
@@ -50,19 +68,6 @@ services:
       - NODE_ENV=production
     networks:
       - app-network
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=mongodb
-    depends_on:
-      - mongodb
-      - mongo-seed
-    networks:
-      - app-network
-    ports:
-      - 8084:8084
-    restart: unless-stopped
 networks:
   app-network:
     driver: bridge
