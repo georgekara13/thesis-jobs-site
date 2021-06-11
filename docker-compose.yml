@@ -4,8 +4,6 @@ services:
     image: mongo
     ports:
       - '27017:27017'
-    networks:
-      - app-network
   mongo-seed:
     build: ./mongo-seed
     links:
@@ -13,8 +11,6 @@ services:
     depends_on:
       - mongodb
     restart: on-failure
-    networks:
-      - app-network
   server:
     build:
       context: ./server
@@ -34,8 +30,6 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
-    networks:
-      - app-network
   scraper:
     build:
       context: ./scraper
@@ -43,17 +37,14 @@ services:
     image: uop-findajob-scraper
     container_name: uop-findajob-node-scraper
     command: node scrape-scheduler.js
-    volumes:
-      - ./scraper/:/usr/src/app
-    ports:
-      - '5800:5800'
+    network_mode: host
     depends_on:
       - server
+    volumes:
+      - ./scraper/:/usr/src/app
     #restart: always
     environment:
       - NODE_ENV=production
-    networks:
-      - app-network
   client:
     build:
       context: ./client
@@ -66,8 +57,3 @@ services:
       - server
     environment:
       - NODE_ENV=production
-    networks:
-      - app-network
-networks:
-  app-network:
-    driver: bridge
