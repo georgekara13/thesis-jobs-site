@@ -142,4 +142,7 @@ client/yarn-error.log*
 # dev
 *.code-workspace
 
+# local storage
+data/
+
 # End of https://www.gitignore.io/api/node

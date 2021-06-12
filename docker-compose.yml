@@ -2,6 +2,8 @@ version: '3.7'
 services:
   mongodb:
     image: mongo
+    volumes:
+      - ./data/db:/data/db
     ports:
       - '27017:27017'
   mongo-seed:
@@ -42,7 +44,7 @@ services:
       - server
     volumes:
       - ./scraper/:/usr/src/app
-    #restart: always
+    restart: always
     environment:
       - NODE_ENV=production
   client:
@@ -57,3 +59,13 @@ services:
       - server
     environment:
       - NODE_ENV=production
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
+    ports:
+      - 8081:8081
+    restart: unless-stopped

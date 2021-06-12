@@ -1,83 +1,82 @@
-[{
-	"_id": {
-		"$oid": "6047f21d9dc855bb5e4638e9"
-	},
-	"browser": "firefox",
-	"mode": "headless",
-	"scrapeType": "jobs",
-	"url": [
-		"https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias",
-		"https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=2",
-		"https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=3",
-		"https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=4",
-		"https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=5"
-	],
-	"totalAds": 10,
-	"scrapeFrequency": 120,
-	"lastRun": {
-		"$date": "2021-05-08T19:30:16.248Z"
-	},
-	"name": "Jobfind",
-	"module": "./functions/JobFind.js",
-	"__v": 0
-},
-{
-	"_id": {
-		"$oid": "6047f2269dc855bb5e4638ea"
-	},
-	"browser": "firefox",
-	"mode": "headless",
-	"scrapeType": "jobs",
-	"url": [
-		"https://weworkremotely.com"
-	],
-	"totalAds": 200,
-	"scrapeFrequency": 10,
-	"lastRun": {
-		"$date": "2021-05-16T09:26:06.048Z"
-	},
-	"name": "We Work Remotely",
-	"module": "./functions/WeWorkRemotely.js",
-	"__v": 0
-},
-{
-	"_id": {
-		"$oid": "609fb7c3aba7768188af4738"
-	},
-	"browser": "firefox",
-	"mode": "headless",
-	"scrapeType": "jobs",
-	"url": [
-		"https://remoteok.io/remote-junior-jobs",
-		"https://remoteok.io/remote-marketing-jobs",
-		"https://remoteok.io/remote-design-jobs"
-	],
-	"totalAds": 250,
-	"scrapeFrequency": 720,
-	"lastRun": {
-		"$date": "2010-01-01T00:00:00Z"
-	},
-	"name": "remoteOK",
-	"module": "./functions/RemoteOK.js",
-	"__v": 0
-},
-{
-	"_id": {
-		"$oid": "60a000d2ac397088580e3677"
-	},
-	"browser": "firefox",
-	"mode": "headless",
-	"scrapeType": "jobs",
-	"url": [
-		"https://www.kariera.gr/%CE%B8%CE%AD%CF%83%CE%B5%CE%B9%CF%82-%CE%B5%CF%81%CE%B3%CE%B1%CF%83%CE%AF%CE%B1%CF%82?filter_category=jn008&pg=2"
-	],
-	"totalAds": 260,
-	"scrapeFrequency": 360,
-	"lastRun": {
-		"$date": "2021-05-15T17:13:11.667Z"
-	},
-	"name": "Kariera",
-	"module": "./functions/Kariera.js",
-	"__v": 0
-}]
-
+[
+  {
+    "_id": {
+      "$oid": "6047f21d9dc855bb5e4638e9"
+    },
+    "browser": "firefox",
+    "mode": "headless",
+    "scrapeType": "jobs",
+    "url": [
+      "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias",
+      "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=2",
+      "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=3",
+      "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=4",
+      "https://www.jobfind.gr/JobAds/all/Athens/GR/Theseis_Ergasias?pageid=5"
+    ],
+    "totalAds": 10,
+    "scrapeFrequency": 0,
+    "lastRun": {
+      "$date": "2021-05-08T19:30:16.248Z"
+    },
+    "name": "Jobfind",
+    "module": "./functions/JobFind.js",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6047f2269dc855bb5e4638ea"
+    },
+    "browser": "firefox",
+    "mode": "headless",
+    "scrapeType": "jobs",
+    "url": ["https://weworkremotely.com"],
+    "totalAds": 5,
+    "scrapeFrequency": 360,
+    "lastRun": {
+      "$date": "2021-05-16T09:26:06.048Z"
+    },
+    "name": "We Work Remotely",
+    "module": "./functions/WeWorkRemotely.js",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "609fb7c3aba7768188af4738"
+    },
+    "browser": "firefox",
+    "mode": "headless",
+    "scrapeType": "jobs",
+    "url": [
+      "https://remoteok.io/remote-junior-jobs",
+      "https://remoteok.io/remote-marketing-jobs",
+      "https://remoteok.io/remote-design-jobs"
+    ],
+    "totalAds": 250,
+    "scrapeFrequency": 0,
+    "lastRun": {
+      "$date": "2010-01-01T00:00:00Z"
+    },
+    "name": "remoteOK",
+    "module": "./functions/RemoteOK.js",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "60a000d2ac397088580e3677"
+    },
+    "browser": "firefox",
+    "mode": "headless",
+    "scrapeType": "jobs",
+    "url": [
+      "https://www.kariera.gr/%CE%B8%CE%AD%CF%83%CE%B5%CE%B9%CF%82-%CE%B5%CF%81%CE%B3%CE%B1%CF%83%CE%AF%CE%B1%CF%82?filter_category=jn008&pg=2"
+    ],
+    "totalAds": 260,
+    "scrapeFrequency": 0,
+    "lastRun": {
+      "$date": "2021-05-15T17:13:11.667Z"
+    },
+    "name": "Kariera",
+    "module": "./functions/Kariera.js",
+    "__v": 0
+  }
+]
