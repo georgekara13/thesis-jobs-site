@@ -40,6 +40,7 @@ services:
     container_name: uop-findajob-node-scraper
     command: node scrape-scheduler.js
     network_mode: host
+    shm_size: '2gb'
     depends_on:
       - server
     volumes:
