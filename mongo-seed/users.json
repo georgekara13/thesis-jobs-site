@@ -1,0 +1,101 @@
+[{
+	"_id": {
+		"$oid": "6043c7de02c06c85e66a9c7c"
+	},
+	"favourites": [
+		{
+			"$oid": "5fe9fd6ed9ea650def6aa618"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e198b"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e198c"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e195f"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e1961"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e19a1"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e1985"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e199d"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e1965"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e195b"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e19b8"
+		},
+		{
+			"$oid": "5fde36ee2ab48e936d9e197c"
+		},
+		{
+			"$oid": "60492c507ba047683c46e230"
+		},
+		{
+			"$oid": "604935277ba047683c46e2a3"
+		},
+		{
+			"$oid": "60492c507ba047683c46e219"
+		},
+		{
+			"$oid": "60492c5f7ba047683c46e293"
+		},
+		{
+			"$oid": "6056186938efab1881fe6e02"
+		},
+		{
+			"$oid": "60492c507ba047683c46e211"
+		},
+		{
+			"$oid": "6056186938efab1881fe6e35"
+		},
+		{
+			"$oid": "60492c5f7ba047683c46e2a1"
+		},
+		{
+			"$oid": "609fb728aba7768188af4709"
+		},
+		{
+			"$oid": "609fb728aba7768188af470a"
+		},
+		{
+			"$oid": "609fb728aba7768188af470b"
+		},
+		{
+			"$oid": "609fb728aba7768188af4706"
+		},
+		{
+			"$oid": "609fb728aba7768188af4702"
+		},
+		{
+			"$oid": "60a00318ac397088580e3686"
+		},
+		{
+			"$oid": "60a00fc2ac397088580e3785"
+		},
+		{
+			"$oid": "60a00fc1ac397088580e371c"
+		},
+		{
+			"$oid": "60a00318ac397088580e36a7"
+		},
+		{
+			"$oid": "60a00fc2ac397088580e379a"
+		}
+	],
+	"email": "dummyuser@uop.gr",
+	"__v": 210,
+	"token": "eyJhbGciOiJIUzI1NiJ9.NjA0M2M3ZGUwMmMwNmM4NWU2NmE5Yzdj.L7gh89YLxu4k-dlorzzaQKUpwQrU5GiunIpiwP-m6Rc"
+}]
+

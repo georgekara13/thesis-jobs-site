@@ -1,0 +1,29 @@
+[{
+	"_id": {
+		"$oid": "5fc3ea7e610dd5e6701f648f"
+	},
+	"title": "Test Announcement",
+	"content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+	"createdAt": {
+		"$date": "2020-11-29T18:37:50.686Z"
+	},
+	"updatedAt": {
+		"$date": "2020-11-29T18:37:50.686Z"
+	},
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "5fc3f86383ff4feb2d160b26"
+	},
+	"title": "Συντήρηση server",
+	"content": "Στις 19/12, θα πέσει ο server λόγω εργασιών συντήρησης. Θα επανέλθει το συντομότερο δυνατόν.",
+	"createdAt": {
+		"$date": "2020-11-29T19:37:07.986Z"
+	},
+	"updatedAt": {
+		"$date": "2020-11-29T19:37:07.986Z"
+	},
+	"__v": 0
+}]
+

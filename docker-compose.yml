@@ -1,2 +1,71 @@
-#TODO
-version: '3'
+version: '3.7'
+services:
+  mongodb:
+    image: mongo
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - '27017:27017'
+  mongo-seed:
+    build: ./mongo-seed
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    restart: on-failure
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: uop-findajob-server
+    container_name: uop-findajob-node-server
+    command: npm run prod
+    volumes:
+      - ./server/:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3001:3001'
+    depends_on:
+      - mongodb
+      - mongo-seed
+    env_file: ./server/.env
+    restart: always
+    environment:
+      - NODE_ENV=production
+  scraper:
+    build:
+      context: ./scraper
+      dockerfile: Dockerfile
+    image: uop-findajob-scraper
+    container_name: uop-findajob-node-scraper
+    command: node scrape-scheduler.js
+    network_mode: host
+    depends_on:
+      - server
+    volumes:
+      - ./scraper/:/usr/src/app
+    restart: always
+    environment:
+      - NODE_ENV=production
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: uop-findajob-client
+    container_name: uop-findajob-node-client
+    ports:
+      - '80:80'
+    depends_on:
+      - server
+    environment:
+      - NODE_ENV=production
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
+    ports:
+      - 8081:8081
+    restart: unless-stopped

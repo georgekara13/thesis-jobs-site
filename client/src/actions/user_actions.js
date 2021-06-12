@@ -11,7 +11,7 @@ import {
 
 export function loginUser(dataToSubmit) {
   const request = axios
-    .post(`/api/login`, dataToSubmit)
+    .post(`${process.env.REACT_APP_API}/api/login`, dataToSubmit)
     .then((response) => response.data)
   return {
     type: LOGIN_USER,
@@ -21,7 +21,7 @@ export function loginUser(dataToSubmit) {
 
 export function registerUser(dataToSubmit) {
   const request = axios
-    .post(`/api/register`, dataToSubmit)
+    .post(`${process.env.REACT_APP_API}/api/register`, dataToSubmit)
     .then((response) => response.data)
   return {
     type: REGISTER_USER,
@@ -30,7 +30,9 @@ export function registerUser(dataToSubmit) {
 }
 
 export function auth() {
-  const request = axios.get(`/api/userisauth`).then((response) => response.data)
+  const request = axios
+    .get(`${process.env.REACT_APP_API}/api/userisauth`)
+    .then((response) => response.data)
   return {
     type: AUTH_USER,
     payload: request,
@@ -38,7 +40,9 @@ export function auth() {
 }
 
 export function logoutUser() {
-  const request = axios.get(`/api/logout`).then((response) => response.data)
+  const request = axios
+    .get(`${process.env.REACT_APP_API}/api/logout`)
+    .then((response) => response.data)
 
   return {
     type: LOGOUT_USER,
@@ -48,7 +52,9 @@ export function logoutUser() {
 
 export function addUserFav(jobId, uid) {
   const request = axios
-    .post(`/api/addtofavourites?userid=${uid}&jobid=${jobId}`)
+    .post(
+      `${process.env.REACT_APP_API}/api/addtofavourites?userid=${uid}&jobid=${jobId}`
+    )
     .then((response) => response.data.doc.favourites)
   return {
     type: ADD_USER_FAV,
@@ -58,7 +64,9 @@ export function addUserFav(jobId, uid) {
 
 export function rmUserFav(jobId, uid) {
   const request = axios
-    .delete(`/api/deletefromfavourites?userid=${uid}&jobid=${jobId}`)
+    .delete(
+      `${process.env.REACT_APP_API}/api/deletefromfavourites?userid=${uid}&jobid=${jobId}`
+    )
     .then((response) => response.data.doc.favourites)
   return {
     type: RM_USER_FAV,

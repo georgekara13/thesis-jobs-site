@@ -2,7 +2,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-var ldapClient = require('promised-ldap')
+const cors = require('cors')
+
 const dbconf = require('./configuration/dbconf').dbconf()
 const { logger } = require('./configuration/logger')
 const { emitter } = require('./configuration/broadcaster')
@@ -32,13 +33,14 @@ mongoose.connect(dbconf.DATABASE, {
 
 const port = process.env.PORT || 3001
 const app = express()
-const ldap = new ldapClient({ url: dbconf.LDAP })
 
 app.use(bodyParser.json())
 //change payload size in mbs. Not recommended
 //app.use(bodyParser.json({limit:'50mb'}))
 //app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}))
 app.use(cookieParser())
+
+app.use(cors())
 
 //GET routes
 app.get('/api/userisauth', auth, (req, res) => {
@@ -144,44 +146,7 @@ app.post('/api/login', (req, res) => {
   const { email, password } = req.body
   const options = { filter: `(&(mail=${email})(userPassword=${password}))` }
 
-  //search for entry in ldap - if it exists, proceed with auth
-  ldap
-    .search('dc=test', options)
-    .then((result) => {
-      //ldap confirms user email & password
-      if (result.entries[0]) {
-        //check if user email exists in User collection
-        User.findOne({ email }, (err, user) => {
-          //if not, add them
-          if (!user) {
-            let user = new User({ email })
-            user.generateToken((err, user) => {
-              if (err) return res.status(400).send(err)
-              //send user data as a response cookie
-              res.cookie('auth', user.token).json({
-                isAuth: true,
-                id: user._id,
-                email: user.email,
-              })
-            })
-          } else {
-            //generate token for user
-            user.generateToken((err, user) => {
-              if (err) return res.status(400).send(err)
-              //send user data as a response cookie
-              res.cookie('auth', user.token).json({
-                isAuth: true,
-                id: user._id,
-                email: user.email,
-              })
-            })
-          }
-        })
-      } else {
-        res.status(401).json({ error: 'User auth error' })
-      }
-    })
-    .catch((err) => res.status(200).json({ error: err }))
+  // TODO redesign route with sso
 })
 
 app.post('/api/addtofavourites', auth, (req, res) => {
