@@ -55,7 +55,7 @@ services:
     image: uop-findajob-client
     container_name: uop-findajob-node-client
     ports:
-      - '80:80'
+      - '8085:8085'
     depends_on:
       - server
     environment:
