@@ -143,10 +143,10 @@ app.get('/api/getsources', sourceQuery, (req, res) => {
 
 //POST routes
 app.post('/api/login', (req, res) => {
-  const { email, password } = req.body
-  const options = { filter: `(&(mail=${email})(userPassword=${password}))` }
-
   // TODO redesign route with sso
+  res.status(200).json({
+    logged_in: true,
+  })
 })
 
 app.post('/api/addtofavourites', auth, (req, res) => {

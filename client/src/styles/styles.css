@@ -13,9 +13,9 @@ html {
 }
 
 .signin_wrapper {
-  background: rgba(52, 58, 64, 0.8);
   padding: 30px;
-  border-radius: 10px;
+  text-align: center;
+  color: #fff;
 }
 
 .login_info_wrapper {
@@ -23,8 +23,7 @@ html {
   padding: 30px;
   border-radius: 10px;
   color: #fff;
-  text-align: justify;
-  margin-left: 10px;
+  text-align: center;
 }
 
 .login_page_wrapper {
