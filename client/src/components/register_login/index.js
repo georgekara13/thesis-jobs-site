@@ -18,8 +18,8 @@ const RegisterLogin = () => (
       </Row>
     </Container>
     <Container className="login_page_wrapper">
-      <Row className="register_login_container">
-        <Col className="login_info_wrapper">
+      <Row className="justify-content-md-center">
+        <Col xs lg="5" className="login_info_wrapper">
           <p>
             Η πλατφόρμα εύρεσης εργασίας αποτελεί ένα ολοκληρωμένο Σύστημα
             Διαχείρισης αγγελιών απ'τον ιστό. Ακολουθεί τη φιλοσοφία του
@@ -28,8 +28,6 @@ const RegisterLogin = () => (
             εξειδικευμένων τεχνικών γνώσεων. Απαραίτητη προϋπόθεση για την
             πρόσβαση, είναι η χρήση λογαριασμού του Πανεπιστημίου.
           </p>
-        </Col>
-        <Col>
           <Login />
         </Col>
       </Row>
