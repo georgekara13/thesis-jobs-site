@@ -8,7 +8,7 @@ const dbconf = () => {
         SECRET: process.env.SECRET,
       }
     : {
-        DATABASE: 'mongodb://mongodb:27017/jobsite',
+        DATABASE: 'mongodb://localhost:27017/jobsite',
         MODE: 'dev',
         SSO: 'ldap://localhost:3002',
         SECRET: 'dev_env_testpass123',
