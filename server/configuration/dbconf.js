@@ -1,8 +1,8 @@
 const dbconf = () => {
   //MONGODB_URI will be a dockerfile env variable
-  return process.env.MONGODB_URI
+  return process.env.NODE_ENV === 'production'
     ? {
-        DATABASE: process.env.MONGODB_URI,
+        DATABASE: `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/jobsite?authSource=admin`,
         MODE: 'production',
         SSO: 'ldap://<host:port>',
         SECRET: process.env.SECRET,

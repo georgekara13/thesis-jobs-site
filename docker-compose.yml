@@ -2,12 +2,20 @@ version: '3.7'
 services:
   mongodb:
     image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - ./data/db:/data/db
     ports:
       - '27017:27017'
+    command: mongod
   mongo-seed:
-    build: ./mongo-seed
+    build:
+      context: ./mongo-seed
+      args:
+        USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+        PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     links:
       - mongodb
     depends_on:
@@ -28,10 +36,11 @@ services:
     depends_on:
       - mongodb
       - mongo-seed
-    env_file: ./server/.env
     restart: always
     environment:
       - NODE_ENV=production
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
   scraper:
     build:
       context: ./scraper
@@ -68,6 +77,10 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongodb
       - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
       - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     depends_on:
       - mongodb
     ports:
