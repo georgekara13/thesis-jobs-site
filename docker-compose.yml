@@ -66,7 +66,16 @@ services:
     container_name: uop-findajob-node-client
     ports:
       - '8085:8085'
+      - '443:443'
+    restart: always
     depends_on:
       - server
+    volumes:
+      - ./client/nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./data/certbot/www:/var/www/certbot/:ro
     environment:
       - NODE_ENV=production
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./data/certbot/www/:/var/www/certbot/:rw
