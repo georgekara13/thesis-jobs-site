@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const cookieSession = require('cookie-session')
 const cors = require('cors')
 
 const dbconf = require('./configuration/dbconf').dbconf()
@@ -39,6 +40,15 @@ app.use(bodyParser.json())
 //app.use(bodyParser.json({limit:'50mb'}))
 //app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}))
 app.use(cookieParser())
+
+app.use(
+  cookieSession({
+    name: 'bezkoder-session',
+    // keys: ['key1', 'key2'],
+    secret: process.env.COOKIE_SECRET, // should use as secret environment variable
+    httpOnly: true,
+  })
+)
 
 app.use(cors())
 
