@@ -375,7 +375,7 @@ app.post('/api/auth/signup', (req, res) => {
   })
 })
 
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth/signin', (req, res) => {
   User.findOne({
     username: req.body.username,
   })
@@ -395,7 +395,7 @@ app.post('/api/auth/login', (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({ message: 'Invalid Password!' })
       }
-      const token = jwt.sign({ id: user.id }, config.secret, {
+      const token = jwt.sign({ id: user.id }, dbconf.SECRET, {
         expiresIn: 86400, // 24 hours
       })
       const authorities = []
