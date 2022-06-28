@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cookieSession = require('cookie-session')
 const cors = require('cors')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 const dbconf = require('./configuration/dbconf').dbconf()
 const { logger } = require('./configuration/logger')
@@ -13,6 +15,7 @@ const { emitter } = require('./configuration/broadcaster')
 const { User } = require('./model/user')
 const { Job } = require('./model/job')
 const { Source } = require('./model/source')
+const { Role } = require('./model/role')
 const { Announcement } = require('./model/announcement')
 
 //middleware
@@ -59,13 +62,6 @@ app.get('/api/userisauth', auth, (req, res) => {
     id: req.user._id,
     email: req.user.email,
     favourites: req.user.favourites,
-  })
-})
-
-app.get('/api/logout', auth, (req, res) => {
-  req.user.deleteToken(req.token, (err, user) => {
-    if (err) return res.status(400).send(err)
-    res.sendStatus(200)
   })
 })
 
@@ -148,14 +144,6 @@ app.get('/api/getsources', sourceQuery, (req, res) => {
   res.status(200).json({
     results: req.sources.length,
     sources: req.sources,
-  })
-})
-
-//POST routes
-app.post('/api/login', (req, res) => {
-  // TODO redesign route with sso
-  res.status(200).json({
-    logged_in: true,
   })
 })
 
@@ -335,6 +323,102 @@ app.post('/api/updatesource', (req, res) => {
       })
     }
   )
+})
+
+app.post('/api/auth/signup', (req, res) => {
+  const user = new User({
+    username: req.body.username,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 8),
+  })
+  user.save((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err })
+      return
+    }
+    if (req.body.roles) {
+      Role.find(
+        {
+          name: { $in: req.body.roles },
+        },
+        (err, roles) => {
+          if (err) {
+            res.status(500).send({ message: err })
+            return
+          }
+          user.roles = roles.map((role) => role._id)
+          user.save((err) => {
+            if (err) {
+              res.status(500).send({ message: err })
+              return
+            }
+            res.send({ message: 'User was registered successfully!' })
+          })
+        }
+      )
+    } else {
+      Role.findOne({ name: 'user' }, (err, role) => {
+        if (err) {
+          res.status(500).send({ message: err })
+          return
+        }
+        user.roles = [role._id]
+        user.save((err) => {
+          if (err) {
+            res.status(500).send({ message: err })
+            return
+          }
+          res.send({ message: 'User was registered successfully!' })
+        })
+      })
+    }
+  })
+})
+
+app.post('/api/auth/login', (req, res) => {
+  User.findOne({
+    username: req.body.username,
+  })
+    .populate('roles', '-__v')
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err })
+        return
+      }
+      if (!user) {
+        return res.status(404).send({ message: 'User Not found.' })
+      }
+      const passwordIsValid = bcrypt.compareSync(
+        req.body.password,
+        user.password
+      )
+      if (!passwordIsValid) {
+        return res.status(401).send({ message: 'Invalid Password!' })
+      }
+      const token = jwt.sign({ id: user.id }, config.secret, {
+        expiresIn: 86400, // 24 hours
+      })
+      const authorities = []
+      for (let i = 0; i < user.roles.length; i++) {
+        authorities.push('ROLE_' + user.roles[i].name.toUpperCase())
+      }
+      req.session.token = token
+      res.status(200).send({
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        roles: authorities,
+      })
+    })
+})
+
+app.post('/api/auth/signout', async (req, res) => {
+  try {
+    req.session = null
+    return res.status(200).send({ message: "You've been signed out!" })
+  } catch (err) {
+    this.next(err)
+  }
 })
 
 app.listen(port, () => {

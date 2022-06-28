@@ -1,20 +1,97 @@
-const {User}     = require('./../model/user')
+const { User } = require('./../model/user')
+const { Role } = require('./../model/role')
 const { logger } = require('../configuration/logger')
+const jwt = require('jsonwebtoken')
+const { SECRET } = require('../configuration/dbconf').dbconf()
 
 let auth = (req, res, next) => {
   let token = req.cookies.auth
 
   User.findByToken(token, (err, user) => {
-    if (err){
+    if (err) {
       logger.warn(err)
       return res.status(400).send(err)
     }
-    if (!user) return res.json({error:true})
+    if (!user) return res.json({ error: true })
 
     req.token = token
-    req.user  = user
+    req.user = user
     next()
   })
 }
 
-module.exports = {auth}
+verifyToken = (req, res, next) => {
+  let token = req.session.token
+  if (!token) {
+    return res.status(403).send({ message: 'No token provided!' })
+  }
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: 'Unauthorized!' })
+    }
+    req.userId = decoded.id
+    next()
+  })
+}
+isAdmin = (req, res, next) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err })
+      return
+    }
+    Role.find(
+      {
+        _id: { $in: user.roles },
+      },
+      (err, roles) => {
+        if (err) {
+          res.status(500).send({ message: err })
+          return
+        }
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === 'admin') {
+            next()
+            return
+          }
+        }
+        res.status(403).send({ message: 'Require Admin Role!' })
+        return
+      }
+    )
+  })
+}
+isModerator = (req, res, next) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err })
+      return
+    }
+    Role.find(
+      {
+        _id: { $in: user.roles },
+      },
+      (err, roles) => {
+        if (err) {
+          res.status(500).send({ message: err })
+          return
+        }
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === 'moderator') {
+            next()
+            return
+          }
+        }
+        res.status(403).send({ message: 'Require Moderator Role!' })
+        return
+      }
+    )
+  })
+}
+
+const authJwt = {
+  verifyToken,
+  isAdmin,
+  isModerator,
+}
+
+module.exports = { auth, authJwt }

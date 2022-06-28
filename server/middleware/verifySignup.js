@@ -31,25 +31,22 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   })
 }
 checkRolesExisted = (req, res, next) => {
-  if (req.body.name) {
-    Role.find({
-      name: req.body.name,
-    }).exec((err, role) => {
+  if (req.body.roles) {
+    Role.find({ name: { $in: req.body.roles } }).exec((err, roles) => {
       if (err) {
         res.status(500).send({ message: err })
         return
       }
-      if (!role) {
+      if (roles.length !== req.body.roles.length) {
         res.status(400).send({
-          message: `Failed! Role ${req.body.name} does not exist!`,
+          message: 'Failed! Some of the roles do not exist!',
         })
         return
       }
-      next()
     })
   }
+  next()
 }
-next()
 
 const verifySignUp = {
   checkDuplicateUsernameOrEmail,
