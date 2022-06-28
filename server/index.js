@@ -352,6 +352,7 @@ app.post('/api/auth/signup', (req, res) => {
               res.status(500).send({ message: err })
               return
             }
+            logger.info(`New user registration for '${req.body.email}'`)
             res.send({ message: 'User was registered successfully!' })
           })
         }
@@ -368,6 +369,7 @@ app.post('/api/auth/signup', (req, res) => {
             res.status(500).send({ message: err })
             return
           }
+          logger.info(`New user registration for '${req.body.email}'`)
           res.send({ message: 'User was registered successfully!' })
         })
       })
@@ -403,6 +405,7 @@ app.post('/api/auth/signin', (req, res) => {
         authorities.push('ROLE_' + user.roles[i].name.toUpperCase())
       }
       req.session.token = token
+      logger.info(`Initiating session for '${user.username}'`)
       res.status(200).send({
         id: user._id,
         username: user.username,
