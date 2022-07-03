@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const dbconf = require('../configuration/dbconf').dbconf()
 
-//to be discussed
 const userSchema = mongoose.Schema({
   username: {
     type: String,

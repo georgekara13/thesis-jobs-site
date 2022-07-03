@@ -24,7 +24,7 @@ const {
   sourceQuery,
   announcementQuery,
 } = require('./middleware/constructquery')
-const { auth } = require('./middleware/auth')
+const { auth, authJwt } = require('./middleware/auth')
 const { createJobHash } = require('./middleware/jobhash')
 
 mongoose.Promise = global.Promise
@@ -147,8 +147,9 @@ app.get('/api/getsources', sourceQuery, (req, res) => {
   })
 })
 
-app.post('/api/addtofavourites', auth, (req, res) => {
-  const { userid, jobid } = req.query
+app.post('/api/addtofavourites', authJwt.verifyToken, (req, res) => {
+  const { jobid } = req.query
+  const userid = req.userId
 
   logger.info(`Add to favs for user ${userid} , for job ${jobid}`)
 
@@ -182,20 +183,25 @@ app.post('/api/addtofavourites', auth, (req, res) => {
 
 /*TODO ADD ADMIN AUTH MIDDLEWARE - only admin users should be able to post
 announcements*/
-app.post('/api/addannouncement', (req, res) => {
-  const announcement = new Announcement(req.body)
+app.post(
+  '/api/addannouncement',
+  authJwt.verifyToken,
+  authJwt.isAdmin,
+  (req, res) => {
+    const announcement = new Announcement(req.body)
 
-  announcement.save((err, doc) => {
-    if (err) {
-      logger.warn(err)
-      return res.status(400).send(err)
-    }
-    res.status(200).json({
-      post: true,
-      announcementId: doc._id,
+    announcement.save((err, doc) => {
+      if (err) {
+        logger.warn(err)
+        return res.status(400).send(err)
+      }
+      res.status(200).json({
+        post: true,
+        announcementId: doc._id,
+      })
     })
-  })
-})
+  }
+)
 
 app.post('/api/addjobs', createJobHash, (req, res) => {
   const options = { upsert: true, new: true, setDefaultsOnInsert: true }
