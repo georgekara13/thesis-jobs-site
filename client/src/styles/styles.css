@@ -18,7 +18,8 @@ html {
   color: #fff;
 }
 
-.login_info_wrapper {
+.login_info_wrapper,
+.auth_wrapper {
   background: rgba(52, 58, 64, 0.8);
   padding: 30px;
   border-radius: 10px;

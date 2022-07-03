@@ -64,39 +64,72 @@ class Login extends Component {
     })
   }
 
-  submitForm = () => {
-    this.props
-      .dispatch(loginUser())
-      .then((response) => {
-        if (response.payload.isAuth) {
-          this.props.history.push('/')
-        } else {
+  submitForm = (event) => {
+    event.preventDefault()
+
+    let dataToSubmit = generateData(this.state.formdata, 'login')
+    let formIsValid = isFormValid(this.state.formdata, 'login')
+
+    if (formIsValid) {
+      this.props
+        .dispatch(loginUser(dataToSubmit))
+        .then((response) => {
+          if (response.payload.isAuth) {
+            this.props.history.push('/')
+          } else {
+            this.setState({
+              formError: true,
+              errorMsg: 'Λάθος στοιχεία εισόδου',
+            })
+          }
+        })
+        .catch((err) => {
           this.setState({
             formError: true,
             errorMsg: 'Λάθος στοιχεία εισόδου',
           })
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          formError: true,
-          errorMsg: 'Λάθος στοιχεία εισόδου',
         })
+    } else {
+      this.setState({
+        formError: true,
+        errorMsg: 'Ελέγξτε τα πεδία',
       })
+    }
   }
 
   render() {
     return (
       <div className="signin_wrapper">
-        <p>Κεντρική υπηρεσία πιστοποίησης</p>
-        <Button
-          className="bck-blue"
-          variant="primary"
-          type="Submit"
-          onClick={() => this.submitForm()}
-        >
-          Σύνδεση
-        </Button>
+        <Form onSubmit={(event) => this.submitForm()}>
+          <FormField
+            id={'email'}
+            icon={faUser}
+            label={'Email'}
+            formdata={this.state.formdata.email}
+            change={(element) => this.updateForm(element)}
+          />
+
+          <FormField
+            id={'password'}
+            icon={faKey}
+            label={'Κωδικός πρόσβασης'}
+            formdata={this.state.formdata.password}
+            change={(element) => this.updateForm(element)}
+          />
+
+          {this.state.formError ? (
+            <div className="error_label">Σφάλμα: {this.state.errorMsg}</div>
+          ) : null}
+
+          <Button
+            className="bg-dark"
+            variant="primary"
+            type="Submit"
+            onClick={(event) => this.submitForm(event)}
+          >
+            Σύνδεση
+          </Button>
+        </Form>
       </div>
     )
   }

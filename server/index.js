@@ -47,7 +47,7 @@ app.use(cookieParser())
 app.use(
   cookieSession({
     name: 'bezkoder-session',
-    // keys: ['key1', 'key2'],
+    keys: ['key1', 'key2'],
     secret: process.env.COOKIE_SECRET, // should use as secret environment variable
     httpOnly: true,
   })
