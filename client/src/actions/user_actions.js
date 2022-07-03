@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 import {
   LOGIN_USER,
@@ -12,7 +13,11 @@ import {
 export function loginUser(data) {
   const request = axios
     .post(`${process.env.REACT_APP_API}/api/auth/signin`, data)
-    .then((response) => response.data)
+    .then((response) => {
+      const { token } = response?.data
+
+      Cookies.set('userSession', token)
+    })
   return {
     type: LOGIN_USER,
     payload: request,

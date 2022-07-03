@@ -417,6 +417,8 @@ app.post('/api/auth/signin', (req, res) => {
         username: user.username,
         email: user.email,
         roles: authorities,
+        favourites: user.favourites,
+        token,
       })
     })
 })
