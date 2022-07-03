@@ -18,18 +18,17 @@ class Login extends Component {
     errorMsg: '',
     formSuccess: '',
     formdata: {
-      email: {
+      username: {
         element: 'input',
         className: 'text-light',
         value: '',
         config: {
-          name: 'email_input',
-          type: 'email',
-          placeholder: 'Εισάγετε διεύθυνση email',
+          name: 'username_input',
+          type: 'text',
+          placeholder: 'Εισάγετε όνομα χρήστη',
         },
         validation: {
           required: true,
-          email: true,
         },
         valid: false,
         touched: false,
@@ -102,10 +101,10 @@ class Login extends Component {
       <div className="signin_wrapper">
         <Form onSubmit={(event) => this.submitForm()}>
           <FormField
-            id={'email'}
+            id={'username'}
             icon={faUser}
-            label={'Email'}
-            formdata={this.state.formdata.email}
+            label={'Όνομα χρήστη'}
+            formdata={this.state.formdata.username}
             change={(element) => this.updateForm(element)}
           />
 

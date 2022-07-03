@@ -9,9 +9,9 @@ import {
   RM_USER_FAV,
 } from './types'
 
-export function loginUser() {
+export function loginUser(data) {
   const request = axios
-    .post(`${process.env.REACT_APP_API}/api/login`)
+    .post(`${process.env.REACT_APP_API}/api/auth/signin`, data)
     .then((response) => response.data)
   return {
     type: LOGIN_USER,
