@@ -15,7 +15,11 @@ export function loginUser(data) {
     .post(`${process.env.REACT_APP_API}/api/auth/signin`, data)
     .then((response) => {
       const { token } = response?.data
-      Cookies.set('userSession', token)
+
+      if (token) {
+        Cookies.set('userSession', token)
+      }
+
       return response.data
     })
   return {

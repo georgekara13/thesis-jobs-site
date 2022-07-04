@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Cookies from 'js-cookie'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logoutUser } from '../../actions/user_actions'
@@ -55,11 +56,12 @@ class Header extends Component {
 
   showLinks = (type) => {
     let list = []
+    const sessionToken = Cookies.get('userSession') || ''
 
     if (this.props.user.userData) {
       type.forEach((item) => {
         //check if user is authenticated
-        if (!this.props.user.userData.token) {
+        if (!sessionToken) {
           //push public links
           if (item.public) {
             list.push(item)
