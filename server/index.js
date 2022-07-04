@@ -403,13 +403,25 @@ app.post('/api/auth/signin', (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({ message: 'Invalid Password!' })
       }
-      const token = jwt.sign({ id: user.id }, dbconf.SECRET, {
-        expiresIn: 86400, // 24 hours
-      })
+
       const authorities = []
       for (let i = 0; i < user.roles.length; i++) {
         authorities.push('ROLE_' + user.roles[i].name.toUpperCase())
       }
+
+      const token = jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          roles: authorities,
+          favourites: user.favourites,
+        },
+        dbconf.SECRET,
+        {
+          expiresIn: 86400, // 24 hours
+        }
+      )
       req.session.token = token
       logger.info(`Initiating session for '${user.username}'`)
       res.status(200).send({

@@ -72,3 +72,4 @@ services:
       - server
     environment:
       - NODE_ENV=production
+      - SECRET=${SECRET}

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import jwt from 'jsonwebtoken'
 
 import {
   LOGIN_USER,
@@ -30,17 +31,6 @@ export function registerUser(dataToSubmit) {
     .then((response) => response.data)
   return {
     type: REGISTER_USER,
-    payload: request,
-  }
-}
-
-export function auth() {
-  const request = axios
-    .get(`${process.env.REACT_APP_API}/api/userisauth`)
-    .then((response) => response.data)
-  //const request = Cookies.get('userSession') || false
-  return {
-    type: AUTH_USER,
     payload: request,
   }
 }

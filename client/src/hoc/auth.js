@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { auth } from '../actions/user_actions'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Cookies from 'js-cookie'
 
 export default function (ComposedClass, reload, adminRoute = null) {
   class AuthenticationCheck extends React.Component {
@@ -10,25 +11,24 @@ export default function (ComposedClass, reload, adminRoute = null) {
     }
 
     componentDidMount() {
-      this.props.dispatch(auth()).then((response) => {
-        let user = this.props.user.userData
+      const user = Cookies.get('userSession') || ''
+      //let user = this.props.user.userData
 
-        if (!user.isAuth) {
-          if (reload) {
-            this.props.history.push('/login')
-          }
+      if (!user) {
+        if (reload) {
+          this.props.history.push('/login')
+        }
+      } else {
+        if (adminRoute && !user.isAdmin) {
+          this.props.history.push('/')
         } else {
-          if (adminRoute && !user.isAdmin) {
+          if (!reload) {
             this.props.history.push('/')
-          } else {
-            if (!reload) {
-              this.props.history.push('/')
-            }
           }
         }
+      }
 
-        this.setState({ loading: false })
-      })
+      this.setState({ loading: false })
     }
 
     render() {

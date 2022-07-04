@@ -216,7 +216,6 @@ class Search extends Component {
   dispatchSearch = (event, page = 1, perPage = this.state.pager.perPage) => {
     if (event) event.preventDefault()
 
-    //TODO add the rest of the filter params
     let keyword = this.state.formdata.jobsearch.value
     let jobTag = this.state.modalFields.formdata.jobtag_checkbox.value.join(',')
     let location = this.state.modalFields.formdata.location_keyword.value

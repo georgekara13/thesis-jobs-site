@@ -73,7 +73,7 @@ class Login extends Component {
       this.props
         .dispatch(loginUser(dataToSubmit))
         .then((response) => {
-          if (response.payload.isAuth) {
+          if (response.payload.token) {
             this.props.history.push('/')
           } else {
             this.setState({
