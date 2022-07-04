@@ -1,6 +1,5 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import jwt from 'jsonwebtoken'
 
 import {
   LOGIN_USER,
