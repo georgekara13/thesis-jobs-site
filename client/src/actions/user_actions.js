@@ -15,8 +15,8 @@ export function loginUser(data) {
     .post(`${process.env.REACT_APP_API}/api/auth/signin`, data)
     .then((response) => {
       const { token } = response?.data
-
       Cookies.set('userSession', token)
+      return response.data
     })
   return {
     type: LOGIN_USER,
@@ -38,6 +38,7 @@ export function auth() {
   const request = axios
     .get(`${process.env.REACT_APP_API}/api/userisauth`)
     .then((response) => response.data)
+  //const request = Cookies.get('userSession') || false
   return {
     type: AUTH_USER,
     payload: request,
