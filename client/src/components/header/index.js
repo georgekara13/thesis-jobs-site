@@ -29,22 +29,17 @@ class Header extends Component {
       },
       {
         name: 'ΑΠΟΣΥΝΔΕΣΗ',
-        linkTo: '/login',
+        linkTo: '/logout',
         public: false,
       },
     ],
   }
 
-  defaultLink = (item, i) =>
-    item.name === 'ΑΠΟΣΥΝΔΕΣΗ' ? (
-      <Nav.Item key={i} onClick={() => this.logOutHandler()}>
-        <Nav.Link href={item.linkTo}>{item.name}</Nav.Link>
-      </Nav.Item>
-    ) : (
-      <Nav.Item key={i}>
-        <Nav.Link href={item.linkTo}>{item.name}</Nav.Link>
-      </Nav.Item>
-    )
+  defaultLink = (item, i) => (
+    <Nav.Item key={i}>
+      <Nav.Link href={item.linkTo}>{item.name}</Nav.Link>
+    </Nav.Item>
+  )
 
   logOutHandler = () => {
     this.props.dispatch(logoutUser()).then((response) => {

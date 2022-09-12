@@ -39,14 +39,14 @@ export function registerUser(dataToSubmit) {
 }
 
 export function logoutUser() {
-  const request = axios
-    .get(`${process.env.REACT_APP_API}/api/logout`)
-    .then((response) => response.data)
+  Cookies.remove('userSession')
+  window.location.href = '/login'
 
-  return {
+  // unreachable
+  /*return {
     type: LOGOUT_USER,
-    payload: request,
-  }
+    payload: { success: true },
+  }*/
 }
 
 export function addUserFav(jobId, uid) {

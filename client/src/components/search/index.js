@@ -21,7 +21,7 @@ import { update } from '../utils/formactions'
 class Search extends Component {
   state = {
     user: {
-      favourites: this.props.user.userData.favourites,
+      favourites: this.props?.user?.userData?.favourites,
     },
     searchResults: [],
     adc: {
@@ -334,7 +334,7 @@ class Search extends Component {
           data={this.state.searchResults}
           error={this.state.errorMsg}
           handleShow={this.showAdc}
-          uid={this.props.user.userData.id}
+          uid={this.props?.user?.userData?.id}
           userFavourites={this.state.user.favourites}
           addFav={this.dispatchAddFavourites}
           rmFav={this.dispatchRemoveFavourites}
