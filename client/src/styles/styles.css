@@ -159,3 +159,12 @@ html {
   border-style: solid !important;
   border-color: #f6f6f6 !important;
 }
+
+.register_text {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.register_text:hover {
+  color: #007bff;
+}

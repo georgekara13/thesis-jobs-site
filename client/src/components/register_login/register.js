@@ -188,6 +188,12 @@ class Register extends Component {
                   <button onClick={(event) => this.submitForm(event)}>
                     Sign Up
                   </button>
+                  <span
+                    className="register_text"
+                    onClick={() => this.props.showLogin(true)}
+                  >
+                    ...ή σύνδεση
+                  </span>
                 </div>
               </form>
             </div>

@@ -63,6 +63,9 @@ class Login extends Component {
     })
   }
 
+  toRegister = () => {
+    this.props.history.push('/register')
+  }
   submitForm = (event) => {
     event.preventDefault()
 
@@ -128,6 +131,12 @@ class Login extends Component {
           >
             Σύνδεση
           </Button>
+          <span
+            className="register_text"
+            onClick={() => this.props.showLogin(false)}
+          >
+            ...ή εγγραφή
+          </span>
         </Form>
       </div>
     )
