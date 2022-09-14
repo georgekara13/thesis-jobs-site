@@ -3,6 +3,7 @@ import FormField from '../utils/formfield'
 import { update, generateData, isFormValid } from '../utils/formactions'
 import { withRouter } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog'
+import Button from 'react-bootstrap/Button'
 
 import { connect } from 'react-redux'
 import { registerUser } from '../../actions/user_actions'
@@ -12,28 +13,13 @@ class Register extends Component {
     formError: false,
     formSuccess: false,
     formdata: {
-      name: {
+      userName: {
         element: 'input',
         value: '',
         config: {
-          name: 'name_input',
+          name: 'username_input',
           type: 'text',
-          placeholder: 'Enter your name',
-        },
-        validation: {
-          required: true,
-        },
-        valid: false,
-        touched: false,
-        validationMessage: '',
-      },
-      lastname: {
-        element: 'input',
-        value: '',
-        config: {
-          name: 'lastname_input',
-          type: 'text',
-          placeholder: 'Enter your last name',
+          placeholder: 'Εισάγετε όνομα χρήστη',
         },
         validation: {
           required: true,
@@ -48,7 +34,7 @@ class Register extends Component {
         config: {
           name: 'email_input',
           type: 'email',
-          placeholder: 'Enter your email',
+          placeholder: 'Εισάγετε email',
         },
         validation: {
           required: true,
@@ -64,7 +50,7 @@ class Register extends Component {
         config: {
           name: 'password_input',
           type: 'password',
-          placeholder: 'Enter your password',
+          placeholder: 'Εισάγετε κωδικό πρόσβασης',
         },
         validation: {
           required: true,
@@ -80,7 +66,7 @@ class Register extends Component {
         config: {
           name: 'confirm_password_input',
           type: 'password',
-          placeholder: 'Confirm your password',
+          placeholder: 'Επιβεβαιώστε τον κωδικό πρόσβασης',
         },
         validation: {
           required: true,
@@ -109,7 +95,7 @@ class Register extends Component {
               formSuccess: true,
             })
             setTimeout(() => {
-              this.props.history.push('/register_login')
+              this.props.history.push('/login')
             }, 3000)
           } else {
             this.setState({ formError: true })
@@ -138,72 +124,62 @@ class Register extends Component {
 
   render() {
     return (
-      <div className="page_wrapper">
-        <div className="container">
-          <div className="register_login_container">
-            <div className="left">
-              <form onSubmit={(event) => this.submitForm(event)}>
-                <h2>Personal Information</h2>
-                <div className="form_block_two">
-                  <div className="block">
-                    <FormField
-                      id={'name'}
-                      formdata={this.state.formdata.name}
-                      change={(element) => this.updateForm(element)}
-                    />
-                  </div>
-                  <div className="block">
-                    <FormField
-                      id={'lastname'}
-                      formdata={this.state.formdata.lastname}
-                      change={(element) => this.updateForm(element)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <FormField
-                    id={'email'}
-                    formdata={this.state.formdata.email}
-                    change={(element) => this.updateForm(element)}
-                  />
-                </div>
-                <h2>Verify Password</h2>
-                <div className="form_block_two">
-                  <div className="block">
-                    <FormField
-                      id={'password'}
-                      formdata={this.state.formdata.password}
-                      change={(element) => this.updateForm(element)}
-                    />
-                  </div>
-                  <div className="block">
-                    <FormField
-                      id={'confirmPassword'}
-                      formdata={this.state.formdata.confirmPassword}
-                      change={(element) => this.updateForm(element)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <button onClick={(event) => this.submitForm(event)}>
-                    Sign Up
-                  </button>
-                  <span
-                    className="register_text"
-                    onClick={() => this.props.showLogin(true)}
-                  >
-                    ...ή σύνδεση
-                  </span>
-                </div>
-              </form>
+      <div className="signin_wrapper">
+        <form onSubmit={(event) => this.submitForm(event)}>
+          <h2>Εγγραφή</h2>
+          <div className="form_block_two">
+            <div className="block">
+              <FormField
+                id={'username'}
+                formdata={this.state.formdata.userName}
+                change={(element) => this.updateForm(element)}
+              />
             </div>
           </div>
-        </div>
+          <div>
+            <FormField
+              id={'email'}
+              formdata={this.state.formdata.email}
+              change={(element) => this.updateForm(element)}
+            />
+          </div>
+          <div className="form_block_two">
+            <div className="block">
+              <FormField
+                id={'password'}
+                formdata={this.state.formdata.password}
+                change={(element) => this.updateForm(element)}
+              />
+            </div>
+            <div className="block">
+              <FormField
+                id={'confirmPassword'}
+                formdata={this.state.formdata.confirmPassword}
+                change={(element) => this.updateForm(element)}
+              />
+            </div>
+          </div>
+          <div>
+            <Button
+              variant="primary"
+              type="Submit"
+              onClick={(event) => this.submitForm(event)}
+            >
+              Εγγραφή
+            </Button>
+            <span
+              className="register_text"
+              onClick={() => this.props.showLogin(true)}
+            >
+              ...ή σύνδεση
+            </span>
+          </div>
+        </form>
 
         <Dialog open={this.state.formSuccess}>
           <div className="dialog_alert">
-            <div>Thanks for joining us!</div>
-            <div>Redirecting to user login...</div>
+            <div>Ευχαριστούμε για την εγγραφή</div>
+            <div>Μετάβαση στο πεδίο σύνδεσης...</div>
           </div>
         </Dialog>
       </div>

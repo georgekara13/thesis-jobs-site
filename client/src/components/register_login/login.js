@@ -124,7 +124,6 @@ class Login extends Component {
           ) : null}
 
           <Button
-            className="bg-dark"
             variant="primary"
             type="Submit"
             onClick={(event) => this.submitForm(event)}
