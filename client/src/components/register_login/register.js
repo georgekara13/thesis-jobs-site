@@ -89,14 +89,13 @@ class Register extends Component {
       this.props
         .dispatch(registerUser(dataToSubmit))
         .then((response) => {
-          if (response.payload.success) {
+          if (response.payload.token) {
             this.setState({
               formError: false,
               formSuccess: true,
             })
-            setTimeout(() => {
-              this.props.history.push('/login')
-            }, 3000)
+            console.log('yay')
+            this.props.history.push('/')
           } else {
             this.setState({ formError: true })
           }

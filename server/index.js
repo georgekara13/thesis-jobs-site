@@ -6,7 +6,7 @@ const cookieSession = require('cookie-session')
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-
+const { createJwtToken } = require('./helpers')
 const dbconf = require('./configuration/dbconf').dbconf()
 const { logger } = require('./configuration/logger')
 const { emitter } = require('./configuration/broadcaster')
@@ -332,55 +332,66 @@ app.post('/api/updatesource', (req, res) => {
 })
 
 app.post('/api/auth/signup', (req, res) => {
-  const user = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-  })
-  user.save((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err })
-      return
-    }
-    if (req.body.roles) {
-      Role.find(
-        {
-          name: { $in: req.body.roles },
-        },
-        (err, roles) => {
-          if (err) {
-            res.status(500).send({ message: err })
-            return
-          }
-          user.roles = roles.map((role) => role._id)
-          user.save((err) => {
+  try {
+    logger.info(JSON.stringify(req.body))
+    const user = new User({
+      username: req.body.userName,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+    })
+
+    user.save((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err })
+        return
+      }
+      if (req.body.roles) {
+        Role.find(
+          {
+            name: { $in: req.body.roles },
+          },
+          (err, roles) => {
             if (err) {
               res.status(500).send({ message: err })
               return
             }
-            logger.info(`New user registration for '${req.body.email}'`)
-            res.send({ message: 'User was registered successfully!' })
-          })
-        }
-      )
-    } else {
-      Role.findOne({ name: 'user' }, (err, role) => {
-        if (err) {
-          res.status(500).send({ message: err })
-          return
-        }
-        user.roles = [role._id]
-        user.save((err) => {
+            user.roles = roles.map((role) => role._id)
+            user.save((err) => {
+              if (err) {
+                res.status(500).send({ message: err })
+                return
+              }
+
+              const { token } = createJwtToken(user)
+
+              logger.info(`New user registration for '${req.body.email}'`)
+              res.send({ message: 'User was registered successfully!', token })
+            })
+          }
+        )
+      } else {
+        Role.findOne({ name: 'user' }, (err, role) => {
           if (err) {
             res.status(500).send({ message: err })
             return
           }
-          logger.info(`New user registration for '${req.body.email}'`)
-          res.send({ message: 'User was registered successfully!' })
+          user.roles = [role._id]
+          user.save((err, user) => {
+            if (err) {
+              res.status(500).send({ message: err })
+              return
+            }
+            const { token } = createJwtToken(user)
+
+            logger.info(`New user registration for '${req.body.email}'`)
+            res.send({ message: 'User was registered successfully!', token })
+          })
         })
-      })
-    }
-  })
+      }
+    })
+  } catch (error) {
+    logger.error(error)
+  }
 })
 
 app.post('/api/auth/signin', (req, res) => {
@@ -404,24 +415,8 @@ app.post('/api/auth/signin', (req, res) => {
         return res.status(401).send({ message: 'Invalid Password!' })
       }
 
-      const authorities = []
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push('ROLE_' + user.roles[i].name.toUpperCase())
-      }
+      const { token, authorities } = createJwtToken(user)
 
-      const token = jwt.sign(
-        {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          roles: authorities,
-          favourites: user.favourites,
-        },
-        dbconf.SECRET,
-        {
-          expiresIn: 86400, // 24 hours
-        }
-      )
       req.session.token = token
       logger.info(`Initiating session for '${user.username}'`)
       res.status(200).send({

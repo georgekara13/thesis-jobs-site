@@ -11,7 +11,7 @@ export const validate = (element, formdata = []) => {
     const valid =
       element.value.trim() === formdata[element.validation.confirm].value
 
-    const message = `${!valid ? 'Must be matching passwords' : ''}`
+    const message = `${!valid ? 'Τα password πρέπει να ταιριάζουν' : ''}`
     error = !valid ? [valid, message] : error
   }
 

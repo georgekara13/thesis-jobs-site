@@ -30,8 +30,15 @@ export function loginUser(data) {
 
 export function registerUser(dataToSubmit) {
   const request = axios
-    .post(`${process.env.REACT_APP_API}/api/register`, dataToSubmit)
-    .then((response) => response.data)
+    .post(`${process.env.REACT_APP_API}/api/auth/signup`, dataToSubmit)
+    .then((response) => {
+      const { token } = response?.data
+      if (token) {
+        Cookies.set('userSession', token)
+      }
+
+      return response.data
+    })
   return {
     type: REGISTER_USER,
     payload: request,
