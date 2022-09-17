@@ -8,7 +8,9 @@ const FormField = ({ formdata, change, id, label, icon }) => {
     let errorMessage = null
 
     if (formdata.validation && !formdata.valid) {
-      errorMessage = <div class="error_label">{formdata.validationMessage}</div>
+      errorMessage = (
+        <div className="error_label">{formdata.validationMessage}</div>
+      )
     }
 
     return errorMessage
