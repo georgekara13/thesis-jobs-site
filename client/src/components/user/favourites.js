@@ -158,7 +158,7 @@ class UserFavourites extends Component {
   }
 
   render() {
-    return (
+    return this.state.items.length > 0 ? (
       <div className="general_wrapper">
         <Container>
           <Row>
@@ -178,6 +178,18 @@ class UserFavourites extends Component {
           </Row>
           {this.state.adc.show ? this.renderAdc() : ''}
           <MyPager pager={this.state.pager} action={this.dispatchSearch} />
+        </Container>
+      </div>
+    ) : (
+      <div className="general_wrapper align_center">
+        <Container>
+          <h2>Δεν υπάρχουν αποθηκευμένα</h2>
+          <p
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.props.history.push('/')}
+          >
+            Κάντε αναζήτηση
+          </p>
         </Container>
       </div>
     )

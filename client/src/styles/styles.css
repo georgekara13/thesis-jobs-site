@@ -70,6 +70,10 @@ html {
   padding-top: 5px;
 }
 
+.align_center {
+  text-align: center;
+}
+
 .icon {
   color: #fff;
   margin-right: 4px;
