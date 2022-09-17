@@ -34,7 +34,7 @@ class UserFavourites extends Component {
       show: false,
       item: '',
     },
-    userFavourites: this.props.user.userData.favourites,
+    userFavourites: this.props?.user?.userData?.favourites,
   }
 
   componentDidMount = () => {
@@ -44,7 +44,7 @@ class UserFavourites extends Component {
   dispatchSearch = (event, page = 1) => {
     if (event) event.preventDefault()
 
-    let _id = this.props.user.userData.favourites.join(',')
+    let _id = this.props?.user?.userData?.favourites?.join(',')
 
     this.props.dispatch(getJobs({ _id, page })).then((response) => {
       if (response.payload.results) {

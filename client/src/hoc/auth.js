@@ -12,21 +12,21 @@ export default function (ComposedClass, reload, adminRoute = null) {
 
     componentDidMount() {
       const token = Cookies.get('userSession') || ''
-      //let user = this.props.user.userData
-
-      this.props.dispatch(authUserCheck({ token })).then((response) => {
-        const { isAuth, roles } = response.payload
-        if (!isAuth) {
-          if (reload) {
+      if (token) {
+        this.props.dispatch(authUserCheck({ token })).then((response) => {
+          const { isAuth, roles } = response.payload
+          if (!isAuth) {
+            if (reload) {
+              this.props.history.push('/login')
+            }
             this.props.history.push('/login')
+          } else {
+            if (!reload) {
+              this.props.history.push('/')
+            }
           }
-          this.props.history.push('/login')
-        } else {
-          if (!reload) {
-            this.props.history.push('/')
-          }
-        }
-      })
+        })
+      }
       this.setState({ loading: false })
     }
 
