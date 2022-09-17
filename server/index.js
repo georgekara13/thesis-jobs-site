@@ -362,10 +362,20 @@ app.post('/api/auth/signup', (req, res) => {
                 return
               }
 
-              const { token } = createJwtToken(user)
+              const { token, authorities } = createJwtToken(user)
 
               logger.info(`New user registration for '${req.body.email}'`)
-              res.send({ message: 'User was registered successfully!', token })
+              res.status(200).send({
+                message: 'User was registered successfully!',
+                token,
+                userData: {
+                  id: user._id,
+                  username: user.username,
+                  email: user.email,
+                  roles: authorities,
+                  favourites: user.favourites,
+                },
+              })
             })
           }
         )
@@ -381,10 +391,21 @@ app.post('/api/auth/signup', (req, res) => {
               res.status(500).send({ message: err })
               return
             }
-            const { token } = createJwtToken(user)
+            const { token, authorities } = createJwtToken(user)
 
             logger.info(`New user registration for '${req.body.email}'`)
-            res.send({ message: 'User was registered successfully!', token })
+            logger.info(`Initiating session for '${user.username}'`)
+            res.status(200).send({
+              message: 'User was registered successfully!',
+              token,
+              userData: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                roles: authorities,
+                favourites: user.favourites,
+              },
+            })
           })
         })
       }
