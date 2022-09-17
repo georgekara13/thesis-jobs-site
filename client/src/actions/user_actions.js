@@ -28,6 +28,22 @@ export function loginUser(data) {
   }
 }
 
+export function authUserCheck(data) {
+  const request = axios
+    .get(`${process.env.REACT_APP_API}/api/auth/userisauth`, {
+      headers: {
+        token: data.token,
+      },
+    })
+    .then((response) => {
+      return response.data
+    })
+  return {
+    type: AUTH_USER,
+    payload: request,
+  }
+}
+
 export function registerUser(dataToSubmit) {
   const request = axios
     .post(`${process.env.REACT_APP_API}/api/auth/signup`, dataToSubmit)

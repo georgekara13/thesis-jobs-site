@@ -1,3 +1,3 @@
-const { createJwtToken } = require('./token')
+const { createJwtToken, extractAuthorities } = require('./token')
 
-module.exports = { createJwtToken }
+module.exports = { createJwtToken, extractAuthorities }

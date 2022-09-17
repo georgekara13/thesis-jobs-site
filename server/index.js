@@ -4,9 +4,8 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cookieSession = require('cookie-session')
 const cors = require('cors')
-const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const { createJwtToken } = require('./helpers')
+const { createJwtToken, extractAuthorities } = require('./helpers')
 const dbconf = require('./configuration/dbconf').dbconf()
 const { logger } = require('./configuration/logger')
 const { emitter } = require('./configuration/broadcaster')
@@ -56,13 +55,28 @@ app.use(
 app.use(cors())
 
 //GET routes
-app.get('/api/userisauth', auth, (req, res) => {
-  res.json({
-    isAuth: true,
-    id: req.user._id,
-    email: req.user.email,
-    favourites: req.user.favourites,
-  })
+app.get('/api/auth/userisauth', verifyToken, (req, res) => {
+  const { userId } = req
+  if (!userId) {
+    res.status(401).send({ error: true, error: 'userNotExist' })
+  }
+
+  User.findById(userId)
+    .exec()
+    .then((user, error) => {
+      if (error) {
+        res.status(400).send(error)
+      }
+      const authorities = extractAuthorities(user)
+      res.status(200).send({
+        isAuth: true,
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        roles: authorities,
+        favourites: user.favourites,
+      })
+    })
 })
 
 app.get('/api/getjobbyid', (req, res) => {

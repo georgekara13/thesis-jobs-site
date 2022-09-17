@@ -3,12 +3,7 @@ const { Role } = require('../model/role')
 const dbconf = require('../configuration/dbconf').dbconf()
 
 const createJwtToken = (user) => {
-  const authorities = []
-  for (let i = 0; i < user.roles.length; i++) {
-    Role.findOne({ _id: user.roles[i] }, (err, role) => {
-      authorities.push('ROLE_' + role.name.toUpperCase())
-    })
-  }
+  const authorities = extractAuthorities(user)
 
   const token = jwt.sign(
     {
@@ -27,4 +22,13 @@ const createJwtToken = (user) => {
   return { token, authorities }
 }
 
-module.exports = { createJwtToken }
+const extractAuthorities = (user) => {
+  const authorities = []
+  for (let i = 0; i < user.roles.length; i++) {
+    Role.findOne({ _id: user.roles[i] }, (err, role) => {
+      authorities.push('ROLE_' + role.name.toUpperCase())
+    })
+  }
+}
+
+module.exports = { createJwtToken, extractAuthorities }
