@@ -102,6 +102,7 @@ class Login extends Component {
   render() {
     return (
       <div className="signin_wrapper">
+        <h2>Σύνδεση</h2>
         <Form onSubmit={(event) => this.submitForm()}>
           <FormField
             id={'username'}

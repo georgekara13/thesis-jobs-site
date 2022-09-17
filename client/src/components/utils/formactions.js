@@ -11,7 +11,11 @@ export const validate = (element, formdata = []) => {
     const valid =
       element.value.trim() === formdata[element.validation.confirm].value
 
-    const message = `${!valid ? 'Τα password πρέπει να ταιριάζουν' : ''}`
+    const message = `${
+      !valid
+        ? 'Ο κωδικός πρόσβασης και η επιβεβαίωση κωδικού πρόσβασης δεν ταιριάζουν'
+        : ''
+    }`
     error = !valid ? [valid, message] : error
   }
 

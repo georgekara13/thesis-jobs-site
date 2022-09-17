@@ -4,6 +4,9 @@ import { update, generateData, isFormValid } from '../utils/formactions'
 import { withRouter } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog'
 import Button from 'react-bootstrap/Button'
+import faUser from '@fortawesome/fontawesome-free-solid/faUser'
+import faKey from '@fortawesome/fontawesome-free-solid/faKey'
+import faEnvelope from '@fortawesome/fontawesome-free-solid/faEnvelope'
 
 import { connect } from 'react-redux'
 import { registerUser } from '../../actions/user_actions'
@@ -129,6 +132,8 @@ class Register extends Component {
           <div className="form_block_two">
             <div className="block">
               <FormField
+                icon={faUser}
+                label={'Όνομα χρήστη'}
                 id={'userName'}
                 formdata={this.state.formdata.userName}
                 change={(element) => this.updateForm(element)}
@@ -138,6 +143,8 @@ class Register extends Component {
           <div>
             <FormField
               id={'email'}
+              icon={faEnvelope}
+              label={'Email'}
               formdata={this.state.formdata.email}
               change={(element) => this.updateForm(element)}
             />
@@ -146,6 +153,8 @@ class Register extends Component {
             <div className="block">
               <FormField
                 id={'password'}
+                icon={faKey}
+                label={'Κωδικός πρόσβασης'}
                 formdata={this.state.formdata.password}
                 change={(element) => this.updateForm(element)}
               />
@@ -153,6 +162,8 @@ class Register extends Component {
             <div className="block">
               <FormField
                 id={'confirmPassword'}
+                icon={faKey}
+                label={'Επιβεβαίωση κωδικού πρόσβασης'}
                 formdata={this.state.formdata.confirmPassword}
                 change={(element) => this.updateForm(element)}
               />

@@ -8,9 +8,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
     let errorMessage = null
 
     if (formdata.validation && !formdata.valid) {
-      errorMessage = (
-        <div className="error_label">{formdata.validationMessage}</div>
-      )
+      errorMessage = <div class="error_label">{formdata.validationMessage}</div>
     }
 
     return errorMessage
@@ -32,7 +30,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
         formTemplate = (
           <Form.Group
             controlId={id}
-            className={formdata.className ? formdata.className : 'text-dark'}
+            className={formdata.className ? formdata.className : 'text-light'}
           >
             {hasIcon(icon)} <Form.Label>{label}</Form.Label>
             <Form.Control
@@ -50,7 +48,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
         formTemplate = (
           <Form.Group controlId={id}>
             {hasIcon(icon)}
-            <Form.Label className="text-dark">
+            <Form.Label className="text-light">
               {label}{' '}
               {formdata.value && formdata.value > 0
                 ? `: €${formdata.value}00+`
@@ -70,7 +68,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
         formTemplate = (
           <Form.Group controlId={id}>
             {hasIcon(icon)}
-            <Form.Label className="text-dark">{label}</Form.Label>
+            <Form.Label className="text-light">{label}</Form.Label>
             {formdata.items.map((item) => (
               <Form.Check
                 {...formdata.config}
