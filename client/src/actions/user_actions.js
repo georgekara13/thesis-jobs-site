@@ -17,7 +17,7 @@ export function loginUser(data) {
       const { token } = response?.data
 
       if (token) {
-        Cookies.set('userSession', token)
+        Cookies.set('userSession', token, { expires: 7 })
       }
 
       return response.data
@@ -38,6 +38,9 @@ export function authUserCheck(data) {
     .then((response) => {
       return response.data
     })
+    .catch((error) => {
+      return { isAuth: false }
+    })
   return {
     type: AUTH_USER,
     payload: request,
@@ -50,7 +53,7 @@ export function registerUser(dataToSubmit) {
     .then((response) => {
       const { token } = response?.data
       if (token) {
-        Cookies.set('userSession', token)
+        Cookies.set('userSession', token, { expires: 7 })
       }
 
       return response.data
