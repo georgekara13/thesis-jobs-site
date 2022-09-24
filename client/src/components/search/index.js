@@ -335,7 +335,7 @@ class Search extends Component {
           error={this.state.errorMsg}
           handleShow={this.showAdc}
           uid={this.props?.user?.userData?.id}
-          userFavourites={this.state.user.favourites}
+          userFavourites={this.state?.user?.favourites}
           addFav={this.dispatchAddFavourites}
           rmFav={this.dispatchRemoveFavourites}
         />

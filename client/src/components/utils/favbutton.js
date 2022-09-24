@@ -6,7 +6,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faHeart from '@fortawesome/fontawesome-free-solid/faHeart'
 
 const FavButton = ({ uid, jobId, addFav, rmFav, userFavourites, className }) =>
-  userFavourites.includes(jobId) ? (
+  userFavourites?.includes(jobId) ? (
     <OverlayTrigger
       placement={'bottom'}
       overlay={<Tooltip>Αφαίρεση απ'τα αποθηκευμένα</Tooltip>}

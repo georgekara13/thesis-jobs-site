@@ -75,10 +75,19 @@ export function logoutUser() {
   }*/
 }
 
-export function addUserFav(jobId, uid) {
+export function addUserFav(jobId) {
+  const token = Cookies.get('userSession') || ''
   const request = axios
     .post(
-      `${process.env.REACT_APP_API}/api/addtofavourites?userid=${uid}&jobid=${jobId}`
+      `${process.env.REACT_APP_API}/api/addtofavourites`,
+      {
+        jobId,
+      },
+      {
+        headers: {
+          token,
+        },
+      }
     )
     .then((response) => response.data.doc.favourites)
   return {
@@ -87,10 +96,19 @@ export function addUserFav(jobId, uid) {
   }
 }
 
-export function rmUserFav(jobId, uid) {
+export function rmUserFav(jobId) {
+  const token = Cookies.get('userSession') || ''
   const request = axios
     .delete(
-      `${process.env.REACT_APP_API}/api/deletefromfavourites?userid=${uid}&jobid=${jobId}`
+      `${process.env.REACT_APP_API}/api/deletefromfavourites`,
+      {
+        jobId,
+      },
+      {
+        headers: {
+          token,
+        },
+      }
     )
     .then((response) => response.data.doc.favourites)
   return {

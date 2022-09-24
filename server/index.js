@@ -163,15 +163,15 @@ app.get('/api/getsources', sourceQuery, (req, res) => {
 })
 
 app.post('/api/addtofavourites', authJwt.verifyToken, (req, res) => {
-  const { jobid } = req.query
+  const { jobId } = req.body
   const userid = req.userId
 
-  logger.info(`Add to favs for user ${userid} , for job ${jobid}`)
+  logger.info(`Add to favs for user ${userid} , for job ${jobId}`)
 
   User.findById({ _id: userid })
     .exec()
     .then((user) => {
-      user.favourites.push(jobid)
+      user.favourites.push(jobId)
 
       // filter out duplicate ids
       let uniqueFavs = user.favourites.filter((c, index) => {
@@ -289,14 +289,15 @@ app.delete('/api/deletesource', (req, res) => {
   })
 })
 
-app.delete('/api/deletefromfavourites', auth, (req, res) => {
-  const { userid, jobid } = req.query
+app.delete('/api/deletefromfavourites', authJwt.verifyToken, (req, res) => {
+  const { jobId } = req.body
+  const userid = req.userId
 
-  logger.info(`Delete favs for user ${userid} , for job ${jobid}`)
+  logger.info(`Delete favs for user ${userid} , for job ${jobId}`)
 
   User.findByIdAndUpdate(
     userid,
-    { $pull: { favourites: jobid } },
+    { $pull: { favourites: jobId } },
     { new: true },
     (err, doc) => {
       if (!err) {
