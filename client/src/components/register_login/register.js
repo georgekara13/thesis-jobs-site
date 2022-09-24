@@ -14,6 +14,7 @@ import { registerUser } from '../../actions/user_actions'
 class Register extends Component {
   state = {
     formError: false,
+    errorMessage: '',
     formSuccess: false,
     formdata: {
       userName: {
@@ -97,10 +98,13 @@ class Register extends Component {
               formError: false,
               formSuccess: true,
             })
-            console.log('yay')
             this.props.history.push('/')
           } else {
-            this.setState({ formError: true })
+            this.setState({
+              ...this.state,
+              formError: true,
+              errorMessage: response.payload.message,
+            })
           }
         })
         .catch((error) => {
@@ -111,6 +115,7 @@ class Register extends Component {
     } else {
       this.setState({
         formError: true,
+        errorMessage: 'Σφάλμα: Παρακαλούμε ελέγξτε τα πεδία',
       })
     }
   }
@@ -169,6 +174,11 @@ class Register extends Component {
               />
             </div>
           </div>
+          {this.state.formError ? (
+            <p className="error_label">{this.state.errorMessage}</p>
+          ) : (
+            ''
+          )}
           <div>
             <Button
               variant="primary"

@@ -25,6 +25,7 @@ const {
 } = require('./middleware/constructquery')
 const { auth, authJwt } = require('./middleware/auth')
 const { createJobHash } = require('./middleware/jobhash')
+const { checkDuplicateUsernameOrEmail } = require('./middleware/verifySignup')
 
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.DATABASE, {
@@ -345,9 +346,13 @@ app.post('/api/updatesource', (req, res) => {
   )
 })
 
-app.post('/api/auth/signup', (req, res) => {
+app.post('/api/auth/signup', checkDuplicateUsernameOrEmail, (req, res) => {
   try {
-    logger.info(JSON.stringify(req.body))
+    if (req.errorSignup) {
+      logger.debug(req.errorSignup)
+      res.status(200).send(req.errorSignup)
+      return
+    }
     const user = new User({
       username: req.body.userName,
       email: req.body.email,

@@ -1,30 +1,37 @@
 const { Role } = require('./../model/role')
 const { User } = require('./../model/user')
+//const { logger } = require('../configuration/logger')
 
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
   User.findOne({
-    username: req.body.username,
+    username: req.body.userName,
   }).exec((err, user) => {
     if (err) {
-      res.status(500).send({ message: err })
-      return
+      req.errorSignup = { message: err, success: false }
+      next()
     }
     if (user) {
-      res.status(400).send({ message: 'Failed! Username is already in use!' })
-      return
+      req.errorSignup = {
+        success: false,
+        message: 'Το όνομα χρήστη υπάρχει ήδη, δοκιμάστε άλλο.',
+      }
+      next()
     }
     // Email
     User.findOne({
       email: req.body.email,
     }).exec((err, user) => {
       if (err) {
-        res.status(500).send({ message: err })
-        return
+        req.errorSignup = { message: err, success: false }
+        next()
       }
       if (user) {
-        res.status(400).send({ message: 'Failed! Email is already in use!' })
-        return
+        req.errorSignup = {
+          success: false,
+          message: 'Το email χρήστη υπάρχει ήδη, δοκιμάστε άλλο',
+        }
+        next()
       }
       next()
     })
@@ -34,14 +41,15 @@ checkRolesExisted = (req, res, next) => {
   if (req.body.roles) {
     Role.find({ name: { $in: req.body.roles } }).exec((err, roles) => {
       if (err) {
-        res.status(500).send({ message: err })
-        return
+        req.errorSignup = { success: false, message: err }
+        next()
       }
       if (roles.length !== req.body.roles.length) {
-        res.status(400).send({
-          message: 'Failed! Some of the roles do not exist!',
-        })
-        return
+        req.errorSignup = {
+          success: false,
+          message: 'Σφάλμα, κάποιοι απ τους ρόλους δεν υπάρχουν',
+        }
+        next()
       }
     })
   }
