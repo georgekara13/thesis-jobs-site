@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 import {
   LOGIN_USER,
@@ -9,51 +10,84 @@ import {
   RM_USER_FAV,
 } from './types'
 
-export function loginUser() {
+export function loginUser(data) {
   const request = axios
-    .post(`${process.env.REACT_APP_API}/api/login`)
-    .then((response) => response.data)
+    .post(`${process.env.REACT_APP_API}/api/auth/signin`, data)
+    .then((response) => {
+      const { token } = response?.data
+
+      if (token) {
+        Cookies.set('userSession', token, { expires: 7 })
+      }
+
+      return response.data
+    })
   return {
     type: LOGIN_USER,
     payload: request,
   }
 }
 
-export function registerUser(dataToSubmit) {
+export function authUserCheck(data) {
   const request = axios
-    .post(`${process.env.REACT_APP_API}/api/register`, dataToSubmit)
-    .then((response) => response.data)
-  return {
-    type: REGISTER_USER,
-    payload: request,
-  }
-}
-
-export function auth() {
-  const request = axios
-    .get(`${process.env.REACT_APP_API}/api/userisauth`)
-    .then((response) => response.data)
+    .get(`${process.env.REACT_APP_API}/api/auth/userisauth`, {
+      headers: {
+        token: data.token,
+      },
+    })
+    .then((response) => {
+      return response.data
+    })
+    .catch((error) => {
+      return { isAuth: false }
+    })
   return {
     type: AUTH_USER,
     payload: request,
   }
 }
 
-export function logoutUser() {
+export function registerUser(dataToSubmit) {
   const request = axios
-    .get(`${process.env.REACT_APP_API}/api/logout`)
-    .then((response) => response.data)
+    .post(`${process.env.REACT_APP_API}/api/auth/signup`, dataToSubmit)
+    .then((response) => {
+      const { token } = response?.data
+      if (token) {
+        Cookies.set('userSession', token, { expires: 7 })
+      }
 
+      return response.data
+    })
   return {
-    type: LOGOUT_USER,
+    type: REGISTER_USER,
     payload: request,
   }
 }
 
-export function addUserFav(jobId, uid) {
+export function logoutUser() {
+  Cookies.remove('userSession')
+  window.location.href = '/login'
+
+  // unreachable
+  /*return {
+    type: LOGOUT_USER,
+    payload: { success: true },
+  }*/
+}
+
+export function addUserFav(jobId) {
+  const token = Cookies.get('userSession') || ''
   const request = axios
     .post(
-      `${process.env.REACT_APP_API}/api/addtofavourites?userid=${uid}&jobid=${jobId}`
+      `${process.env.REACT_APP_API}/api/addtofavourites`,
+      {
+        jobId,
+      },
+      {
+        headers: {
+          token,
+        },
+      }
     )
     .then((response) => response.data.doc.favourites)
   return {
@@ -62,11 +96,13 @@ export function addUserFav(jobId, uid) {
   }
 }
 
-export function rmUserFav(jobId, uid) {
+export function rmUserFav(jobId) {
+  const token = Cookies.get('userSession') || ''
   const request = axios
-    .delete(
-      `${process.env.REACT_APP_API}/api/deletefromfavourites?userid=${uid}&jobid=${jobId}`
-    )
+    .delete(`${process.env.REACT_APP_API}/api/deletefromfavourites`, {
+      headers: { token },
+      data: { jobId },
+    })
     .then((response) => response.data.doc.favourites)
   return {
     type: RM_USER_FAV,

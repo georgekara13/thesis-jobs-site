@@ -2,14 +2,29 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const dbconf = require('../configuration/dbconf').dbconf()
 
-//to be discussed
 const userSchema = mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
   email: {
     type: String,
     required: true,
     trim: true,
     unique: true,
   },
+  password: {
+    type: String,
+    required: true,
+  },
+  roles: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Role',
+    },
+  ],
   token: {
     type: String,
   },

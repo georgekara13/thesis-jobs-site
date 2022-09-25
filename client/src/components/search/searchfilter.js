@@ -17,6 +17,7 @@ const SearchFilter = (props) => {
         label={props.searchFields[field].config.placeholder}
         formdata={props.searchFields[field]}
         change={(element) => props.updateFields(element)}
+        textColor="text-dark"
       />
     ))
 

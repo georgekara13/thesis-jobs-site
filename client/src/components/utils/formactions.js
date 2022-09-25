@@ -1,21 +1,25 @@
 export const validate = (element, formdata = []) => {
   let error = [true, '']
 
-  if (element.validation.email) {
+  if (element?.validation?.email) {
     const valid = /^.*?@.*?\.[a-zA-Z]+$/.test(element.value)
     const message = `${!valid ? 'Το email πρέπει να έχει σωστή μορφή' : ''}`
     error = !valid ? [valid, message] : error
   }
 
-  if (element.validation.confirm) {
+  if (element?.validation?.confirm) {
     const valid =
       element.value.trim() === formdata[element.validation.confirm].value
 
-    const message = `${!valid ? 'Must be matching passwords' : ''}`
+    const message = `${
+      !valid
+        ? 'Ο κωδικός πρόσβασης και η επιβεβαίωση κωδικού πρόσβασης δεν ταιριάζουν'
+        : ''
+    }`
     error = !valid ? [valid, message] : error
   }
 
-  if (element.validation.required) {
+  if (element?.validation?.required) {
     const valid = element.value.trim() !== ''
     const message = `${!valid ? 'Το πεδίο είναι απαραίτητο' : ''}`
     error = !valid ? [valid, message] : error

@@ -3,7 +3,14 @@ import Form from 'react-bootstrap/Form'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
-const FormField = ({ formdata, change, id, label, icon }) => {
+const FormField = ({
+  formdata,
+  change,
+  id,
+  label,
+  icon,
+  textColor = 'text-light',
+}) => {
   const showError = () => {
     let errorMessage = null
 
@@ -32,7 +39,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
         formTemplate = (
           <Form.Group
             controlId={id}
-            className={formdata.className ? formdata.className : 'text-dark'}
+            className={formdata.className ? formdata.className : textColor}
           >
             {hasIcon(icon)} <Form.Label>{label}</Form.Label>
             <Form.Control
@@ -50,7 +57,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
         formTemplate = (
           <Form.Group controlId={id}>
             {hasIcon(icon)}
-            <Form.Label className="text-dark">
+            <Form.Label className={textColor}>
               {label}{' '}
               {formdata.value && formdata.value > 0
                 ? `: €${formdata.value}00+`
@@ -70,7 +77,7 @@ const FormField = ({ formdata, change, id, label, icon }) => {
         formTemplate = (
           <Form.Group controlId={id}>
             {hasIcon(icon)}
-            <Form.Label className="text-dark">{label}</Form.Label>
+            <Form.Label className={textColor}>{label}</Form.Label>
             {formdata.items.map((item) => (
               <Form.Check
                 {...formdata.config}

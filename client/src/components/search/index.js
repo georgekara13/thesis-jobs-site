@@ -21,7 +21,7 @@ import { update } from '../utils/formactions'
 class Search extends Component {
   state = {
     user: {
-      favourites: this.props.user.userData.favourites,
+      favourites: this.props?.user?.userData?.favourites,
     },
     searchResults: [],
     adc: {
@@ -216,7 +216,6 @@ class Search extends Component {
   dispatchSearch = (event, page = 1, perPage = this.state.pager.perPage) => {
     if (event) event.preventDefault()
 
-    //TODO add the rest of the filter params
     let keyword = this.state.formdata.jobsearch.value
     let jobTag = this.state.modalFields.formdata.jobtag_checkbox.value.join(',')
     let location = this.state.modalFields.formdata.location_keyword.value
@@ -335,8 +334,8 @@ class Search extends Component {
           data={this.state.searchResults}
           error={this.state.errorMsg}
           handleShow={this.showAdc}
-          uid={this.props.user.userData.id}
-          userFavourites={this.state.user.favourites}
+          uid={this.props?.user?.userData?.id}
+          userFavourites={this.state?.user?.favourites}
           addFav={this.dispatchAddFavourites}
           rmFav={this.dispatchRemoveFavourites}
         />

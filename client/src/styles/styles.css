@@ -18,7 +18,8 @@ html {
   color: #fff;
 }
 
-.login_info_wrapper {
+.login_info_wrapper,
+.auth_wrapper {
   background: rgba(52, 58, 64, 0.8);
   padding: 30px;
   border-radius: 10px;
@@ -65,8 +66,12 @@ html {
 
 .general_wrapper {
   background: #fafafa;
-  min-height: calc(40vh - 30px);
+  min-height: 70vh;
   padding-top: 5px;
+}
+
+.align_center {
+  text-align: center;
 }
 
 .icon {
@@ -157,4 +162,13 @@ html {
   border-radius: 10px !important;
   border-style: solid !important;
   border-color: #f6f6f6 !important;
+}
+
+.register_text {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.register_text:hover {
+  color: #007bff;
 }

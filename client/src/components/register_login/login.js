@@ -18,18 +18,17 @@ class Login extends Component {
     errorMsg: '',
     formSuccess: '',
     formdata: {
-      email: {
+      username: {
         element: 'input',
         className: 'text-light',
         value: '',
         config: {
-          name: 'email_input',
-          type: 'email',
-          placeholder: 'Εισάγετε διεύθυνση email',
+          name: 'username_input',
+          type: 'text',
+          placeholder: 'Εισάγετε όνομα χρήστη',
         },
         validation: {
           required: true,
-          email: true,
         },
         valid: false,
         touched: false,
@@ -64,39 +63,81 @@ class Login extends Component {
     })
   }
 
-  submitForm = () => {
-    this.props
-      .dispatch(loginUser())
-      .then((response) => {
-        if (response.payload.isAuth) {
-          this.props.history.push('/')
-        } else {
+  toRegister = () => {
+    this.props.history.push('/register')
+  }
+  submitForm = (event) => {
+    event.preventDefault()
+
+    let dataToSubmit = generateData(this.state.formdata, 'login')
+    let formIsValid = isFormValid(this.state.formdata, 'login')
+
+    if (formIsValid) {
+      this.props
+        .dispatch(loginUser(dataToSubmit))
+        .then((response) => {
+          if (response.payload.token) {
+            this.props.history.push('/')
+          } else {
+            this.setState({
+              formError: true,
+              errorMsg: 'Λάθος στοιχεία εισόδου',
+            })
+          }
+        })
+        .catch((err) => {
           this.setState({
             formError: true,
             errorMsg: 'Λάθος στοιχεία εισόδου',
           })
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          formError: true,
-          errorMsg: 'Λάθος στοιχεία εισόδου',
         })
+    } else {
+      this.setState({
+        formError: true,
+        errorMsg: 'Ελέγξτε τα πεδία',
       })
+    }
   }
 
   render() {
     return (
       <div className="signin_wrapper">
-        <p>Κεντρική υπηρεσία πιστοποίησης</p>
-        <Button
-          className="bck-blue"
-          variant="primary"
-          type="Submit"
-          onClick={() => this.submitForm()}
-        >
-          Σύνδεση
-        </Button>
+        <h2>Σύνδεση</h2>
+        <Form onSubmit={(event) => this.submitForm()}>
+          <FormField
+            id={'username'}
+            icon={faUser}
+            label={'Όνομα χρήστη'}
+            formdata={this.state.formdata.username}
+            change={(element) => this.updateForm(element)}
+          />
+
+          <FormField
+            id={'password'}
+            icon={faKey}
+            label={'Κωδικός πρόσβασης'}
+            formdata={this.state.formdata.password}
+            change={(element) => this.updateForm(element)}
+          />
+
+          {this.state.formError ? (
+            <div className="error_label">Σφάλμα: {this.state.errorMsg}</div>
+          ) : null}
+
+          <Button
+            variant="primary"
+            type="Submit"
+            onClick={(event) => this.submitForm(event)}
+          >
+            Σύνδεση
+          </Button>
+          <span
+            className="register_text"
+            onClick={() => this.props.showLogin(false)}
+          >
+            ...ή εγγραφή
+          </span>
+        </Form>
       </div>
     )
   }

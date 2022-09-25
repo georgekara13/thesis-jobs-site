@@ -2,8 +2,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const cookieSession = require('cookie-session')
 const cors = require('cors')
-
+const bcrypt = require('bcryptjs')
+const { createJwtToken, extractAuthorities } = require('./helpers')
 const dbconf = require('./configuration/dbconf').dbconf()
 const { logger } = require('./configuration/logger')
 const { emitter } = require('./configuration/broadcaster')
@@ -12,6 +14,7 @@ const { emitter } = require('./configuration/broadcaster')
 const { User } = require('./model/user')
 const { Job } = require('./model/job')
 const { Source } = require('./model/source')
+const { Role } = require('./model/role')
 const { Announcement } = require('./model/announcement')
 
 //middleware
@@ -20,8 +23,9 @@ const {
   sourceQuery,
   announcementQuery,
 } = require('./middleware/constructquery')
-const { auth } = require('./middleware/auth')
+const { auth, authJwt } = require('./middleware/auth')
 const { createJobHash } = require('./middleware/jobhash')
+const { checkDuplicateUsernameOrEmail } = require('./middleware/verifySignup')
 
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.DATABASE, {
@@ -40,23 +44,40 @@ app.use(bodyParser.json())
 //app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}))
 app.use(cookieParser())
 
+app.use(
+  cookieSession({
+    name: 'bezkoder-session',
+    keys: ['key1', 'key2'],
+    secret: process.env.COOKIE_SECRET, // should use as secret environment variable
+    httpOnly: true,
+  })
+)
+
 app.use(cors())
 
 //GET routes
-app.get('/api/userisauth', auth, (req, res) => {
-  res.json({
-    isAuth: true,
-    id: req.user._id,
-    email: req.user.email,
-    favourites: req.user.favourites,
-  })
-})
+app.get('/api/auth/userisauth', verifyToken, (req, res) => {
+  const { userId } = req
+  if (!userId) {
+    res.status(401).send({ error: true, error: 'userNotExist' })
+  }
 
-app.get('/api/logout', auth, (req, res) => {
-  req.user.deleteToken(req.token, (err, user) => {
-    if (err) return res.status(400).send(err)
-    res.sendStatus(200)
-  })
+  User.findById(userId)
+    .exec()
+    .then((user, error) => {
+      if (error) {
+        res.status(400).send(error)
+      }
+      const authorities = extractAuthorities(user)
+      res.status(200).send({
+        isAuth: true,
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        roles: authorities,
+        favourites: user.favourites,
+      })
+    })
 })
 
 app.get('/api/getjobbyid', (req, res) => {
@@ -141,23 +162,16 @@ app.get('/api/getsources', sourceQuery, (req, res) => {
   })
 })
 
-//POST routes
-app.post('/api/login', (req, res) => {
-  // TODO redesign route with sso
-  res.status(200).json({
-    logged_in: true,
-  })
-})
+app.post('/api/addtofavourites', authJwt.verifyToken, (req, res) => {
+  const { jobId } = req.body
+  const userid = req.userId
 
-app.post('/api/addtofavourites', auth, (req, res) => {
-  const { userid, jobid } = req.query
-
-  logger.info(`Add to favs for user ${userid} , for job ${jobid}`)
+  logger.info(`Add to favs for user ${userid} , for job ${jobId}`)
 
   User.findById({ _id: userid })
     .exec()
     .then((user) => {
-      user.favourites.push(jobid)
+      user.favourites.push(jobId)
 
       // filter out duplicate ids
       let uniqueFavs = user.favourites.filter((c, index) => {
@@ -184,20 +198,25 @@ app.post('/api/addtofavourites', auth, (req, res) => {
 
 /*TODO ADD ADMIN AUTH MIDDLEWARE - only admin users should be able to post
 announcements*/
-app.post('/api/addannouncement', (req, res) => {
-  const announcement = new Announcement(req.body)
+app.post(
+  '/api/addannouncement',
+  authJwt.verifyToken,
+  authJwt.isAdmin,
+  (req, res) => {
+    const announcement = new Announcement(req.body)
 
-  announcement.save((err, doc) => {
-    if (err) {
-      logger.warn(err)
-      return res.status(400).send(err)
-    }
-    res.status(200).json({
-      post: true,
-      announcementId: doc._id,
+    announcement.save((err, doc) => {
+      if (err) {
+        logger.warn(err)
+        return res.status(400).send(err)
+      }
+      res.status(200).json({
+        post: true,
+        announcementId: doc._id,
+      })
     })
-  })
-})
+  }
+)
 
 app.post('/api/addjobs', createJobHash, (req, res) => {
   const options = { upsert: true, new: true, setDefaultsOnInsert: true }
@@ -270,14 +289,15 @@ app.delete('/api/deletesource', (req, res) => {
   })
 })
 
-app.delete('/api/deletefromfavourites', auth, (req, res) => {
-  const { userid, jobid } = req.query
+app.delete('/api/deletefromfavourites', authJwt.verifyToken, (req, res) => {
+  const { jobId } = req.body
+  const userid = req.userId
 
-  logger.info(`Delete favs for user ${userid} , for job ${jobid}`)
+  logger.info(`Delete favs for user ${userid} , for job ${jobId}`)
 
   User.findByIdAndUpdate(
     userid,
-    { $pull: { favourites: jobid } },
+    { $pull: { favourites: jobId } },
     { new: true },
     (err, doc) => {
       if (!err) {
@@ -325,6 +345,139 @@ app.post('/api/updatesource', (req, res) => {
       })
     }
   )
+})
+
+app.post('/api/auth/signup', checkDuplicateUsernameOrEmail, (req, res) => {
+  try {
+    if (req.errorSignup) {
+      logger.debug(req.errorSignup)
+      res.status(200).send(req.errorSignup)
+      return
+    }
+    const user = new User({
+      username: req.body.userName,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+    })
+
+    user.save((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err })
+        return
+      }
+      if (req.body.roles) {
+        Role.find(
+          {
+            name: { $in: req.body.roles },
+          },
+          (err, roles) => {
+            if (err) {
+              res.status(500).send({ message: err })
+              return
+            }
+            user.roles = roles.map((role) => role._id)
+            user.save((err) => {
+              if (err) {
+                res.status(500).send({ message: err })
+                return
+              }
+
+              const { token, authorities } = createJwtToken(user)
+
+              logger.info(`New user registration for '${req.body.email}'`)
+              res.status(200).send({
+                message: 'User was registered successfully!',
+                token,
+                userData: {
+                  id: user._id,
+                  username: user.username,
+                  email: user.email,
+                  roles: authorities,
+                  favourites: user.favourites,
+                },
+              })
+            })
+          }
+        )
+      } else {
+        Role.findOne({ name: 'user' }, (err, role) => {
+          if (err) {
+            res.status(500).send({ message: err })
+            return
+          }
+          user.roles = [role._id]
+          user.save((err, user) => {
+            if (err) {
+              res.status(500).send({ message: err })
+              return
+            }
+            const { token, authorities } = createJwtToken(user)
+
+            logger.info(`New user registration for '${req.body.email}'`)
+            logger.info(`Initiating session for '${user.username}'`)
+            res.status(200).send({
+              message: 'User was registered successfully!',
+              token,
+              userData: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                roles: authorities,
+                favourites: user.favourites,
+              },
+            })
+          })
+        })
+      }
+    })
+  } catch (error) {
+    logger.error(error)
+  }
+})
+
+app.post('/api/auth/signin', (req, res) => {
+  User.findOne({
+    username: req.body.username,
+  })
+    .populate('roles', '-__v')
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err })
+        return
+      }
+      if (!user) {
+        return res.status(404).send({ message: 'User Not found.' })
+      }
+      const passwordIsValid = bcrypt.compareSync(
+        req.body.password,
+        user.password
+      )
+      if (!passwordIsValid) {
+        return res.status(401).send({ message: 'Invalid Password!' })
+      }
+
+      const { token, authorities } = createJwtToken(user)
+
+      req.session.token = token
+      logger.info(`Initiating session for '${user.username}'`)
+      res.status(200).send({
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        roles: authorities,
+        favourites: user.favourites,
+        token,
+      })
+    })
+})
+
+app.post('/api/auth/signout', async (req, res) => {
+  try {
+    req.session = null
+    return res.status(200).send({ message: "You've been signed out!" })
+  } catch (err) {
+    this.next(err)
+  }
 })
 
 app.listen(port, () => {

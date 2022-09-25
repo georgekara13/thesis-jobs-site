@@ -41,6 +41,8 @@ services:
       - NODE_ENV=production
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - COOKIE_SECRET=${COOKIE_SECRET}
+      - SECRET=${SECRET}
   scraper:
     build:
       context: ./scraper
@@ -70,3 +72,4 @@ services:
       - server
     environment:
       - NODE_ENV=production
+      - SECRET=${SECRET}
