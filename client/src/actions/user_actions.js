@@ -99,17 +99,10 @@ export function addUserFav(jobId) {
 export function rmUserFav(jobId) {
   const token = Cookies.get('userSession') || ''
   const request = axios
-    .delete(
-      `${process.env.REACT_APP_API}/api/deletefromfavourites`,
-      {
-        jobId,
-      },
-      {
-        headers: {
-          token,
-        },
-      }
-    )
+    .delete(`${process.env.REACT_APP_API}/api/deletefromfavourites`, {
+      headers: { token },
+      data: { jobId },
+    })
     .then((response) => response.data.doc.favourites)
   return {
     type: RM_USER_FAV,

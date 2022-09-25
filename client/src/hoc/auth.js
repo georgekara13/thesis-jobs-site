@@ -23,9 +23,8 @@ export default function (ComposedClass, reload, adminRoute = null) {
             this.props.history.push('/')
           }
         }
+        this.setState({ loading: false })
       })
-
-      this.setState({ loading: false })
     }
 
     render() {

@@ -34,35 +34,37 @@ class UserFavourites extends Component {
       show: false,
       item: '',
     },
-    userFavourites: this.props?.user?.userData?.favourites,
+    userFavourites: this.props.user?.userData?.favourites,
   }
 
   componentDidMount = () => {
-    this.dispatchSearch()
+    if (this.props.user.userData) {
+      this.dispatchSearch()
+    }
   }
 
   dispatchSearch = (event, page = 1) => {
     if (event) event.preventDefault()
-
-    let _id = this.props?.user?.userData?.favourites?.join(',')
-
-    this.props.dispatch(getJobs({ _id, page })).then((response) => {
-      if (response.payload.results) {
-        this.setState({
-          ...this.state,
-          items: response.payload.jobs,
-          pager: {
-            totalPages: response.payload.totalPages,
-            currentPage: response.payload.currentPage,
-            nextPage: response.payload.nextPage,
-            previousPage: response.payload.previousPage,
-            results: response.payload.results,
-            perPage: response.payload.perPage,
-          },
-          errorMsg: response.payload.error,
-        })
-      }
-    })
+    if (this.props?.user?.userData?.favourites?.length > 0) {
+      let _id = this.props?.user?.userData?.favourites?.join(',')
+      this.props.dispatch(getJobs({ _id, page })).then((response) => {
+        if (response.payload.results) {
+          this.setState({
+            ...this.state,
+            items: response.payload.jobs,
+            pager: {
+              totalPages: response.payload.totalPages,
+              currentPage: response.payload.currentPage,
+              nextPage: response.payload.nextPage,
+              previousPage: response.payload.previousPage,
+              results: response.payload.results,
+              perPage: response.payload.perPage,
+            },
+            errorMsg: response.payload.error,
+          })
+        }
+      })
+    }
   }
 
   handleAdcShow = () => {
@@ -123,7 +125,6 @@ class UserFavourites extends Component {
 
   mapFavourites = () => {
     let { items } = this.state
-
     return items.map((item) => (
       <tr key={item._id}>
         <th>
@@ -141,8 +142,8 @@ class UserFavourites extends Component {
         </th>
         <th>
           <FavButton
-            uid={this.props.user.userData.id}
-            userFavourites={this.state.userFavourites}
+            uid={this.props?.user?.userData?.id}
+            userFavourites={this.props?.user?.userData?.favourites}
             jobId={item._id}
             addFav={this.dispatchAddFavourites}
             rmFav={this.dispatchRemoveFavourites}
