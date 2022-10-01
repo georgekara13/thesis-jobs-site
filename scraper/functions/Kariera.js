@@ -6,20 +6,20 @@ module.exports = {
     //remove modal & privacy consent
     try {
       await driver
-        .findElement(webdriver.By.id('onetrust-accept-btn-handler'))
+        .findElement(
+          webdriver.By.id(
+            'CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll'
+          )
+        )
         .click()
-
-      await driver
-        .findElement(webdriver.By.className('remodal-close'))
-        .sendKeys('webdriver', driver.Key.ESCAPE)
     } catch (err) {
       logger.warn(err.message)
     }
     //fetch ad urls
-    for (let y = 0; y < 13; y++) {
+    for (let y = 0; y < 3; y++) {
       logger.info(`Kariera.gr pager: Page ${y + 1}`)
       let fetched_urls = await driver.findElements(
-        webdriver.By.className('job-title')
+        webdriver.By.className('tGc1KEdv')
       )
       for (let i = 0; i < fetched_urls.length; i++) {
         ad_urls.push(await fetched_urls[i].getAttribute('href'))
@@ -27,11 +27,7 @@ module.exports = {
 
       //Navigate to the next page
       await driver
-        .findElement(
-          webdriver.By.xpath(
-            '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[3]/div/div[1]/div[23]/a[8]/div'
-          )
-        )
+        .findElement(webdriver.By.className('ant-pagination-next'))
         .click()
 
       await driver.navigate().refresh()
@@ -46,11 +42,7 @@ module.exports = {
     //Title
     driver
       .wait(
-        webdriver.until.elementLocated(
-          webdriver.By.xpath(
-            '/html/body/div[2]/div/div[1]/div/div[2]/div/div/div[1]/div[1]/h1'
-          )
-        ),
+        webdriver.until.elementLocated(webdriver.By.className('UGhAL2CE')),
         200000
       )
       .then((element) => {
@@ -58,11 +50,7 @@ module.exports = {
       })
 
     await driver
-      .findElement(
-        webdriver.By.xpath(
-          '/html/body/div[2]/div/div[1]/div/div[2]/div/div/div[1]/div[1]/h1'
-        )
-      )
+      .findElement(webdriver.By.className('UGhAL2CE'))
       .getText()
       .then((title) => {
         ad_fields.title = title
@@ -72,7 +60,7 @@ module.exports = {
       })
 
     await driver
-      .findElement(webdriver.By.xpath('//*[@id="job-description"]'))
+      .findElement(webdriver.By.className('hi8OBmAZ'))
       .getText()
       .then((description) => {
         ad_fields.description = description
@@ -82,11 +70,7 @@ module.exports = {
       })
 
     await driver
-      .findElement(
-        webdriver.By.xpath(
-          '/html/body/div[2]/div/div[1]/div/div[2]/div/div/div[1]/div[2]/div[2]'
-        )
-      )
+      .findElement(webdriver.By.className('DllOEHb_ main-body-text'))
       .getText()
       .then((location) => {
         ad_fields.location = location

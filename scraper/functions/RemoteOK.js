@@ -24,7 +24,9 @@ module.exports = {
     driver
       .wait(
         webdriver.until.elementLocated(
-          webdriver.By.css('#jobsboard td.position h2')
+          webdriver.By.xpath(
+            '/html/body/div[5]/div/table/tbody/tr[3]/td[2]/a/h2'
+          )
         ),
         200000
       )
@@ -36,8 +38,8 @@ module.exports = {
     driver
       .wait(
         webdriver.until.elementLocated(
-          webdriver.By.css(
-            '.insert .bsa .default-description, #jobsboard td.company h3'
+          webdriver.By.xpath(
+            '/html/body/div[5]/div/table/tbody/tr[3]/td[2]/span/h3'
           )
         ),
         200000
@@ -58,7 +60,7 @@ module.exports = {
 
     await driver
       .findElement(
-        webdriver.By.xpath('/html/body/div[8]/div/table/tbody/tr[1]/td[2]/a/h2')
+        webdriver.By.xpath('/html/body/div[5]/div/table/tbody/tr[3]/td[2]/a/h2')
       )
       .getText()
       .then((title) => {
@@ -71,7 +73,7 @@ module.exports = {
     await driver
       .findElement(
         webdriver.By.xpath(
-          '/html/body/div[8]/div/table/tbody/tr[1]/td[2]/span[1]/h3'
+          '/html/body/div[5]/div/table/tbody/tr[3]/td[2]/span/h3'
         )
       )
       .getText()

@@ -4,7 +4,8 @@
   "description": "js scraper tests with firefox(GUI & headless)",
   "main": "scraper.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scrape": "node scrape-source.js "
   },
   "proxy": "http://localhost:3001",
   "keywords": [],
