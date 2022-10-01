@@ -3,9 +3,16 @@ const { logger } = require('../configuration/environment/logger')
 
 module.exports = {
   results_page: async function (ad_urls, driver) {
+    // remove privacy consent
+    try {
+      await driver.findElement(webdriver.By.className('css-k8o10q')).click()
+    } catch (err) {
+      logger.warn(err.message)
+    }
+
     let fetched_urls = await driver.findElements(
       webdriver.By.xpath(
-        '/html/body/form/div[4]/div/div[2]/div[1]/div/div[1]/div/div[1]/h3/a'
+        '/html/body/form/div[3]/div[2]/div[2]/div[2]/div[1]/div/div[1]/div/div[2]/div[1]/div[1]/h3/a'
       )
     )
     for (let i = 0; i < fetched_urls.length; i++) {
@@ -29,11 +36,7 @@ module.exports = {
       })
 
     await driver
-      .findElement(
-        webdriver.By.xpath(
-          '/html/body/form/div[4]/div/div[2]/div[2]/div/div/h1'
-        )
-      )
+      .findElement(webdriver.By.className('title'))
       .getText()
       .then((title) => {
         ad_fields.title = title
