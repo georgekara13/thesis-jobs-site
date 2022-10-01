@@ -4,7 +4,6 @@ const { logger } = require('./configuration/environment/logger')
 logger.info('Starting scraper scheduler')
 
 // for now the scraper scheduler will emit a scheduleScrapes event every 15 mins
-// TODO setup npm script & run it on docker container up
 const interval = setInterval(() => {
   emitter.emit('scheduleScrapes')
 }, 900000)
