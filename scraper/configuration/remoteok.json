@@ -4,9 +4,9 @@
   "mode": "headless",
   "module": "./functions/RemoteOK.js",
   "url": [
-    "https://remoteok.io/remote-junior-jobs",
-    "https://remoteok.io/remote-marketing-jobs",
-    "https://remoteok.io/remote-design-jobs"
+    "https://remoteok.com/remote-dev-jobs",
+    "https://remoteok.com/remote-finance-jobs",
+    "https://remoteok.com/remote-exec-jobs"
   ],
   "totalAds": 250,
   "scrapeFrequency": 720,
